@@ -1,0 +1,86 @@
+<div class="colored-box" style="flex-direction: row; box-sizing: border-box; display: flex;">
+    <div style="flex: 1 1 100%; box-sizing: border-box; max-width: 5%;" class="menu">
+        <div class="logo">
+            <img src="assets/images/logo.png" height="90px" width="90px">
+        </div>
+        <div class="button-container">
+            <button mat-fab 
+            color="primary">
+            <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+        <div class="button-container">
+            <button mat-fab 
+            color="accent">
+            <mat-icon>bookmark</mat-icon>
+            </button>
+        </div>
+        <div class="button-container">
+            <button mat-fab 
+            color="warn">
+            <mat-icon>home</mat-icon>
+            </button>
+        </div>
+        <div class="button-container" id="button-usuario">
+            <button mat-fab 
+            color="warn">
+            <mat-icon>person</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div fxflex="20" style="flex: 1 1 100%; box-sizing: border-box; max-width: 20%;" class="submenu">   
+
+        <div class="colored-box" style="flex-direction: column; box-sizing: border-box; display: flex;">
+            <div class="options" style="flex: 1 1 100%; box-sizing: border-box; max-height: 25%;">
+                <h3>Opciones</h3>
+                <button>Crear grupo</button>
+            </div>
+            <div class="my-groups" fxflex="" style="flex: 1 1 1e-09px; box-sizing: border-box;">
+                <h3>Mis Grupos</h3>
+                <button mat-raised-button>Ingles III</button>
+                <button mat-raised-button>Matematica Aplicada</button>
+            </div>
+        </div>
+
+    </div>
+    <div fxflex="" style="flex: 1 1 0%; box-sizing: border-box;" class="chat">
+
+        <div class="colored-box" style="flex-direction: column; box-sizing: border-box; display: flex;">
+            <div id="header-chat" style="flex: 1 1 100%; box-sizing: border-box; max-height: 10%;">
+                <button mat-fab>
+                    <mat-icon >person</mat-icon>
+                </button>               
+                <!--<mat-card-title id="text-title-group" style="margin-left: 40px; color: white;">Titulo del grupo</mat-card-title>-->
+                <button mat-raised-button id="text-title-group">
+                    Titulo del grupo
+                </button>            
+                <div id="button-menu">
+                    <button mat-icon-button>
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                </div>
+            </div>
+            <div class="options" fxflex="80" style="flex: 1 1 1e-09px; box-sizing: border-box; max-height: 80%;">
+                
+            </div>
+            <div id="text-area-chat" fxflex="10" style="flex: 1 1 100%; box-sizing: border-box; max-height: 10%;">
+                <button mat-fab>
+                    <mat-icon>attachment</mat-icon>
+                    </button>
+                <mat-form-field style="width: 88%;" appearance="fill" id="input-message">
+                    <input matInput placeholder="Escribe un mensaje aquí" required [(ngModel)]="value">
+                    <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </mat-form-field>
+                <div id="send-button">
+                    <button mat-fab 
+                    color="primary">
+                    <mat-icon>send</mat-icon>
+                    </button>
+                </div>
+            </div>            
+        </div>
+
+    </div>
+</div>
