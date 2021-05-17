@@ -35,10 +35,12 @@
                 <h3>Opciones</h3>
                 <button (click)='createComponent(2)'>Crear grupo</button>
             </div>
-            <div class="my-groups" fxflex="" style="flex: 1 1 1e-09px; box-sizing: border-box;">
+            <div class="my-groups" fxflex="" style="flex: 1 1 1e-09px; box-sizing: border-box;" >
                 <h3>Mis Grupos</h3>
-                <button mat-raised-button>Ingles III</button>
-                <button mat-raised-button>Matematica Aplicada</button>
+                <div *ngFor="let grupo of grupos | keyvalue">
+                <!--TODO: Crear en forma de ListView y arreglar problema con los nombres-->
+                <button mat-raised-button (click)='showMessages($event.target.innerHTML)' >{{grupo.value.nombre}}</button>                
+                </div>                
             </div>
         </div>
 
@@ -46,15 +48,15 @@
     
     
     <div fxflex="" style="flex: 1 1 0%; box-sizing: border-box;" class="chat" id="principalContainer">
-
+<!--MODULARIZAR-->
 <!--ContenedorDeChar--> 
         <div class="colored-box" style="flex-direction: column; box-sizing: border-box; display: flex;" id="chatContainer"> 
             <div id="header-chat" style="flex: 1 1 100%; box-sizing: border-box; max-height: 10%;">
                 <button mat-fab>
                     <mat-icon >person</mat-icon>
                 </button>               
-                <button mat-raised-button id="text-title-group">
-                    Titulo del grupo
+                <button mat-raised-button id="text-title-group" >
+                    {{currentGroup}}
                 </button>            
                 <div id="button-menu">
                     <button mat-icon-button>
@@ -110,10 +112,10 @@
 
                         <!--NombreDeGrupo--> 
                         <h1>Nombre del grupo</h1><br>
-                        <input name="groupName" type="text" style="height: 20%; width: 40%; border-radius: 15px;  box-sizing: border-box; padding: 2%;" ><br><br>
+                        <input id="txtGroupName" name="groupName" type="text" style="height: 20%; width: 40%; border-radius: 15px;  box-sizing: border-box; padding: 2%;" ><br><br>
                         <h1>Descripción del grupo</h1><br>
                         <!--DescripcionDeGrupo--> 
-                        <input name="groupDescription" type="text" style="height: 50%; width: 90%; border-radius: 15px;  box-sizing: border-box; padding: 10%;" ><br>
+                        <input id="txtGroupDescription" name="groupDescription" type="text" style="height: 50%; width: 90%; border-radius: 15px;  box-sizing: border-box; padding: 10%;" ><br>
                     
                         <div>
 
@@ -130,15 +132,10 @@
                         <!--ListaDeMiembrosMiembros--> 
                             <h2> Miembros </h2>   
                         <div name="MebersList" style=" background-color: gray; padding-left: 2%;border-radius: 2px; width:100%; height:200px; overflow: scroll;">
-                            <h3> Persona1 </h3>
-                            <h3> Persona2 </h3>
-                            <h3> Persona3 </h3>
-                            <h3> Persona3 </h3>
-                            <h3> Persona3 </h3>
-                            <h3> Persona3 </h3>
-                            <h3> Persona3 </h3>
-                            <h3> Persona3 </h3>
-                            <h3> Persona3 </h3>
+                            <!--TODO: Crear componente en donde se pueda hacer click-->
+                            <div *ngFor="let miembro of miembros" >
+                                <h3>{{miembro}}</h3>
+                            </div>
                         </div>      
                         </div>  
                     </div>    
@@ -165,7 +162,7 @@
 
                  <!--BotonParaCrearGrupo--> 
                     <div style="background-color:gray; width: 50%; height: 100%; padding:5%;box-sizing: border-box; ">
-                        <button name="createGroup" style="font-size:xx-large;background-color:rgb(255, 167, 4); color: white; width: 100%; height: 100%; border-radius: 10px;"> Crear</button>
+                        <button (click)="createGroup()" name="createGroup" style="font-size:xx-large;background-color:rgb(255, 167, 4); color: white; width: 100%; height: 100%; border-radius: 10px;"> Crear</button>
                     </div> 
                     </div>
                 </div>
@@ -173,9 +170,8 @@
             </div>
         </div>
 
-<!--ContenedorAñadirMiembro--> 
-        
-        <div class="colored-box" style="flex-direction: column; box-sizing: border-box; display: none;background-color: #143058; " id="addMemberContainer">
+<!--ContenedorAñadirMiembro-->         
+        <div class="colored-box" style="flex-direction: column; box-sizing: border-box; display: none;background-color: #143058;" id="addMemberContainer">
             <div id="header-groupCreation" style="flex: 1 1 100%; box-sizing: border-box; max-height: 10%; display: flex;
             justify-content: center;
             align-items: center; padding-top: 10px;">
@@ -191,7 +187,9 @@
                 <div class="options1" style=" width: 50%; height: 100%; display: flex; justify-content: center; flex-direction: column; align-items: center;">
                 
                 <!--CampoParaBuscarUsuario--> 
-                <input name="searchUser" type="text" style="height: 5%; width: 40%; border-radius: 15px; margin: 2%; " >
+                <input id="txtUserId" name="searchUser" type="text" style="height: 5%; width: 40%; border-radius: 15px; margin: 2%; " #txtUsuario>
+                <!--TODO: Mover a un costado-->
+                <button id="btnBuscarUsuario" mat-fab (click)="searchUser(txtUsuario.value);">Buscar</button>
 
                 <div style="clear:both ;height: 100%; width: 100%; background-color: white;">
                 
@@ -201,10 +199,10 @@
                 <div style="float: left;height: 10%; padding-top: 2%; padding-left: 1%;  ">
                  
                     <!--CampoNombreDeUsuario--> 
-                    <h3 name="userName" >Nombre</h3>
+                    <h3 name="userName" >Nombre: {{userData.name}}</h3>
                  
                     <!--CampoIdDeUsuario--> 
-                    <h3 name="userId">ID</h3>
+                    <h3 name="userId">ID: {{userData.id}}</h3>
                 </div>
                 <div style="clear:both; width: 100%; height: 60%;background-color: turquoise;align-items: center; justify-content: center; display: flex; ">
                     <!--CampoImagenDePerfil--> 
@@ -216,9 +214,9 @@
                 <div style="padding: 5%;box-sizing: border-box;">
                      <!--CampoDeDescripcionUsuario--> 
 
-                    <h2 name="userDescription">Descripción</h2>   
+                    <h2 name="userDescription">Descripción: {{userData.description}}</h2>   
                      <!--BotonAñadirMiembro--> 
-                    <button name="addMemberButton" (click)="createComponent(2)" class="addMemberButton" name="" style="height: 100%; padding: 10px;box-sizing:  border-box; float: right; box-sizing: border-box;"  > Añadir miembro</button>
+                    <button name="addMemberButton" (click)="createComponent(2); addUser()" class="addMemberButton" name="" style="height: 100%; padding: 10px;box-sizing:  border-box; float: right; box-sizing: border-box;"  > Añadir miembro</button>
                 </div>
                 </div>
                 </div> 

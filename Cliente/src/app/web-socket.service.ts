@@ -7,8 +7,7 @@ import * as io from 'socket.io-client';
 })
 export class WebSocketService {
 
-  socket:any;
-
+  public socket:any;  
   readonly URL = 'localhost:3000';
   constructor() {
     this.socket = io.io(this.URL);
@@ -21,8 +20,9 @@ export class WebSocketService {
       });
     });
   }
-
-  emit(eventName: string, data:any){
-    this.socket.emit(eventName,data);
+  /*
+  emit(eventName: string, data:any){    
+    data_callback = this.socket.emit(eventName,data);
   }
+  */
 }
