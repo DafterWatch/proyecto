@@ -20,9 +20,9 @@ export class WebSocketService {
       });
     });
   }
-  /*
+  
   emit(eventName: string, data:any){    
-    data_callback = this.socket.emit(eventName,data);
+    this.socket.emit(eventName,data);
   }
-  */
+  
 }

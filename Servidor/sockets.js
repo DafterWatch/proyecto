@@ -4,9 +4,9 @@ module.exports = function (io){
         console.log('Nueva conexión');
         
         socket.on('nuevoMensaje', data=>{
-            console.log(data.mensaje);
-            io.sockets.emit('nuevoMensaje',data.mensaje);
-            grupos[data.grupo].append(data.mensaje);
+            console.log(data);
+            io.sockets.emit('nuevoMensaje',data);
+            //Llevar mensaje a la base de datos
         });
 
         socket.on('nuevoGrupo',data=>{

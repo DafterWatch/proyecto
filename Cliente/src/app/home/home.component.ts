@@ -12,7 +12,7 @@ export class HomeComponent implements OnInit {
 
   mensajes : Array<String> = [];
   miembros : Object = {};  
-  userData = {
+  userData : any = {
     name: "",
     id: "",
     description : "",
@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
   constructor(private socket: WebSocketService, private http:HttpClient) {
 
     this.http.post('http://localhost:3000/grupos/',{}).subscribe(data =>{      
-      let userData = JSON.stringify(data);
+      let userData = JSON.stringify(data);          
       this.grupos = JSON.parse(userData);            
     });    
   }
@@ -37,12 +37,12 @@ export class HomeComponent implements OnInit {
       this.mensajes.push(data);
     });
   } 
-  sendMensaje(mensaje:string){
-    let datos:Object = {
+  sendMensaje(mensaje:string){       
+    /* let datos:Object = {
       mensaje,
       grupo : this.currentGroup.trim()
-    } 
-    //this.socket.emit('nuevoMensaje',mensaje);    
+    } */
+    this.socket.emit('nuevoMensaje',mensaje);    
   } 
   value:string = "";
   
@@ -81,32 +81,40 @@ export class HomeComponent implements OnInit {
     if(this.miembros && Object.keys(this.miembros).length===0 && this.miembros.constructor===Object){
       console.log('No se han seleccionado miembros');
       return;
-    }        
-    //TODO: Post Method
+    }            
+    let integrantes = Object.keys(this.miembros);
+    let grupo_n = {nombre: groupName.value, descripcion: groupDescription.value, usuarios:integrantes }
     /*this.socket.socket.emit('crearGrupo',{nombre:groupName.value,descripcion:groupDescription.value}, (id,cb)=>{      
         this.grupos[id] = cb;
     });*/
 
+    this.http.post('http://localhost:3000/createG',grupo_n).subscribe( data =>{
+      console.log(data);      
+    });
+
+    this.http.post('http://localhost:3000/grupos/',{}).subscribe(data =>{      
+      let userData = JSON.stringify(data);                      
+      this.grupos = JSON.parse(userData);            
+    });    
     this.createComponent(4);
     
   }
   addUser(){
     //TODO: Acá va la lógica de busqueda de usuario en base de datos.
-        
+    this.miembros[0] = this.userData;    
     //this.miembros.push(this.userData.name);
     //TODO: Luego de hacer click limpiar los inputs, ver si se puede corregir con componentes dinámicos
   }
   searchUser(id:any){
 
     this.userData.id = id;
-    this.http.post(`http://localhost:3000/usuarios/${id}`,{t:'Algo'}).subscribe(data =>{
+    this.http.post(`http://localhost:3000/usuarios/${id}`,{}).subscribe(data =>{
       //TODO: Parsear mejor los datos.
       let userData = JSON.stringify(data);
       let userData_ = JSON.parse(userData);
       this.miembros[id] = userData_;
       this.userData.name = userData_.nombre;      
-      this.userData.description = userData_.descripcion;    
-                  
+      this.userData.description = userData_.descripcion;                      
     });    
     /*
     this.socket.socket.emit('buscarUsuario',id,cb=>{
