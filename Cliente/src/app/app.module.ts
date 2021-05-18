@@ -21,6 +21,12 @@ import { MatInputModule } from '@angular/material/input';
 //Card
 import {MatCardModule} from '@angular/material/card';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+//List
+import {MatListModule} from '@angular/material/list';
+//Scrolling
+import {ScrollingModule} from '@angular/cdk/scrolling';
+//Menu
+import {MatMenuModule} from '@angular/material/menu';
 
 //HTPP
 import {HttpClientModule} from '@angular/common/http'
@@ -49,7 +55,12 @@ import {HttpClientModule} from '@angular/common/http'
     //Card
     MatCardModule,
     //Input
-    MatInputModule
+    MatInputModule,
+    //List
+    MatListModule,
+    //Scroll
+    ScrollingModule,
+    MatMenuModule,
   ],
   bootstrap: [AppComponent],
   providers: [ErrorStateMatcher]

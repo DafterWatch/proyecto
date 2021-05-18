@@ -28,7 +28,8 @@
     "ng-sidebar": "^9.4.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~6.6.0",
-    "socket.io-client": "^4.1.1",
+    "socket.io": "^4.1.2",
+    "socket.io-client": "^4.1.2",
     "tslib": "^2.0.0",
     "zone.js": "^0.11.4"
   },
