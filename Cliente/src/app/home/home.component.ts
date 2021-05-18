@@ -1,6 +1,7 @@
 import { TOUCH_BUFFER_MS } from '@angular/cdk/a11y';
 import { Component, OnInit } from '@angular/core';
 import { WebSocketService } from '../web-socket.service';
+import {HttpClient} from '@angular/common/http'
 
 @Component({
   selector: 'app-home',
@@ -10,7 +11,7 @@ import { WebSocketService } from '../web-socket.service';
 export class HomeComponent implements OnInit {
 
   mensajes : Array<String> = [];
-  miembros : Array<String> = [];  
+  miembros : Object = {};  
   userData = {
     name: "",
     id: "",
@@ -19,14 +20,17 @@ export class HomeComponent implements OnInit {
   }
   //grupos : Array<String> = ['Ingles III',"Matemática Aplicada"];
   grupos : Object = {    
-    1:{
-      nombre : 'Ingles III',
-      descripcion : 'Grupo de Inglés'
-    }
+    
   }
   currentGroup = "";
 
-  constructor(private socket: WebSocketService) { }
+  constructor(private socket: WebSocketService, private http:HttpClient) {
+
+    this.http.post('http://localhost:3000/grupos/',{}).subscribe(data =>{      
+      let userData = JSON.stringify(data);
+      this.grupos = JSON.parse(userData);            
+    });    
+  }
 
   ngOnInit(): void {
     this.socket.listen('nuevoMensaje').subscribe((data:any)=>{
@@ -74,26 +78,37 @@ export class HomeComponent implements OnInit {
   createGroup(){
     let groupName:any = document.getElementById('txtGroupName');
     let groupDescription:any = document.getElementById('txtGroupDescription');    
-    if(this.miembros.length == 0){
+    if(this.miembros && Object.keys(this.miembros).length===0 && this.miembros.constructor===Object){
       console.log('No se han seleccionado miembros');
       return;
     }        
-   
-    this.socket.socket.emit('crearGrupo',{nombre:groupName.value,descripcion:groupDescription.value}, (id,cb)=>{      
+    //TODO: Post Method
+    /*this.socket.socket.emit('crearGrupo',{nombre:groupName.value,descripcion:groupDescription.value}, (id,cb)=>{      
         this.grupos[id] = cb;
-    });
+    });*/
+
     this.createComponent(4);
-    //TODO: Mandar evento de Socket IO para los grupos. 
+    
   }
   addUser(){
     //TODO: Acá va la lógica de busqueda de usuario en base de datos.
         
-    this.miembros.push(this.userData.name);
+    //this.miembros.push(this.userData.name);
     //TODO: Luego de hacer click limpiar los inputs, ver si se puede corregir con componentes dinámicos
   }
   searchUser(id:any){
+
     this.userData.id = id;
-    //let usuario = this.socket.emit('buscarUsuario',id);   
+    this.http.post(`http://localhost:3000/usuarios/${id}`,{t:'Algo'}).subscribe(data =>{
+      //TODO: Parsear mejor los datos.
+      let userData = JSON.stringify(data);
+      let userData_ = JSON.parse(userData);
+      this.miembros[id] = userData_;
+      this.userData.name = userData_.nombre;      
+      this.userData.description = userData_.descripcion;    
+                  
+    });    
+    /*
     this.socket.socket.emit('buscarUsuario',id,cb=>{
       if(cb.error){
         console.log('Error');        
@@ -101,7 +116,8 @@ export class HomeComponent implements OnInit {
       }
       this.userData.name = cb.usuario.nombre;      
       this.userData.description = cb.usuario.descripcion;
-    });                   
+    });      
+    */             
   }
   showMessages(groupName:string){
     this.createComponent(4);
