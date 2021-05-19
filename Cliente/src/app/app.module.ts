@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
+import { GroupMenuComponent } from './group-menu/group-menu.component'
 //Demo
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { SidebarModule } from 'ng-sidebar';
@@ -29,14 +30,15 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import {MatMenuModule} from '@angular/material/menu';
 
 //HTPP
-import {HttpClientModule} from '@angular/common/http'
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
     AppComponent,
     DemoComponent,
     HomeComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    GroupMenuComponent
   ],
   imports: [
     BrowserModule,

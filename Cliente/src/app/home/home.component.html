@@ -1,227 +1,276 @@
-<div class="colored-box" style="flex-direction: row; box-sizing: border-box; display: flex;">
-    <div style="flex: 1 1 100%; box-sizing: border-box; max-width: 5%;" class="menu">
-        <div class="logo">
-            <img src="assets/images/logo.png" height="90px" width="90px">
-        </div>
-        <div class="button-container">
-            <button mat-fab 
-            color="primary">
-            <mat-icon>delete</mat-icon>
-            </button>
-        </div>
-        <div class="button-container">
-            <button mat-fab 
-            color="accent">
-            <mat-icon>bookmark</mat-icon>
-            </button>
-        </div>
-        <div class="button-container">
-            <button mat-fab 
-            color="warn">
-            <mat-icon>home</mat-icon>
-            </button>
-        </div>
-        <div class="button-container" id="button-usuario">
-            <button mat-fab 
-            color="warn">
-            <mat-icon>person</mat-icon>
-            </button>
-        </div>
+<ng-sidebar-container 
+(onBackdropClicked)="_onBackdropClicked()">
+<ng-sidebar
+[(opened)]="_opened"
+[mode]="_MODES[_modeNum]"
+[keyClose]="_keyClose"
+[position]="_POSITIONS[_positionNum]"
+[dock]="_dock"
+[dockedSize]="'50px'"
+[autoCollapseHeight]="_autoCollapseHeight"
+[autoCollapseWidth]="_autoCollapseWidth"
+[closeOnClickOutside]="_closeOnClickOutside"
+[closeOnClickBackdrop]="_closeOnClickBackdrop"
+[showBackdrop]="_showBackdrop"
+[animate]="_animate"
+[trapFocus]="_trapFocus"
+[autoFocus]="_autoFocus"
+[ariaLabel]="'My sidebar'"
+(onOpenStart)="_onOpenStart()"
+(onOpened)="_onOpened()"
+(onCloseStart)="_onCloseStart()"
+(onClosed)="_onClosed()"
+(onTransitionEnd)="_onTransitionEnd()">
+<div class="colored-box2" style="flex-direction: column; box-sizing: border-box; display: flex;">
+  <div id="header-menu-group" style="flex: 1 1 100%; box-sizing: border-box; max-height: 5%;">
+    <button mat-icon-button aria-label="Close" (click)="_toggleOpened()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <span id="text-header-menu">Información</span>
+  </div>
+  <div id="icon-name-group" fxflex="20" style="flex: 1 1 100%; box-sizing: border-box; max-height: 20%;">
+    <img mat-card-image src="assets/images/chayan.png" style="border-radius: 50%; display: block; margin-left: auto; margin-right: auto; padding-top: 10px; width: 20%;">
+    <h1 style="padding-top: 4%; padding-left: 2%; color: white; font-size: 30px;">
+        <!--Recibe el nombre del grupo-->
+        {{currentGroup}}
+    </h1>
+  </div>
+  <div id="description-group" fxflex="20" style="flex: 1 1 100%; box-sizing: border-box; max-height: 20%;">
+    <h1 style="padding-top: 4%; color: black; font-size: 25px;">DESCRIPCION</h1>
+    <div>
+      <!--area donde estara la descripcion del grupo-->
     </div>
-    <div fxflex="20" style="flex: 1 1 100%; box-sizing: border-box; max-width: 20%;" class="submenu">   
+  </div>
+  <div id="assign-homework-group" fxflex="5" style="flex: 1 1 100%; box-sizing: border-box; max-height: 5%;">
+    <button mat-raised-button style="width: 100%; height: 100%; background-color: white;">Asignar Tarea</button>
+  </div>
+  <div id="text-members-group" fxflex="5" style="flex: 1 1 100%; box-sizing: border-box; max-height: 5%;">
+    <h1>Integrantes</h1>    
+  </div>
+  <div id="members-group" fxflex="35" style="flex: 1 1 100%; box-sizing: border-box; max-height: 35%;">
+    <cdk-virtual-scroll-viewport itemSize="50" class="list-members">
+      <div *cdkVirtualFor="let item of items" class="member-item">
+        <button mat-button [matMenuTriggerFor]="menu" style="height: 100%; width: 100%;">
+          {{item}}
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>Eliminar del grupo</button>
+          <button mat-menu-item>Hacer administrador</button>
+        </mat-menu>
+      </div>   
+    </cdk-virtual-scroll-viewport>-  
+  </div>  
 
-        <div class="colored-box" style="flex-direction: column; box-sizing: border-box; display: flex;">
-            <div class="options" style="flex: 1 1 100%; box-sizing: border-box; max-height: 25%;">
-                <h3>Opciones</h3>
-                <button (click)='createComponent(2)'>Crear grupo</button>
+  <div id="buttons-group" fxflex="10" style="flex: 1 1 1e-09px; box-sizing: border-box; max-height: 10%;">
+    <button mat-raised-button >Salir del grupo</button><br>
+    <button mat-raised-button style="margin-top: 10px;">Reportar grupo</button>
+  </div>
+</div>  
+</ng-sidebar>
+<div ng-sidebar-content style="height: 100%; width: 100%;">
+    <!--Toda la parte de arriba es el menu de gh-->
+    <!-------------------------------------------------------------------------------------Esta seccion es Home - Pagina---------------------------------------------------------------------------------->
+    <div class="colored-box" style="flex-direction: row; box-sizing: border-box; display: flex;">
+        <div style="flex: 1 1 100%; box-sizing: border-box; max-width: 5%;" class="menu">
+            <div class="logo">
+                <img src="assets/images/logo.png" height="90px" width="90px">
             </div>
-            <div class="my-groups" fxflex="" style="flex: 1 1 1e-09px; box-sizing: border-box;" >
-                <h3>Mis Grupos</h3>
-                <div *ngFor="let grupo of grupos | keyvalue">
-                <!--TODO: Crear en forma de ListView y arreglar problema con los nombres-->
-                <button mat-raised-button (click)='showMessages($event.target.innerHTML)' >{{grupo.value.nombre}}</button>                
-                </div>                
+            <div class="button-container">
+                <button mat-fab 
+                color="primary">
+                <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+            <div class="button-container">
+                <button mat-fab 
+                color="accent">
+                <mat-icon>bookmark</mat-icon>
+                </button>
+            </div>
+            <div class="button-container">
+                <button mat-fab 
+                color="warn">
+                <mat-icon>home</mat-icon>
+                </button>
+            </div>
+            <div class="button-container" id="button-usuario">
+                <button mat-fab 
+                color="warn">
+                <mat-icon>person</mat-icon>
+                </button>
             </div>
         </div>
-
-    </div>
-    
-    
-    <div fxflex="" style="flex: 1 1 0%; box-sizing: border-box;" class="chat" id="principalContainer">
-<!--MODULARIZAR-->
-<!--ContenedorDeChar--> 
-        <div class="colored-box" style="flex-direction: column; box-sizing: border-box; display: flex;" id="chatContainer"> 
-            <div id="header-chat" style="flex: 1 1 100%; box-sizing: border-box; max-height: 10%;">
-                <button mat-fab>
-                    <mat-icon >person</mat-icon>
-                </button>               
-                <button mat-raised-button id="text-title-group" >
-                    {{currentGroup}}
-                </button>            
-                <div id="button-menu">
-                    <button mat-icon-button>
-                        <mat-icon>more_vert</mat-icon>
-                    </button>
+        <div fxflex="20" style="flex: 1 1 100%; box-sizing: border-box; max-width: 20%;" class="submenu">
+            <div class="colored-box" style="flex-direction: column; box-sizing: border-box; display: flex;">
+                <div class="options" style="flex: 1 1 100%; box-sizing: border-box; max-height: 25%;">
+                    <h3>Opciones</h3>
+                    <button (click)='createComponent(2)'>Crear grupo</button>
+                </div>
+                <div class="my-groups" fxflex="" style="flex: 1 1 1e-09px; box-sizing: border-box;" >
+                    <h3>Mis Grupos</h3>
+                    <div *ngFor="let grupo of grupos | keyvalue">
+                    <!--TODO: Crear en forma de ListView y arreglar problema con los nombres-->
+                    <button mat-raised-button (click)='showMessages($event.target.innerHTML)' >{{grupo.value.nombre}}</button>                
+                    </div>                
                 </div>
             </div>
-            <div class="options" fxflex="80" style="flex: 1 1 1e-09px; box-sizing: border-box; max-height: 80%;">
-            <!--Mensajes--> 
-           
-            <div *ngFor="let mensaje of mensajes">
-                <div> {{mensaje}} </div> <br>
-            </div> 
-            </div>
-            <div id="text-area-chat" fxflex="10" style="flex: 1 1 100%; box-sizing: border-box; max-height: 10%;">
-                <button mat-fab>
-                    <mat-icon>attachment</mat-icon>
-                    </button>
-                <mat-form-field style="width: 88%;" appearance="fill" id="input-message">
-                    <input name="Mensaje-Input" #txtMensaje id="txtMensaje" matInput placeholder="Escribe un mensaje aquí" required [(ngModel)]="value">
-                    <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
-                        <mat-icon>close</mat-icon>
-                    </button>
-                </mat-form-field>
-                <div id="send-button" (click)='sendMensaje(txtMensaje.value)'>
-                    <button mat-fab color="primary" >
-                    <mat-icon>send</mat-icon>
-                    </button>
+        </div>   
+        <div fxflex="" style="flex: 1 1 0%; box-sizing: border-box;" class="chat" id="principalContainer">
+    <!--MODULARIZAR-->
+    <!--ContenedorDeChat--> 
+            <div class="colored-box" style="flex-direction: column; box-sizing: border-box; display: flex;" id="chatContainer"> 
+                <div id="header-chat" style="flex: 1 1 100%; box-sizing: border-box; max-height: 10%;">
+                    <img mat-card-image id="img-title-group" src="assets/images/chayan.png">
+                    <button mat-raised-button id="text-title-group" (click)="_toggleOpened()">
+                        {{currentGroup}}
+                    </button>            
+                    <div id="button-menu">
+                        <button mat-icon-button [matMenuTriggerFor]="menu" style="height: 100%; width: 100%;">
+                            <mat-icon>more_vert</mat-icon>
+                          </button>
+                          <mat-menu #menu="matMenu">
+                            <button mat-menu-item (click)="_toggleOpened()">Informacion del grupo</button>
+                            <button mat-menu-item>Crear Formulario</button>
+                          </mat-menu>
+                    </div>
                 </div>
-            </div>            
-        </div>
-
-<!--ContenedorCrearGrupo--> 
-
-        <div class="colored-box" style="flex-direction: column; box-sizing: border-box; display: none; background-color: #143058;"id="groupContainer">
-            <div id="header-groupCreation" style="flex: 1 1 100%; box-sizing: border-box; max-height: 10%; display: flex;
-            justify-content: center;
-            align-items: center; padding-top: 10px;">
-                <h3 style=" font-weight: bold;text-align: center; padding-top: 30px; height: 80%; " id="text-title-group">
-                    Creación de grupo
-                </h3>  
-                <button mat-fab (click)="createComponent(1)">
-                    <mat-icon >cancel</mat-icon>
-                </button>            
+                <div class="options" fxflex="80" style="flex: 1 1 1e-09px; box-sizing: border-box; max-height: 80%;">
+                <!--Mensajes-->            
+                <div *ngFor="let mensaje of mensajes">
+                    <div> {{mensaje}} </div> <br>
+                </div> 
+                </div>
+                <div id="text-area-chat" fxflex="10" style="flex: 1 1 100%; box-sizing: border-box; max-height: 10%;">
+                    <button mat-fab>
+                        <mat-icon>attachment</mat-icon>
+                        </button>
+                    <mat-form-field style="width: 88%;" appearance="fill" id="input-message">
+                        <input name="Mensaje-Input" #txtMensaje id="txtMensaje" matInput placeholder="Escribe un mensaje aquí" required [(ngModel)]="value">
+                        <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </mat-form-field>
+                    <div id="send-button" (click)='sendMensaje(txtMensaje.value)'>
+                        <button mat-fab color="primary" >
+                        <mat-icon>send</mat-icon>
+                        </button>
+                    </div>
+                </div>            
             </div>
-            <div class="options" style="flex-direction: row; flex: 1 1 1e-09px; box-sizing: border-box; max-height: 90%; ">
-                <div class="options1" style="float:left; width: 50%; height: 100%; display: flex;
+    <!--ContenedorCrearGrupo--> 
+            <div class="colored-box" style="flex-direction: column; box-sizing: border-box; display: none; background-color: #143058;"id="groupContainer">
+                <div id="header-groupCreation" style="flex: 1 1 100%; box-sizing: border-box; max-height: 10%; display: flex;
                 justify-content: center;
-                align-items: center;">
-
-                <div style="width: 90%; height: 90%; background-color: #efebe8;">
-                    <div>
-
-                        <!--NombreDeGrupo--> 
-                        <h1>Nombre del grupo</h1><br>
-                        <input id="txtGroupName" name="groupName" type="text" style="height: 20%; width: 40%; border-radius: 15px;  box-sizing: border-box; padding: 2%;" ><br><br>
-                        <h1>Descripción del grupo</h1><br>
-                        <!--DescripcionDeGrupo--> 
-                        <input id="txtGroupDescription" name="groupDescription" type="text" style="height: 50%; width: 90%; border-radius: 15px;  box-sizing: border-box; padding: 10%;" ><br>
-                    
-                        <div>
-
-                    <div style="margin-top: 10%;">
-                        <div style="float: left; width: 50%;" >
-
-                        <!--BotónAgregarMiembro--> 
-                            <button name="addMember" (click)="createComponent(3)" style=" padding-left:10% ;height: 50%; width: 90%;border-radius: 5px;  box-sizing: border-box; padding: 10%;  background: #488ff8;
-                            color: white;"> Agregar miembro</button><br>
-                        </div>
-
-                        <div style="float: right;width: 40%;padding-left: 2%;"  >
-                        
-                        <!--ListaDeMiembrosMiembros--> 
-                            <h2> Miembros </h2>   
-                        <div name="MebersList" style=" background-color: gray; padding-left: 2%;border-radius: 2px; width:100%; height:200px; overflow: scroll;">
-                            <!--TODO: Crear componente en donde se pueda hacer click-->
-                            <div *ngFor="let miembro of miembros | keyvalue" >
-                                <h3>{{miembro.value.name}}</h3>
-                            </div>
-                        </div>      
-                        </div>  
-                    </div>    
-                          
-                </div>    
+                align-items: center; padding-top: 10px;">
+                    <h3 style=" font-weight: bold;text-align: center; padding-top: 30px; height: 80%; " id="text-title-group">
+                        Creación de grupo
+                    </h3>  
+                    <button mat-fab (click)="createComponent(1)">
+                        <mat-icon >cancel</mat-icon>
+                    </button>            
                 </div>
-                </div>
-                </div>
-                <div class="options2" style="float:left; width: 49%; height: 100%; ">
-                <div style="clear: both; width: 100%; height: 100%" >
-                    <div style="height: 80%; width: 100%; background-color: gray; display: flex;
+                <div class="options" style="flex-direction: row; flex: 1 1 1e-09px; box-sizing: border-box; max-height: 90%; ">
+                    <div class="options1" style="float:left; width: 50%; height: 100%; display: flex;
                     justify-content: center;
                     align-items: center;">
-
-                 <!--ImagenDeGrupo--> 
-
-                    <div style="width: 60%;height: 60%;">
-                        <img name="groupImage" src="" style="width: 100%;height: 100%;">
+                    <div style="width: 90%; height: 90%; background-color: #efebe8;">
+                        <div>
+                            <!--NombreDeGrupo--> 
+                            <h1>Nombre del grupo</h1><br>
+                            <input id="txtGroupName" name="groupName" type="text" style="height: 20%; width: 40%; border-radius: 15px;  box-sizing: border-box; padding: 2%;" ><br><br>
+                            <h1>Descripción del grupo</h1><br>
+                            <!--DescripcionDeGrupo--> 
+                            <input id="txtGroupDescription" name="groupDescription" type="text" style="height: 50%; width: 90%; border-radius: 15px;  box-sizing: border-box; padding: 10%;" ><br>
+                            <div>
+                        <div style="margin-top: 10%;">
+                            <div style="float: left; width: 50%;" >
+                            <!--BotónAgregarMiembro--> 
+                                <button name="addMember" (click)="createComponent(3)" style=" padding-left:10% ;height: 50%; width: 90%;border-radius: 5px;  box-sizing: border-box; padding: 10%;  background: #488ff8;
+                                color: white;"> Agregar miembro</button><br>
+                            </div>
+                            <div style="float: right;width: 40%;padding-left: 2%;"  >                            
+                            <!--ListaDeMiembrosMiembros--> 
+                                <h2> Miembros </h2>   
+                            <div name="MebersList" style=" background-color: gray; padding-left: 2%;border-radius: 2px; width:100%; height:200px; overflow: scroll;">
+                                <!--TODO: Crear componente en donde se pueda hacer click-->
+                                <div *ngFor="let miembro of miembros | keyvalue" >
+                                    <h3>{{miembro.value.name}}</h3>
+                                </div>
+                            </div>      
+                            </div>  
+                        </div>
+                    </div>    
                     </div>
                     </div>
-                    <div style="height: 20%; width: 100%; background-color: gray; display: flex;
-                    justify-content: flex-end;
-                    align-items: flex-end;">
-
-                 <!--BotonParaCrearGrupo--> 
-                    <div style="background-color:gray; width: 50%; height: 100%; padding:5%;box-sizing: border-box; ">
-                        <button (click)="createGroup()" name="createGroup" style="font-size:xx-large;background-color:rgb(255, 167, 4); color: white; width: 100%; height: 100%; border-radius: 10px;"> Crear</button>
+                    </div>
+                    <div class="options2" style="float:left; width: 49%; height: 100%; ">
+                    <div style="clear: both; width: 100%; height: 100%" >
+                        <div style="height: 80%; width: 100%; background-color: gray; display: flex;
+                        justify-content: center;
+                        align-items: center;">
+                    <!--ImagenDeGrupo--> 
+                        <div style="width: 60%;height: 60%;">
+                            <img name="groupImage" src="" style="width: 100%;height: 100%;">
+                        </div>
+                        </div>
+                        <div style="height: 20%; width: 100%; background-color: gray; display: flex;
+                        justify-content: flex-end;
+                        align-items: flex-end;">
+                    <!--BotonParaCrearGrupo--> 
+                        <div style="background-color:gray; width: 50%; height: 100%; padding:5%;box-sizing: border-box; ">
+                            <button (click)="createGroup()" name="createGroup" style="font-size:xx-large;background-color:rgb(255, 167, 4); color: white; width: 100%; height: 100%; border-radius: 10px;"> Crear</button>
+                        </div> 
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+    <!--ContenedorAñadirMiembro-->         
+            <div class="colored-box" style="flex-direction: column; box-sizing: border-box; display: none;background-color: #143058;" id="addMemberContainer">
+                <div id="header-groupCreation" style="flex: 1 1 100%; box-sizing: border-box; max-height: 10%; display: flex;
+                justify-content: center;
+                align-items: center; padding-top: 10px;">
+                    <h3 style=" font-weight: bold;text-align: center; padding-top: 30px; height: 80%; " id="text-title-group">
+                        Añadir miembro
+                    </h3>  
+                    <button mat-fab (click)="createComponent(1)">
+                        <mat-icon >cancel</mat-icon>
+                    </button>            
+                </div>
+            <div class="options" style="display: flex; flex: 1 1 1e-09px; box-sizing: border-box; max-height: 90%; justify-content: center;
+                align-items: center;">
+                    <div class="options1" style=" width: 50%; height: 100%; display: flex; justify-content: center; flex-direction: column; align-items: center;">                    
+                    <!--CampoParaBuscarUsuario--> 
+                    <input id="txtUserId" name="searchUser" type="text" style="height: 5%; width: 40%; border-radius: 15px; margin: 2%; " #txtUsuario>
+                    <!--TODO: Mover a un costado-->
+                    <button id="btnBuscarUsuario" mat-fab (click)="searchUser(txtUsuario.value);">Buscar</button>
+                    <div style="clear:both ;height: 100%; width: 100%; background-color: white;">                    
+                    <!--CampoLogoDeUsuario--> 
+                    <img name="userLogo" style="width: 10%;height: 10%; float: left; padding-left:  8%; padding-top: 2%;padding-bottom: 2%;">
+                    <div style="float: left;height: 10%; padding-top: 2%; padding-left: 1%;  ">                    
+                        <!--CampoNombreDeUsuario--> 
+                        <h3 name="userName" > Nombre: {{userData.name}} </h3>                    
+                        <!--CampoIdDeUsuario--> 
+                        <h3 name="userId">ID: {{userData.id}}</h3>
+                    </div>
+                    <div style="clear:both; width: 100%; height: 60%;background-color: turquoise;align-items: center; justify-content: center; display: flex; ">
+                        <!--CampoImagenDePerfil--> 
+                        <img name="userImage" style="width: 60%;height: 90%; ">
+                    </div>
+                    <div style="clear:both; width: 100%; height: 25%;background-color:white;">                    
+                    <div style="padding: 5%;box-sizing: border-box;">
+                        <!--CampoDeDescripcionUsuario-->
+                        <h2 name="userDescription">Descripción: {{userData.description}}</h2>   
+                        <!--BotonAñadirMiembro--> 
+                        <button name="addMemberButton" (click)="createComponent(2); addUser()" class="addMemberButton" name="" style="height: 100%; padding: 10px;box-sizing:  border-box; float: right; box-sizing: border-box;"  > Añadir miembro</button>
+                    </div>
+                    </div>
                     </div> 
-                    </div>
-                </div>
                 </div>
             </div>
-        </div>
-
-<!--ContenedorAñadirMiembro-->         
-        <div class="colored-box" style="flex-direction: column; box-sizing: border-box; display: none;background-color: #143058;" id="addMemberContainer">
-            <div id="header-groupCreation" style="flex: 1 1 100%; box-sizing: border-box; max-height: 10%; display: flex;
-            justify-content: center;
-            align-items: center; padding-top: 10px;">
-                <h3 style=" font-weight: bold;text-align: center; padding-top: 30px; height: 80%; " id="text-title-group">
-                    Añadir miembro
-                </h3>  
-                <button mat-fab (click)="createComponent(1)">
-                    <mat-icon >cancel</mat-icon>
-                </button>            
             </div>
-        <div class="options" style="display: flex; flex: 1 1 1e-09px; box-sizing: border-box; max-height: 90%; justify-content: center;
-            align-items: center;">
-                <div class="options1" style=" width: 50%; height: 100%; display: flex; justify-content: center; flex-direction: column; align-items: center;">
-                
-                <!--CampoParaBuscarUsuario--> 
-                <input id="txtUserId" name="searchUser" type="text" style="height: 5%; width: 40%; border-radius: 15px; margin: 2%; " #txtUsuario>
-                <!--TODO: Mover a un costado-->
-                <button id="btnBuscarUsuario" mat-fab (click)="searchUser(txtUsuario.value);">Buscar</button>
-
-                <div style="clear:both ;height: 100%; width: 100%; background-color: white;">
-                
-                 <!--CampoLogoDeUsuario--> 
-
-                <img name="userLogo" style="width: 10%;height: 10%; float: left; padding-left:  8%; padding-top: 2%;padding-bottom: 2%;">
-                <div style="float: left;height: 10%; padding-top: 2%; padding-left: 1%;  ">
-                 
-                    <!--CampoNombreDeUsuario--> 
-                    <h3 name="userName" > Nombre: {{userData.name}} </h3>
-                 
-                    <!--CampoIdDeUsuario--> 
-                    <h3 name="userId">ID: {{userData.id}}</h3>
-                </div>
-                <div style="clear:both; width: 100%; height: 60%;background-color: turquoise;align-items: center; justify-content: center; display: flex; ">
-                    <!--CampoImagenDePerfil--> 
-
-                    <img name="userImage" style="width: 60%;height: 90%; ">
-                </div>
-                <div style="clear:both; width: 100%; height: 25%;background-color:white;">
-                
-                <div style="padding: 5%;box-sizing: border-box;">
-                     <!--CampoDeDescripcionUsuario--> 
-
-                    <h2 name="userDescription">Descripción: {{userData.description}}</h2>   
-                     <!--BotonAñadirMiembro--> 
-                    <button name="addMemberButton" (click)="createComponent(2); addUser()" class="addMemberButton" name="" style="height: 100%; padding: 10px;box-sizing:  border-box; float: right; box-sizing: border-box;"  > Añadir miembro</button>
-                </div>
-                </div>
-                </div> 
-            </div>
-        </div>
         </div>
     </div>
+    <!----------------------------------------------------------------------------------------------------------------------------------------------------------------------->
 </div>
+</ng-sidebar-container>
