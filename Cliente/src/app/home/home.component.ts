@@ -110,7 +110,8 @@ export class HomeComponent implements OnInit {
     this.userData.id = id;
     this.http.post(`http://localhost:3000/usuarios/${id}`,{}).subscribe(data =>{
       //TODO: Parsear mejor los datos.
-      let userData = JSON.stringify(data);
+      console.log(data);      
+      let userData = JSON.stringify(data[0]);
       let userData_ = JSON.parse(userData);
       this.miembros[id] = userData_;
       this.userData.name = userData_.nombre;      
@@ -127,9 +128,10 @@ export class HomeComponent implements OnInit {
     });      
     */             
   }
-  showMessages(groupName:string){
-    this.createComponent(4);
-    this.currentGroup = groupName;      
+  showGroup(buton:HTMLElement){
+    let btn = document.getElementById('btnC');    
+    console.log(btn.dataset.idgrupo);    
+    this.createComponent(4);    
   }
   // ------------------------------------------------------------------------Menu Grupo -----------------------------------------------------------------------------
   // -------------------De aqui para abajo son funciones del menu de grupos ----------------------------------------

@@ -21,6 +21,7 @@
 (onCloseStart)="_onCloseStart()"
 (onClosed)="_onClosed()"
 (onTransitionEnd)="_onTransitionEnd()">
+
 <div class="colored-box2" style="flex-direction: column; box-sizing: border-box; display: flex;">
   <div id="header-menu-group" style="flex: 1 1 100%; box-sizing: border-box; max-height: 5%;">
     <button mat-icon-button aria-label="Close" (click)="_toggleOpened()">
@@ -110,7 +111,7 @@
                     <h3>Mis Grupos</h3>
                     <div *ngFor="let grupo of grupos | keyvalue">
                     <!--TODO: Crear en forma de ListView y arreglar problema con los nombres-->
-                    <button mat-raised-button (click)='showMessages($event.target.innerHTML)' >{{grupo.value.nombre}}</button>                
+                    <button mat-raised-button (click)='showGroup()' data-idgrupo="{{grupo.value.id}}" id="btnC">{{grupo.value.nombre}}</button>                
                     </div>                
                 </div>
             </div>
