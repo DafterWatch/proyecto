@@ -11,7 +11,9 @@ import {HttpClient} from '@angular/common/http'
 export class HomeComponent implements OnInit {
 
   mensajes : Array<String> = [];
-  miembros : Object = {};  
+
+  miembros : Object = {};
+    
   userData : any = {
     name: "",
     id: "",
@@ -42,8 +44,13 @@ export class HomeComponent implements OnInit {
       mensaje,
       grupo : this.currentGroup.trim()
     } */
+    alert("Mensaje123123 enviado");
     this.socket.emit('nuevoMensaje',mensaje);    
   } 
+
+
+
+
   value:string = "";
   
   createComponent(index){
@@ -76,6 +83,7 @@ export class HomeComponent implements OnInit {
   }
 
   createGroup(){
+    alert("Grupo creado")
     let groupName:any = document.getElementById('txtGroupName');
     let groupDescription:any = document.getElementById('txtGroupDescription');    
     if(this.miembros && Object.keys(this.miembros).length===0 && this.miembros.constructor===Object){

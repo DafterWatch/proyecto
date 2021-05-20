@@ -1,0 +1,43 @@
+<div class="colored-box" id="chatContainer"> 
+    <div id="header-chat">
+        <img mat-card-image id="img-title-group" src="assets/images/chayan.png" style="float: left;">
+        <button mat-fab (click)="_toggleOpened()">
+            {{currentGroup}}
+        </button>               
+        <button mat-raised-button id="text-title-group">
+            Titulo del grupo
+        </button>            
+        <div id="button-menu">
+            <button mat-icon-button [matMenuTriggerFor]="menu" >
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="_toggleOpened()">Informacion del grupo</button>
+                <button mat-menu-item>Crear Formulario</button>
+              </mat-menu>
+        </div>
+    </div>
+    <div class="options" fxflex="80" id="chatContainerDiv">
+    <!--Mensajes--> 
+   
+    <div *ngFor="let mensaje of mensajes">
+        <div> {{mensaje}} </div> <br>
+    </div> 
+    </div>
+    <div id="text-area-chat" fxflex="10">
+        <button mat-fab>
+            <mat-icon>attachment</mat-icon>
+            </button>
+        <mat-form-field style="width: 88%;" appearance="fill" id="input-message">
+            <input name="Mensaje-Input" #txtMensaje id="txtMensaje" matInput placeholder="Escribe un mensaje aquí" required [(ngModel)]="value" >
+            <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        <div id="send-button" (click)='sendMensaje(txtMensaje.value)'>
+            <button mat-fab color="primary" >
+            <mat-icon>send</mat-icon>
+            </button>
+        </div>
+    </div>            
+</div>

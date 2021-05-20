@@ -31,6 +31,9 @@ import {MatMenuModule} from '@angular/material/menu';
 
 //HTPP
 import {HttpClientModule} from '@angular/common/http';
+import { ChatGroupComponent } from './home/chat-group/chat-group.component';
+import { CreateGroupComponent } from './home/create-group/create-group.component';
+import { AddMemberComponent } from './home/add-member/add-member.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,10 @@ import {HttpClientModule} from '@angular/common/http';
     DemoComponent,
     HomeComponent,
     PageNotFoundComponent,
-    GroupMenuComponent
+    GroupMenuComponent,
+    ChatGroupComponent,
+    CreateGroupComponent,
+    AddMemberComponent
   ],
   imports: [
     BrowserModule,

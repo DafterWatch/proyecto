@@ -1,0 +1,68 @@
+<div class="colored-box" id="groupContainer">
+    <div id="header-groupCreation">
+        <h3 id="text-title-group">
+            Creación de grupo
+        </h3>  
+        <button mat-fab  (click)="executeEvent(1)" >
+            <mat-icon >cancel</mat-icon>
+        </button>            
+    </div>
+    <div class="options" id="contenedorCrearGrupo">
+        <div class="options1" id="contenedorCrearGrupo1" >
+
+        <div id="contenedorCrearGrupo1_1">
+            <div>
+
+                <!--NombreDeGrupo--> 
+                <h1>Nombre del grupo</h1><br>
+                <input id="idInputNombreDegrupo" name="groupName" type="text" ><br><br>
+                <h1>Descripción del grupo</h1><br>
+                <!--DescripcionDeGrupo--> 
+                <input id="idDescripcionDeGrupo" name="groupDescription" type="text"><br>
+            
+                <div>
+
+            <div id="contenedorCrearGrupo1_1_1" >
+                <div id="contenedorCrearGrupo1_1_2">
+
+                <!--BotónAgregarMiembro--> 
+                    <button (click)="executeEvent(3)" id="addMenmberButton" name="addMember"  > Agregar miembro</button><br>
+                </div>
+
+                <div id="listOfBembersDiv">
+                
+                <!--ListaDeMiembrosMiembros--> 
+                    <h2> Miembros </h2>   
+                <div id="listOfMembers" name="MebersList" >
+                    <div *ngFor="let miembro of miembros | keyvalue" >
+                        <h3>{{miembro.value.name}}</h3>
+                    </div>
+                </div>      
+                </div>  
+            </div>    
+                
+        </div>    
+        </div>
+        </div>
+        </div>
+        <div id="contenedorCrearGrupo2" class="options2">
+        <div id="contenedorCrearGrupo2_1" >
+            <div id="#contenedorCrearGrupo2_1_1">
+
+        <!--ImagenDeGrupo--> 
+
+            <div>
+                <img name="groupImage" src="" >
+            </div>
+            </div>
+            <div id="createGroupButton">
+
+        <!--BotonParaCrearGrupo--> 
+            <div id="createGroupDiv">
+                <button (click)="createGroup()"  id="buttonCss" name="createGroup" > Crear</button>
+            </div> 
+            </div>
+        </div>
+        </div>
+    </div>
+</div>

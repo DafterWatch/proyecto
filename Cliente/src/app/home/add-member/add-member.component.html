@@ -1,0 +1,47 @@
+<div class="colored-box" id="addMemberContainer">
+    <div id="header-groupCreation">
+        <h3 id="text-title-group">
+            Añadir miembro
+        </h3>  
+        <button mat-fab  (click)="executeEvent(1)">
+            <mat-icon >cancel</mat-icon>
+        </button>            
+    </div>
+<div id="addMemberContainerGroup_1" class="options">
+        <div id="addMemberContainerGroup_1_1" class="options1">
+        
+        <!--CampoParaBuscarUsuario--> 
+        <input id="fieldToSearchUser" name="searchUser" type="text" >
+
+        <div id="fieldToSeeUserLogo" >
+        
+        <!--CampoLogoDeUsuario--> 
+
+        <img name="userLogo" id="userLogo">
+        <div id="fieldToSeeUserInformation">
+        
+            <!--CampoNombreDeUsuario--> 
+            <h3 name="userName" >Nombre: {{userData.name}}</h3>
+        
+            <!--CampoIdDeUsuario--> 
+            <h3 name="userId">{{userData.id}}</h3>
+        </div>
+        <div id="fieldToSeeUserInformation2">
+            <!--CampoImagenDePerfil--> 
+
+            <img name="userImage">
+        </div>
+        <div id="fieldUserDescription" >
+        
+        <div>
+            <!--CampoDeDescripcionUsuario--> 
+
+            <h2 name="userDescription">Descripción: {{userData.description}}</h2>   
+            <!--BotonAñadirMiembro--> 
+            <button (click)="executeEvent(2)" id="addMemberButton" name="addMemberButton"  class="addMemberButton" name=""> Añadir miembro</button>
+        </div>
+        </div>
+        </div> 
+    </div>
+</div>
+</div>
