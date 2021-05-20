@@ -119,159 +119,167 @@
         <div fxflex="" style="flex: 1 1 0%; box-sizing: border-box;" class="chat" id="principalContainer">
     <!--MODULARIZAR-->
     <!--ContenedorDeChat--> 
-            <div class="colored-box" style="flex-direction: column; box-sizing: border-box; display: flex;" id="chatContainer"> 
-                <div id="header-chat" style="flex: 1 1 100%; box-sizing: border-box; max-height: 10%;">
-                    <img mat-card-image id="img-title-group" src="assets/images/chayan.png">
-                    <button mat-raised-button id="text-title-group" (click)="_toggleOpened()">
-                        {{currentGroup}}
-                    </button>            
-                    <div id="button-menu">
-                        <button mat-icon-button [matMenuTriggerFor]="menu" style="height: 100%; width: 100%;">
-                            <mat-icon>more_vert</mat-icon>
-                          </button>
-                          <mat-menu #menu="matMenu">
-                            <button mat-menu-item (click)="_toggleOpened()">Informacion del grupo</button>
-                            <button mat-menu-item>Crear Formulario</button>
-                          </mat-menu>
-                    </div>
-                </div>
-                <div class="options" fxflex="80" style="flex: 1 1 1e-09px; box-sizing: border-box; max-height: 80%;">
-                <!--Mensajes-->            
-                <div *ngFor="let mensaje of mensajes">
-                    <div> {{mensaje}} </div> <br>
-                </div> 
-                </div>
-                <div id="text-area-chat" fxflex="10" style="flex: 1 1 100%; box-sizing: border-box; max-height: 10%;">
-                    <button mat-fab>
-                        <mat-icon>attachment</mat-icon>
-                        </button>
-                    <mat-form-field style="width: 88%;" appearance="fill" id="input-message">
-                        <input name="Mensaje-Input" #txtMensaje id="txtMensaje" matInput placeholder="Escribe un mensaje aquí" required [(ngModel)]="value">
-                        <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
-                            <mat-icon>close</mat-icon>
-                        </button>
-                    </mat-form-field>
-                    <div id="send-button" (click)='sendMensaje(txtMensaje.value)'>
-                        <button mat-fab color="primary" >
-                        <mat-icon>send</mat-icon>
-                        </button>
-                    </div>
-                </div>            
+    <div class="colored-box" id="chatContainer"> 
+        <div id="header-chat">
+            <img mat-card-image id="img-title-group" src="assets/images/chayan.png">
+            <button mat-fab (click)="_toggleOpened()">
+                {{currentGroup}}
+            </button>               
+            <button mat-raised-button id="text-title-group">
+                Titulo del grupo
+            </button>            
+            <div id="button-menu">
+                <button mat-icon-button [matMenuTriggerFor]="menu" >
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="_toggleOpened()">Informacion del grupo</button>
+                    <button mat-menu-item>Crear Formulario</button>
+                  </mat-menu>
             </div>
+        </div>
+        <div class="options" fxflex="80" id="chatContainerDiv">
+        <!--Mensajes--> 
+       
+        <div *ngFor="let mensaje of mensajes">
+            <div> {{mensaje}} </div> <br>
+        </div> 
+        </div>
+        <div id="text-area-chat" fxflex="10">
+            <button mat-fab>
+                <mat-icon>attachment</mat-icon>
+                </button>
+            <mat-form-field style="width: 88%;" appearance="fill" id="input-message">
+                <input name="Mensaje-Input" #txtMensaje id="txtMensaje" matInput placeholder="Escribe un mensaje aquí" required [(ngModel)]="value">
+                <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </mat-form-field>
+            <div id="send-button" (click)='sendMensaje(txtMensaje.value)'>
+                <button mat-fab color="primary" >
+                <mat-icon>send</mat-icon>
+                </button>
+            </div>
+        </div>            
+    </div>
     <!--ContenedorCrearGrupo--> 
-            <div class="colored-box" style="flex-direction: column; box-sizing: border-box; display: none; background-color: #143058;"id="groupContainer">
-                <div id="header-groupCreation" style="flex: 1 1 100%; box-sizing: border-box; max-height: 10%; display: flex;
-                justify-content: center;
-                align-items: center; padding-top: 10px;">
-                    <h3 style=" font-weight: bold;text-align: center; padding-top: 30px; height: 80%; " id="text-title-group">
+            <div class="colored-box" id="groupContainer">
+                <div id="header-groupCreation">
+                    <h3 id="text-title-group">
                         Creación de grupo
                     </h3>  
-                    <button mat-fab (click)="createComponent(1)">
+                    <button mat-fab  (click)="createComponent(1)" >
                         <mat-icon >cancel</mat-icon>
                     </button>            
                 </div>
-                <div class="options" style="flex-direction: row; flex: 1 1 1e-09px; box-sizing: border-box; max-height: 90%; ">
-                    <div class="options1" style="float:left; width: 50%; height: 100%; display: flex;
-                    justify-content: center;
-                    align-items: center;">
-                    <div style="width: 90%; height: 90%; background-color: #efebe8;">
+                <div class="options" id="contenedorCrearGrupo">
+                    <div class="options1" id="contenedorCrearGrupo1" >
+            
+                    <div id="contenedorCrearGrupo1_1">
                         <div>
+            
                             <!--NombreDeGrupo--> 
                             <h1>Nombre del grupo</h1><br>
-                            <input id="txtGroupName" name="groupName" type="text" style="height: 20%; width: 40%; border-radius: 15px;  box-sizing: border-box; padding: 2%;" ><br><br>
+                            <input id="idInputNombreDegrupo" name="groupName" type="text" ><br><br>
                             <h1>Descripción del grupo</h1><br>
                             <!--DescripcionDeGrupo--> 
-                            <input id="txtGroupDescription" name="groupDescription" type="text" style="height: 50%; width: 90%; border-radius: 15px;  box-sizing: border-box; padding: 10%;" ><br>
+                            <input id="idDescripcionDeGrupo" name="groupDescription" type="text"><br>
+                        
                             <div>
-                        <div style="margin-top: 10%;">
-                            <div style="float: left; width: 50%;" >
+            
+                        <div id="contenedorCrearGrupo1_1_1" >
+                            <div id="contenedorCrearGrupo1_1_2">
+            
                             <!--BotónAgregarMiembro--> 
-                                <button name="addMember" (click)="createComponent(3)" style=" padding-left:10% ;height: 50%; width: 90%;border-radius: 5px;  box-sizing: border-box; padding: 10%;  background: #488ff8;
-                                color: white;"> Agregar miembro</button><br>
+                                <button (click)="createComponent(3)" id="addMenmberButton" name="addMember"  > Agregar miembro</button><br>
                             </div>
-                            <div style="float: right;width: 40%;padding-left: 2%;"  >                            
+            
+                            <div id="listOfBembersDiv">
+                            
                             <!--ListaDeMiembrosMiembros--> 
                                 <h2> Miembros </h2>   
-                            <div name="MebersList" style=" background-color: gray; padding-left: 2%;border-radius: 2px; width:100%; height:200px; overflow: scroll;">
-                                <!--TODO: Crear componente en donde se pueda hacer click-->
+                            <div id="listOfMembers" name="MebersList" >
                                 <div *ngFor="let miembro of miembros | keyvalue" >
                                     <h3>{{miembro.value.name}}</h3>
                                 </div>
                             </div>      
                             </div>  
-                        </div>
+                        </div>    
+                            
                     </div>    
                     </div>
                     </div>
                     </div>
-                    <div class="options2" style="float:left; width: 49%; height: 100%; ">
-                    <div style="clear: both; width: 100%; height: 100%" >
-                        <div style="height: 80%; width: 100%; background-color: gray; display: flex;
-                        justify-content: center;
-                        align-items: center;">
+                    <div id="contenedorCrearGrupo2" class="options2">
+                    <div id="contenedorCrearGrupo2_1" >
+                        <div id="#contenedorCrearGrupo2_1_1">
+            
                     <!--ImagenDeGrupo--> 
-                        <div style="width: 60%;height: 60%;">
-                            <img name="groupImage" src="" style="width: 100%;height: 100%;">
+            
+                        <div>
+                            <img name="groupImage" src="" >
                         </div>
                         </div>
-                        <div style="height: 20%; width: 100%; background-color: gray; display: flex;
-                        justify-content: flex-end;
-                        align-items: flex-end;">
+                        <div id="createGroupButton">
+            
                     <!--BotonParaCrearGrupo--> 
-                        <div style="background-color:gray; width: 50%; height: 100%; padding:5%;box-sizing: border-box; ">
-                            <button (click)="createGroup()" name="createGroup" style="font-size:xx-large;background-color:rgb(255, 167, 4); color: white; width: 100%; height: 100%; border-radius: 10px;"> Crear</button>
+                        <div id="createGroupDiv">
+                            <button (click)="createComponent(2)"  id="buttonCss" name="createGroup" > Crear</button>
                         </div> 
                         </div>
                     </div>
                     </div>
                 </div>
             </div>
+    
     <!--ContenedorAñadirMiembro-->         
-            <div class="colored-box" style="flex-direction: column; box-sizing: border-box; display: none;background-color: #143058;" id="addMemberContainer">
-                <div id="header-groupCreation" style="flex: 1 1 100%; box-sizing: border-box; max-height: 10%; display: flex;
-                justify-content: center;
-                align-items: center; padding-top: 10px;">
-                    <h3 style=" font-weight: bold;text-align: center; padding-top: 30px; height: 80%; " id="text-title-group">
+            <div class="colored-box" id="addMemberContainer">
+                <div id="header-groupCreation">
+                    <h3 id="text-title-group">
                         Añadir miembro
                     </h3>  
-                    <button mat-fab (click)="createComponent(1)">
+                    <button mat-fab  (click)="createComponent(1)">
                         <mat-icon >cancel</mat-icon>
                     </button>            
                 </div>
-            <div class="options" style="display: flex; flex: 1 1 1e-09px; box-sizing: border-box; max-height: 90%; justify-content: center;
-                align-items: center;">
-                    <div class="options1" style=" width: 50%; height: 100%; display: flex; justify-content: center; flex-direction: column; align-items: center;">                    
+            <div id="addMemberContainerGroup_1" class="options">
+                    <div id="addMemberContainerGroup_1_1" class="options1">
+                    
                     <!--CampoParaBuscarUsuario--> 
-                    <input id="txtUserId" name="searchUser" type="text" style="height: 5%; width: 40%; border-radius: 15px; margin: 2%; " #txtUsuario>
-                    <!--TODO: Mover a un costado-->
-                    <button id="btnBuscarUsuario" mat-fab (click)="searchUser(txtUsuario.value);">Buscar</button>
-                    <div style="clear:both ;height: 100%; width: 100%; background-color: white;">                    
+                    <input id="fieldToSearchUser" name="searchUser" type="text" >
+            
+                    <div id="fieldToSeeUserLogo" >
+                    
                     <!--CampoLogoDeUsuario--> 
-                    <img name="userLogo" style="width: 10%;height: 10%; float: left; padding-left:  8%; padding-top: 2%;padding-bottom: 2%;">
-                    <div style="float: left;height: 10%; padding-top: 2%; padding-left: 1%;  ">                    
+            
+                    <img name="userLogo" id="userLogo">
+                    <div id="fieldToSeeUserInformation">
+                    
                         <!--CampoNombreDeUsuario--> 
-                        <h3 name="userName" > Nombre: {{userData.name}} </h3>                    
+                        <h3 name="userName" >Nombre: {{userData.name}}</h3>
+                    
                         <!--CampoIdDeUsuario--> 
-                        <h3 name="userId">ID: {{userData.id}}</h3>
+                        <h3 name="userId">{{userData.id}}</h3>
                     </div>
-                    <div style="clear:both; width: 100%; height: 60%;background-color: turquoise;align-items: center; justify-content: center; display: flex; ">
+                    <div id="fieldToSeeUserInformation2">
                         <!--CampoImagenDePerfil--> 
-                        <img name="userImage" style="width: 60%;height: 90%; ">
+            
+                        <img name="userImage">
                     </div>
-                    <div style="clear:both; width: 100%; height: 25%;background-color:white;">                    
-                    <div style="padding: 5%;box-sizing: border-box;">
-                        <!--CampoDeDescripcionUsuario-->
+                    <div id="fieldUserDescription" >
+                    
+                    <div>
+                        <!--CampoDeDescripcionUsuario--> 
+            
                         <h2 name="userDescription">Descripción: {{userData.description}}</h2>   
                         <!--BotonAñadirMiembro--> 
-                        <button name="addMemberButton" (click)="createComponent(2); addUser()" class="addMemberButton" name="" style="height: 100%; padding: 10px;box-sizing:  border-box; float: right; box-sizing: border-box;"  > Añadir miembro</button>
+                        <button (click)="createComponent(2)" id="addMemberButton" name="addMemberButton"  class="addMemberButton" name=""> Añadir miembro</button>
                     </div>
                     </div>
                     </div> 
                 </div>
             </div>
             </div>
-        </div>
-    </div>
     <!----------------------------------------------------------------------------------------------------------------------------------------------------------------------->
 </div>
-</ng-sidebar-container>
+
