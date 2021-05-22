@@ -34,6 +34,7 @@ import {HttpClientModule} from '@angular/common/http';
 import { ChatGroupComponent } from './home/chat-group/chat-group.component';
 import { CreateGroupComponent } from './home/create-group/create-group.component';
 import { AddMemberComponent } from './home/add-member/add-member.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { AddMemberComponent } from './home/add-member/add-member.component';
     GroupMenuComponent,
     ChatGroupComponent,
     CreateGroupComponent,
-    AddMemberComponent
+    AddMemberComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

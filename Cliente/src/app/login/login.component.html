@@ -1,0 +1,33 @@
+<div class="colored-box" style="flex-direction: row; box-sizing: border-box; display: flex;">
+    <div style="flex: 1 1 100%; box-sizing: border-box; max-width: 20%;">
+        
+    </div>
+    <div fxflex="60" style="flex: 1 1 100%; box-sizing: border-box; max-width: 60%;">
+        <div class="imgcontainer">
+            <img src="assets/images/person.png" alt="Avatar" class="avatar">
+          </div>
+        
+          <div class="container">
+            <label for="uname"><b>Usuario</b></label>
+            <input type="text" placeholder="Ingresar usuario" name="uname" required>
+        
+            <label for="psw"><b>Contraseña</b></label>
+            <input type="password" placeholder="Ingresar contraseña" name="psw" required>
+
+            <button routerLink="/home">Iniciar sesión</button>
+            <label>
+              <input type="checkbox" name="remember"> Recuerdame
+            </label>
+          </div>
+        
+          <div class="container">
+            <button class="cancelbtn">Cancelar</button>
+            <button class="registerbtn">Registrarse</button>
+            <span class="psw"><a>¿Olvido su contraseña?</a></span>
+          </div>
+    </div>
+    <div fxflex="20" style="flex: 1 1 100%; box-sizing: border-box; max-width: 20%;">
+
+    </div>
+</div>
+    

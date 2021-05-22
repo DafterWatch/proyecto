@@ -4,12 +4,14 @@ import { DemoComponent } from './demo/demo.component';
 import { GroupMenuComponent } from './group-menu/group-menu.component';
 
 import { HomeComponent } from './home/home.component';
+import { LoginComponent } from './login/login.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const routes: Routes = [
   // Con este hacemos q al ir a Localhost:4200 lo envie al home
-  { path: '', redirectTo: 'home', pathMatch: 'full'},
+  { path: '', redirectTo: 'login', pathMatch: 'full'},
   { path: 'home', component: HomeComponent },
+  { path: 'login', component: LoginComponent },
   //componente de pruebas - Jose
   //{ path: 'demo', component: DemoComponent },
   //{ path: 'group-menu', component: GroupMenuComponent },
