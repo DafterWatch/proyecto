@@ -3,10 +3,10 @@
         
     </div>
     <div fxflex="60" style="flex: 1 1 100%; box-sizing: border-box; max-width: 60%;">
-        <div class="imgcontainer">
+
+          <div class="imgcontainer">
             <img src="assets/images/person.png" alt="Avatar" class="avatar">
-          </div>
-        
+          </div>        
           <div class="container">
             <label for="uname"><b>Usuario</b></label>
             <input type="text" placeholder="Ingresar usuario" name="uname" required>
@@ -22,8 +22,8 @@
         
           <div class="container">
             <button class="cancelbtn">Cancelar</button>
-            <button class="registerbtn">Registrarse</button>
-            <span class="psw"><a>¿Olvido su contraseña?</a></span>
+            <button class="registerbtn" routerLink="/register">Registrarse</button>
+            <span class="psw"><a routerLink="/recovery">¿Olvido su contraseña?</a></span>
           </div>
     </div>
     <div fxflex="20" style="flex: 1 1 100%; box-sizing: border-box; max-width: 20%;">

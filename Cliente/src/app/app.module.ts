@@ -38,6 +38,7 @@ import { CreateGroupComponent } from './home/create-group/create-group.component
 import { AddMemberComponent } from './home/add-member/add-member.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { AccountRecoveryComponent } from './account-recovery/account-recovery.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { RegisterComponent } from './register/register.component';
     CreateGroupComponent,
     AddMemberComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    AccountRecoveryComponent
   ],
   imports: [
     BrowserModule,
