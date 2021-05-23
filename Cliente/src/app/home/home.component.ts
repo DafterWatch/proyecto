@@ -10,27 +10,31 @@ import {HttpClient} from '@angular/common/http'
 })
 export class HomeComponent implements OnInit {
 
-  mensajes : Array<String> = [];
 
-  miembros : Object = {};
-    
+  mensajes : Array<String> = [];
+  miembros =[];
+  miembroscount=0;
+  currentMembers=[];
+  currentGroupItems=[];
   userData : any = {
     name: "",
     id: "",
     description : "",
     profile_picture : ""
   }
-  //grupos : Array<String> = ['Ingles III',"Matemática Aplicada"];
+  currentNewgroupAdmin:Number=-1;
   grupos : Object = {    
     
   }
   currentGroup = "";
+  currentDescription="Desc:";
 
   constructor(private socket: WebSocketService, private http:HttpClient) {
 
     this.http.post('http://localhost:3000/grupos/',{}).subscribe(data =>{      
       let userData = JSON.stringify(data);          
-      this.grupos = JSON.parse(userData);            
+      this.grupos = JSON.parse(userData);  
+     
     });    
   }
 
@@ -39,17 +43,25 @@ export class HomeComponent implements OnInit {
       this.mensajes.push(data);
     });
   } 
-  sendMensaje(mensaje:string){       
-    /* let datos:Object = {
-      mensaje,
-      grupo : this.currentGroup.trim()
-    } */
-    alert("Mensaje123123 enviado");
+  sendMensaje(mensaje:string){         
     this.socket.emit('nuevoMensaje',mensaje);    
   } 
 
+  cleanCreateGroupFields(){
+    var groupName:any =document.getElementById('idInputNombreDegrupo');
+    var groupDescription:any  = document.getElementById('idDescripcionDeGrupo');
+    
+    groupName.value="";
+    groupDescription.value="";
+    this.miembros=[];
+    this.currentNewgroupAdmin=-1;
 
-
+  }
+  cleanAddMemberFields(){
+    var searchUser:any =document.getElementById('fieldToSearchUser');
+    searchUser.value="";
+    this.userData={}
+  }
 
   value:string = "";
   
@@ -58,22 +70,32 @@ export class HomeComponent implements OnInit {
     var groupWindow = document.getElementById('groupContainer');
     var addMemberWindow = document.getElementById('addMemberContainer');
 
-    //REVISAR!!!
     if(index==1){
       chatWindow.style.display="flex";
       groupWindow.style.display="none";
       addMemberWindow.style.display="none";
+      this.currentNewgroupAdmin=-1;
       
     }
     if(index==2){
       chatWindow.style.display="none";
       groupWindow.style.display="flex";
       addMemberWindow.style.display="none";
+      
     }
     if(index==3){
       chatWindow.style.display="none";
       groupWindow.style.display="none";
       addMemberWindow.style.display="flex";
+      this.cleanAddMemberFields();
+      var checkBoxAdmin:any = document.getElementById('checkboxAdmin');
+      if(this.currentNewgroupAdmin!=-1){
+
+        checkBoxAdmin.disabled=true;
+      }
+      else{
+        checkBoxAdmin.disabled=false;
+      }
     }
     if(index == 4){
       chatWindow.style.display="flex";
@@ -83,67 +105,129 @@ export class HomeComponent implements OnInit {
   }
 
   createGroup(){
+
+
+    let groupsQuantity=0;
+    for (const group in this.grupos) {
+      groupsQuantity++;
+    }
     alert("Grupo creado")
-    let groupName:any = document.getElementById('txtGroupName');
-    let groupDescription:any = document.getElementById('txtGroupDescription');    
+    let groupName:any = document.getElementById('idInputNombreDegrupo');
+    let groupDescription:any = document.getElementById('idDescripcionDeGrupo'); 
+
     if(this.miembros && Object.keys(this.miembros).length===0 && this.miembros.constructor===Object){
       console.log('No se han seleccionado miembros');
       return;
     }            
-    let integrantes = Object.keys(this.miembros);
-    let grupo_n = {nombre: groupName.value, descripcion: groupDescription.value, usuarios:integrantes }
-    /*this.socket.socket.emit('crearGrupo',{nombre:groupName.value,descripcion:groupDescription.value}, (id,cb)=>{      
-        this.grupos[id] = cb;
-    });*/
+    let integrantesGrupo=[];
+    this.miembros.forEach(element => {
+      integrantesGrupo.push(element.id)
+    });
+    let informacionDelGrupo1={
+      nombre: groupName.value,
+      descripcion:groupDescription.value,
+      foto:""
+    }
+    let mensaje:{
+      archivo:{
+          mensaje:"",
+          remitente:"",
+          hora:Date
+      }
+    }
 
+    let miembrosDelGrupo={
+        integrantes:integrantesGrupo,
+        admin:this.currentNewgroupAdmin
+    };
+    let grupo_n = {id: groupsQuantity, miembrosDelGrupo:miembrosDelGrupo,informacion:informacionDelGrupo1,mensaje:mensaje}
+ 
+    
     this.http.post('http://localhost:3000/createG',grupo_n).subscribe( data =>{
       console.log(data);      
     });
-
     this.http.post('http://localhost:3000/grupos/',{}).subscribe(data =>{      
       let userData = JSON.stringify(data);                      
-      this.grupos = JSON.parse(userData);            
+      this.grupos = JSON.parse(userData); 
     });    
     this.createComponent(4);
-    
+  }
+  copy (obj) {
+    let result;
+    if (typeof obj === 'object') {
+      result = new obj.constructor();
+    } else {
+      return obj;
+    }
+    for (let prop of Reflect.ownKeys (obj)) {
+      result[ prop ] = this.copy (obj[ prop ]);
+    }
+    return result;
   }
   addUser(){
-    //TODO: Acá va la lógica de busqueda de usuario en base de datos.
-    this.miembros[0] = this.userData;    
-    //this.miembros.push(this.userData.name);
-    //TODO: Luego de hacer click limpiar los inputs, ver si se puede corregir con componentes dinámicos
+
+    const userdata2= this.copy(this.userData);
+    
+    var checkBoxAdmin:any = document.getElementById('checkboxAdmin');
+    if(checkBoxAdmin.checked && checkBoxAdmin.disabled==false){
+   
+      this.currentNewgroupAdmin=userdata2.id;
+    
+    }
+    
+    var userAlreadyRegistered=false;
+    this.miembros.forEach(element => {
+      if(userdata2.id==element.id){
+        userAlreadyRegistered=true;
+      }
+    });
+    
+    if(!userAlreadyRegistered){
+      this.miembros[this.miembroscount]=userdata2;
+      this.miembroscount++;
+    }
+    else{
+      alert("¡¡Usuario ya registrado!!");
+      this.createComponent(3);  
+    }
+ 
   }
   searchUser(id:any){
 
-    this.userData.id = id;
-    this.http.post(`http://localhost:3000/usuarios/${id}`,{}).subscribe(data =>{
+      
+      this.userData.id = id;
+      this.http.post(`http://localhost:3000/usuarios/${id}`,{}).subscribe(data =>{
       //TODO: Parsear mejor los datos.
-      console.log(data);      
+           
       let userData = JSON.stringify(data[0]);
       let userData_ = JSON.parse(userData);
-      this.miembros[id] = userData_;
+
+     
       this.userData.name = userData_.nombre;      
-      this.userData.description = userData_.descripcion;                      
+      this.userData.description = userData_.descripcion;
+              
     });    
-    /*
-    this.socket.socket.emit('buscarUsuario',id,cb=>{
-      if(cb.error){
-        console.log('Error');        
-        return;
-      }
-      this.userData.name = cb.usuario.nombre;      
-      this.userData.description = cb.usuario.descripcion;
-    });      
-    */             
   }
-  showGroup(buton:HTMLElement){
-    let btn = document.getElementById('btnC');    
-    console.log(btn.dataset.idgrupo);    
+  showGroup(buton:any){
+
+    this.currentMembers=[]; 
+
+    this.currentGroup=buton.informacion.nombre;   
+    this.currentDescription=buton.informacion.descripcion;
+    this.currentGroupItems=buton.miembrosDelGrupo.integrantes;
+
+    this.currentGroupItems.forEach(element => {
+        this.http.post(`http://localhost:3000/usuarios/${element}`,{}).subscribe(data =>{
+        let userData2 = JSON.stringify(data[0]);
+        let userData2_ = JSON.parse(userData2);
+        this.currentMembers.push(userData2_);
+      }); 
+    });
     this.createComponent(4);    
   }
   // ------------------------------------------------------------------------Menu Grupo -----------------------------------------------------------------------------
   // -------------------De aqui para abajo son funciones del menu de grupos ----------------------------------------
-  items = Array.from({length: 10}).map((_, i) => `Item #${i}`);
+  public items = [];
   public _opened: boolean = false;
   public _modeNum: number = 0;
   public _positionNum: number = 1;

@@ -10,8 +10,14 @@
 <div id="addMemberContainerGroup_1" class="options">
         <div id="addMemberContainerGroup_1_1" class="options1">
         
-        <!--CampoParaBuscarUsuario--> 
-        <input id="fieldToSearchUser" name="searchUser" type="text" >
+        <div style="width: 100%; margin-left: 25%; height: 8%; margin-bottom:2%" >
+            <button (click)="buscarMiembro(searchUser.value)"><mat-icon  >search </mat-icon></button> 
+            <!--CampoParaBuscarUsuario--> 
+            <input id="fieldToSearchUser" #searchUser name="searchUser" type="text" >
+    
+            <button  (click)="executeEvent(2)" ><mat-icon >cancel </mat-icon></button> 
+        </div>
+       
 
         <div id="fieldToSeeUserLogo" >
         
@@ -38,7 +44,9 @@
 
             <h2 name="userDescription">Descripción: {{userData.description}}</h2>   
             <!--BotonAñadirMiembro--> 
-            <button (click)="executeEvent(2)" id="addMemberButton" name="addMemberButton"  class="addMemberButton" name=""> Añadir miembro</button>
+            <label>Es admin?</label>
+            <input type="checkbox" id="checkboxAdmin" value="Hacer Admin?">
+            <button (click)="executeEvent(2)" (click)="addUser()" id="addMemberButton" name="addMemberButton"  class="addMemberButton" name=""> Añadir miembro</button>
         </div>
         </div>
         </div> 

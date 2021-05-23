@@ -24,4 +24,13 @@ export class AddMemberComponent implements OnInit {
     profile_picture : ""
   }
 
+  @Output() buscarMiembroEvento= new EventEmitter<string>();
+  buscarMiembro(message){
+    this.buscarMiembroEvento.emit(message);
+  }
+  @Output() addUserEvent= new EventEmitter();
+  addUser(){
+    this.addUserEvent.emit();
+  }
+  
 }

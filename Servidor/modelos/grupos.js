@@ -4,10 +4,23 @@ const Schema = mongoose.Schema;
 
 const grupoSchema = new Schema ({
     id:Number,
-    nombre:String,
-    descripcion:String,
-    integrantes:Array,
-    admin:Number
+    mensaje:{
+        archivo:{
+            mensaje:String,
+            remitente:Number,
+            hora:Date
+
+        }
+    },
+    miembrosDelGrupo:{
+        integrantes:Array,
+        admin:Number,
+    },
+    informacion:{
+        foto:String,
+        nombre:String,
+        descripcion:String
+    }
 });
 
 module.exports = mongoose.model('grupo',grupoSchema,'grupos');

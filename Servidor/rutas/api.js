@@ -57,9 +57,21 @@ router.post('/grupos',(req,res)=>{
 
 router.post('/createG',jsonParser,(req,res)=>{
     
-    grupos[id_grupo.toString()] = req.body;    
-    id_grupo++;
+
+    var grupo = new Grupo(req.body)
+    grupo.save(function (err) {
+    if (err) {
+        console.log(err)
+    } else {
+        console.log('group added')
+    }
+    })
+
+    //grupos[id_grupo.toString()] = req.body;    
+    //id_grupo++;
     res.send(true);
+
+  
 });
 
 module.exports = router;
