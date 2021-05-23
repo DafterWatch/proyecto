@@ -28,6 +28,8 @@ import {MatListModule} from '@angular/material/list';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 //Menu
 import {MatMenuModule} from '@angular/material/menu';
+//Select
+import {MatSelectModule} from '@angular/material/select';
 
 //HTPP
 import {HttpClientModule} from '@angular/common/http';
@@ -35,6 +37,7 @@ import { ChatGroupComponent } from './home/chat-group/chat-group.component';
 import { CreateGroupComponent } from './home/create-group/create-group.component';
 import { AddMemberComponent } from './home/add-member/add-member.component';
 import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +49,8 @@ import { LoginComponent } from './login/login.component';
     ChatGroupComponent,
     CreateGroupComponent,
     AddMemberComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -71,6 +75,8 @@ import { LoginComponent } from './login/login.component';
     //Scroll
     ScrollingModule,
     MatMenuModule,
+    //Select
+    MatSelectModule,
   ],
   bootstrap: [AppComponent],
   providers: [ErrorStateMatcher]
