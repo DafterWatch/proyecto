@@ -1,5 +1,12 @@
 module.exports = function (io){
-            
+    
+    const Usuario = require('./modelos/usuario');
+    const Grupo = require('./modelos/grupos');
+
+    var usuarios = {
+
+    };
+
     io.on('connection', socket=>{
         console.log('Nueva conexión');
         
@@ -11,6 +18,14 @@ module.exports = function (io){
 
         socket.on('nuevoGrupo',data=>{
             grupos[data.nombre] = [];    
+        });
+
+        socket.on('login-nuevo', async (data,cb)=>{
+            let user = await Usuario.findOne({"id":data});
+            /*if(exist user)*/ cb(false);
+            //else cb(true);
+            socket.id = user.id;
+            usuarios[user.id] = socket;
         });
         
         //Parte a reemplazar con otro tipo de comunicación !!!!

@@ -9,12 +9,12 @@
           </div>        
           <div class="container">
             <label for="uname"><b>Usuario</b></label>
-            <input type="text" placeholder="Ingresar usuario" name="uname" required>
+            <input type="text" placeholder="Ingresar usuario" name="uname" required #txtName>
         
             <label for="psw"><b>Contraseña</b></label>
             <input type="password" placeholder="Ingresar contraseña" name="psw" required>
 
-            <button routerLink="/home">Iniciar sesión</button>
+            <button routerLink="/home" (click)="login(txtName.value)">Iniciar sesión</button>
             <label>
               <input type="checkbox" name="remember"> Recuerdame
             </label>

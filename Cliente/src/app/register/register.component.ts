@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+//import { WebSocketService } from '../web-socket.service';
+//import { HttpClient } from '@angular/common/http';
 
 interface Question {
   value: string;
@@ -11,7 +13,9 @@ interface Question {
 })
 export class RegisterComponent implements OnInit {
 
-  constructor() { }
+  constructor(/*private socket: WebSocketService*/) {
+
+  }
 
   ngOnInit(): void {
   }

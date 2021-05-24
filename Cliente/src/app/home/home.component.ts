@@ -1,7 +1,7 @@
 import { TOUCH_BUFFER_MS } from '@angular/cdk/a11y';
 import { Component, OnInit } from '@angular/core';
 import { WebSocketService } from '../web-socket.service';
-import {HttpClient} from '@angular/common/http'
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -33,8 +33,8 @@ export class HomeComponent implements OnInit {
 
     this.http.post('http://localhost:3000/grupos/',{}).subscribe(data =>{      
       let userData = JSON.stringify(data);          
-      this.grupos = JSON.parse(userData);  
-     
+      this.grupos = JSON.parse(userData);       
+
     });    
   }
 
@@ -43,6 +43,7 @@ export class HomeComponent implements OnInit {
       this.mensajes.push(data);
     });
   } 
+
   sendMensaje(mensaje:string){         
     this.socket.emit('nuevoMensaje',mensaje);    
   } 
