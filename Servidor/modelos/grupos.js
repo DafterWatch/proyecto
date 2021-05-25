@@ -14,7 +14,7 @@ const grupoSchema = new Schema ({
     },
     miembrosDelGrupo:{
         integrantes:Array,
-        admin:Number,
+        admin:Array,
     },
     informacion:{
         foto:String,

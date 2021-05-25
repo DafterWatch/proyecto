@@ -10,7 +10,8 @@ import {HttpClient} from '@angular/common/http';
 })
 export class HomeComponent implements OnInit {
 
-
+  currentUserId : any;
+  currentUser : any={}; 
   mensajes : Array<String> = [];
   miembros =[];
   miembroscount=0;
@@ -22,8 +23,9 @@ export class HomeComponent implements OnInit {
     description : "",
     profile_picture : ""
   }
-  currentNewgroupAdmin:Number=-1;
-  grupos : Object = {    
+  //currentNewgroupAdmin:Number=-1;
+  NewGroupAdmins:Array<Number> = [];
+  grupos : any = {    
     
   }
   currentGroup = "";
@@ -31,16 +33,26 @@ export class HomeComponent implements OnInit {
 
   constructor(private socket: WebSocketService, private http:HttpClient) {
 
-    this.http.post('http://localhost:3000/grupos/',{}).subscribe(data =>{      
-      let userData = JSON.stringify(data);          
-      this.grupos = JSON.parse(userData);       
+    this.currentUserId = sessionStorage.getItem('currentUser');
+    console.log(this.currentUserId);    
+    this.http.post(`http://localhost:3000/usuarios/${this.currentUserId}`,{}).subscribe(data=>{
+        let aux = JSON.stringify(data);         
+        this.currentUser = JSON.parse(aux);   
 
-    });    
+        this.http.post('http://localhost:3000/gruposId/',this.currentUser.grupos).subscribe(data =>{      
+          let userData = JSON.stringify(data);          
+          this.grupos = JSON.parse(userData);                                       
+        });        
+    });                
+
   }
 
   ngOnInit(): void {
     this.socket.listen('nuevoMensaje').subscribe((data:any)=>{
       this.mensajes.push(data);
+    });
+    this.socket.listen('nuevoGrupo').subscribe((data:any)=>{            
+      this.grupos.push(data);      
     });
   } 
 
@@ -55,7 +67,8 @@ export class HomeComponent implements OnInit {
     groupName.value="";
     groupDescription.value="";
     this.miembros=[];
-    this.currentNewgroupAdmin=-1;
+    //this.currentNewgroupAdmin=-1;
+    this.NewGroupAdmins = [];
 
   }
   cleanAddMemberFields(){
@@ -75,8 +88,8 @@ export class HomeComponent implements OnInit {
       chatWindow.style.display="flex";
       groupWindow.style.display="none";
       addMemberWindow.style.display="none";
-      this.currentNewgroupAdmin=-1;
-      
+      //this.currentNewgroupAdmin=-1;
+      this.NewGroupAdmins = [];
     }
     if(index==2){
       chatWindow.style.display="none";
@@ -90,8 +103,8 @@ export class HomeComponent implements OnInit {
       addMemberWindow.style.display="flex";
       this.cleanAddMemberFields();
       var checkBoxAdmin:any = document.getElementById('checkboxAdmin');
-      if(this.currentNewgroupAdmin!=-1){
-
+      //if(this.currentNewgroupAdmin!=-1){
+      if(this.NewGroupAdmins.length!=0){
         checkBoxAdmin.disabled=true;
       }
       else{
@@ -121,9 +134,15 @@ export class HomeComponent implements OnInit {
       return;
     }            
     let integrantesGrupo=[];
+    for (let miembro of this.miembros) {
+          integrantesGrupo.push(miembro.id)
+    }
+    integrantesGrupo.push(this.currentUserId);
+    /* array.forEach es 50% más lento que el for normal
     this.miembros.forEach(element => {
       integrantesGrupo.push(element.id)
     });
+    */
     let informacionDelGrupo1={
       nombre: groupName.value,
       descripcion:groupDescription.value,
@@ -139,7 +158,8 @@ export class HomeComponent implements OnInit {
 
     let miembrosDelGrupo={
         integrantes:integrantesGrupo,
-        admin:this.currentNewgroupAdmin
+        admin:this.NewGroupAdmins
+        //admin:this.currentNewgroupAdmin
     };
     let grupo_n = {id: groupsQuantity, miembrosDelGrupo:miembrosDelGrupo,informacion:informacionDelGrupo1,mensaje:mensaje}
  
@@ -147,10 +167,18 @@ export class HomeComponent implements OnInit {
     this.http.post('http://localhost:3000/createG',grupo_n).subscribe( data =>{
       console.log(data);      
     });
+    let data = {
+      ids: integrantesGrupo,
+      infoGrupo:grupo_n
+    }
+    this.socket.emit('nuevoGrupo',data);
+    /*
+    Deprecamos este post xd 
     this.http.post('http://localhost:3000/grupos/',{}).subscribe(data =>{      
       let userData = JSON.stringify(data);                      
       this.grupos = JSON.parse(userData); 
     });    
+    */
     this.createComponent(4);
   }
   copy (obj) {
@@ -167,12 +195,13 @@ export class HomeComponent implements OnInit {
   }
   addUser(){
 
-    const userdata2= this.copy(this.userData);
+    const userdata2 = this.copy(this.userData);
     
     var checkBoxAdmin:any = document.getElementById('checkboxAdmin');
     if(checkBoxAdmin.checked && checkBoxAdmin.disabled==false){
    
-      this.currentNewgroupAdmin=userdata2.id;
+      //this.currentNewgroupAdmin=userdata2.id;
+      this.NewGroupAdmins.push(userdata2.id);
     
     }
     
@@ -200,7 +229,7 @@ export class HomeComponent implements OnInit {
       this.http.post(`http://localhost:3000/usuarios/${id}`,{}).subscribe(data =>{
       //TODO: Parsear mejor los datos.
            
-      let userData = JSON.stringify(data[0]);
+      let userData = JSON.stringify(data);
       let userData_ = JSON.parse(userData);
 
      

@@ -16,42 +16,28 @@ module.exports = function (io){
             //Llevar mensaje a la base de datos
         });
 
-        socket.on('nuevoGrupo',data=>{
-            grupos[data.nombre] = [];    
+        socket.on('nuevoGrupo',async data=>{
+            //Data={ids:[1,2,4,3],InfoGrupo:{} }
+            let id_list = data.ids;
+            
+            for (let index = 0; index < id_list.length; index++) {
+                let id = parseInt(id_list[index]);                
+                if(id in usuarios){                    
+                    usuarios[id].emit('nuevoGrupo',data.infoGrupo);                    
+                }
+                console.log(data);
+                await Usuario.updateOne({"id":id},{ $push:{ "grupos":data.infoGrupo.id.toString() } })
+            }
+            
         });
 
         socket.on('login-nuevo', async (data,cb)=>{
-            let user = await Usuario.findOne({"id":data});
+            let user = await Usuario.findOne({"id":data});                        
             /*if(exist user)*/ cb(false);
             //else cb(true);
             socket.id = user.id;
             usuarios[user.id] = socket;
         });
-        
-        //Parte a reemplazar con otro tipo de comunicación !!!!
-        socket.on('pedirMensajes',(nombre,cb)=>{
-            if(nombre in grupos){
-                cb(grupos.nombre);
-            }
-            cb(null);
-        });        
-        socket.on('buscarUsuario',(id,cb)=>{
-            if(id in usuarios){
-                cb({
-                    error: false,
-                    usuario:usuarios[id]
-                });                
-                return;
-            }
-            cb({
-                error:true,
-                usuario:null
-            });
-        });
-        socket.on('crearGrupo',(data,cb)=>{            
-            grupos[id_grupo] = data;
-            cb(id_grupo,data);                        
-            id_grupo++;
-        });
+                
     });
 };

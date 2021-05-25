@@ -10,11 +10,12 @@ module.exports = function(router){
 
     id_grupo = 2;
 
+    //Para borrar un usuario de un grupo: Grupo.updateOne({id:id},{ $pull: { ??? } })
 
     router.get('/con',(req,res)=>{
         Usuario.find({}).exec((err,usuarios)=>{
             if(err){
-                console.log('Error con los vídeos');
+                console.log('Error con los usuarios');
                 return;
             }               
             res.json(usuarios);
@@ -22,11 +23,10 @@ module.exports = function(router){
     });
     /*Revisar luego */
     router.post('/usuarios/:id',(req,res)=>{
-        let id = req.params.id;
-        console.log(id);
-        Usuario.find({"id": id}).exec((err,usuarios)=>{
+        let id = req.params.id;        
+        Usuario.findOne({"id": id}).exec((err,usuarios)=>{
             if(err){
-                console.log('Error con los vídeos');
+                console.log('Error con los usuarios');
                 return;
             }                    
             res.json(usuarios);
@@ -41,6 +41,16 @@ module.exports = function(router){
             }
             res.json(grupos);
         });    
+    });
+
+    router.post('/gruposId',jsonParser,(req,res)=>{                      
+        Grupo.find({ id:{$in:req.body} }).exec((err,grupos)=>{
+           if(err){
+               console.log('Error recuperando grupos '+err.message);
+               return;
+           }            
+           res.json(grupos);
+        });
     });
 
     router.post('/createG',jsonParser,(req,res)=>{

@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
         return;
       }
     });
+    sessionStorage.setItem('currentUser',id);    
   }
 
 }
