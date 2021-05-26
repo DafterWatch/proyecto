@@ -30,6 +30,15 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import {MatMenuModule} from '@angular/material/menu';
 //Select
 import {MatSelectModule} from '@angular/material/select';
+//Calender
+import {MatToolbarModule} from '@angular/material/toolbar';
+import { FullCalendarModule } from '@fullcalendar/angular'; 
+import dayGridPlugin from '@fullcalendar/daygrid'; 
+import interactionPlugin from '@fullcalendar/interaction'; 
+FullCalendarModule.registerPlugins([ 
+  dayGridPlugin,
+  interactionPlugin
+]);
 
 //HTPP
 import {HttpClientModule} from '@angular/common/http';
@@ -39,6 +48,7 @@ import { AddMemberComponent } from './home/add-member/add-member.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AccountRecoveryComponent } from './account-recovery/account-recovery.component';
+import { CalenderComponent } from './calender/calender.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +62,8 @@ import { AccountRecoveryComponent } from './account-recovery/account-recovery.co
     AddMemberComponent,
     LoginComponent,
     RegisterComponent,
-    AccountRecoveryComponent
+    AccountRecoveryComponent,
+    CalenderComponent
   ],
   imports: [
     BrowserModule,
@@ -79,6 +90,9 @@ import { AccountRecoveryComponent } from './account-recovery/account-recovery.co
     MatMenuModule,
     //Select
     MatSelectModule,
+    //Calender
+    FullCalendarModule,
+    MatToolbarModule,
   ],
   bootstrap: [AppComponent],
   providers: [ErrorStateMatcher]

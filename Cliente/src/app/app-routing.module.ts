@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AccountRecoveryComponent } from './account-recovery/account-recovery.component';
+import { CalenderComponent } from './calender/calender.component';
 import { DemoComponent } from './demo/demo.component';
 import { GroupMenuComponent } from './group-menu/group-menu.component';
 
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'recovery', component: AccountRecoveryComponent },
+  { path: 'calender', component: CalenderComponent },
   //componente de pruebas - Jose
   //{ path: 'demo', component: DemoComponent },
   //{ path: 'group-menu', component: GroupMenuComponent },
