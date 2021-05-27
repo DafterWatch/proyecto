@@ -1,0 +1,17 @@
+<mat-toolbar class="navbar-calender">
+    <span>Lista Tareas</span>
+    <span class="example-spacer"></span>
+    <button mat-icon-button routerLink="/home">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+<div class="list">
+    <cdk-virtual-scroll-viewport itemSize="50" class="list-homeworks">
+        <div *ngFor="let item of items" class="member-item">
+          <button mat-button style="height: 100%; width: 100%; 
+          text-align: left;" >
+            {{item}}
+          </button>         
+        </div>   
+    </cdk-virtual-scroll-viewport>
+</div>

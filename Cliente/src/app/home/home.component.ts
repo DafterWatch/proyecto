@@ -15,6 +15,7 @@ export class HomeComponent implements OnInit {
   currentUserId : any;
   currentUser : any={}; 
   mensajes : Array<String> = [];
+  miembros2 = ["a","b","c"]
   miembros =[];
   miembroscount=0;
   currentMembers=[];

@@ -58,9 +58,9 @@
     padding-left: 10px;
 }
 #text-title-group{
-    margin-top: 0px;
+    margin-top: 0.7%;
     margin-right: 20px;
-    margin-left: 20px;
+    margin-left: 0px;
     width: 86%;
     background: rgb(41, 65, 99);
     color: white;
@@ -69,9 +69,7 @@
     align-self: center;
 }
 #button-menu{
-    position: fixed;
-    top: 30px;
-    left: 96%;
+    float: right;
     color: white;
     transform: scale(2);
 }
@@ -216,9 +214,10 @@
 #img-title-group{
   border-radius: 50%;
   padding-top: 10px;
-  width: 60px;
-  height: 60px;
-  margin-right: 60px;
+  width: 80px;
+  height: 80px;
+  margin-right: 40px;
+  margin-left: 20px;
 }
 #button-menu{
     position: fixed;

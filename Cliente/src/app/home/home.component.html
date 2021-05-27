@@ -36,19 +36,32 @@
         {{currentGroup}}
     </h1>
   </div>
-  <div id="description-group" fxflex="20" style="flex: 1 1 100%; box-sizing: border-box; max-height: 20%;">
+  <div id="description-group" fxflex="15" style="flex: 1 1 100%; box-sizing: border-box; max-height: 15%;">
     <h1 style="padding-top: 4%; color: black; font-size: 25px;">DESCRIPCION</h1>
     <div>
       {{currentDescription}}
     </div>
   </div>
   <div id="assign-homework-group" fxflex="5" style="flex: 1 1 100%; box-sizing: border-box; max-height: 5%;">
-    <button mat-raised-button style="width: 100%; height: 100%; background-color: white;">Asignar Tarea</button>
+    <button mat-raised-button 
+    style="width: 100%; 
+    height: 100%; 
+    background-color: 
+    white;"
+    (click)="_toggleOpened()" 
+    (click)="addMemberToGroup()"
+    >Añadir miembro</button>
+  </div>
+  <div id="assign-homework-group" fxflex="5" style="flex: 1 1 100%; box-sizing: border-box; max-height: 5%;">
+    <button mat-raised-button 
+    style="width: 100%; 
+    height: 100%;
+    background-color: white;" 
+    (click)="_toggleOpened()"
+    routerLink="/homework1">Lista Tareas</button>
   </div>
   <div id="text-members-group" fxflex="5" style="flex: 1 1 100%; box-sizing: border-box; max-height: 5%;">
-    
-    <h1 style="float: left;">Integrantes</h1>  
-    <button style="float: right;" (click)="addMemberToGroup()">Añadir Miembro</button>  
+    <h1 style="float: left;">Integrantes</h1>
   </div>
   <div id="members-group" fxflex="35" style="flex: 1 1 100%; box-sizing: border-box; max-height: 35%;">
     <cdk-virtual-scroll-viewport itemSize="50" class="list-members">
@@ -61,12 +74,12 @@
           <button mat-menu-item>Hacer administrador</button>
         </mat-menu>
       </div>   
-    </cdk-virtual-scroll-viewport>-  
+    </cdk-virtual-scroll-viewport> 
   </div>  
 
   <div id="buttons-group" fxflex="10" style="flex: 1 1 1e-09px; box-sizing: border-box; max-height: 10%;">
-    <button mat-raised-button >Salir del grupo</button><br>
-    <button mat-raised-button style="margin-top: 10px;">Reportar grupo</button>
+    <button mat-raised-button (click)="_toggleOpened()">Salir del grupo</button><br>
+    <button mat-raised-button style="margin-top: 10px;" (click)="_toggleOpened()">Reportar grupo</button>
   </div>
 </div>  
 </ng-sidebar>
@@ -79,25 +92,13 @@
                 <img src="assets/images/logo.png" height="90px" width="90px">
             </div>
             <div class="button-container">
-                <button mat-fab 
-                color="primary">
-                <mat-icon>delete</mat-icon>
-                </button>
-            </div>
-            <div class="button-container">
-                <button mat-fab 
-                color="accent">
-                <mat-icon>bookmark</mat-icon>
-                </button>
-            </div>
-            <div class="button-container">
-                <button mat-fab color="warn" routerLink="/calender">
+                <button mat-fab color="primary" routerLink="/calender">
                 <mat-icon>calendar_today</mat-icon>
                 </button>
             </div>
             <div class="button-container" id="button-usuario">
                 <button mat-fab 
-                color="warn">
+                color="primary">
                 <mat-icon>person</mat-icon>
                 </button>
             </div>
@@ -126,7 +127,5 @@
     <!--ContenedorAñadirMiembro-->         
     <app-add-member (addUserEvent)="addUser()" (addMemberEvent)="addMember()" (buscarMiembroEvento)="searchUser($event)" (myEvent)="createComponent($event)" [userData]="userData"></app-add-member>
     <!----------------------------------------------------------------------------------------------------------------------------------------------------------------------->
-
-
 </div>
 

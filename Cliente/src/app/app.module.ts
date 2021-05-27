@@ -39,6 +39,8 @@ FullCalendarModule.registerPlugins([
   dayGridPlugin,
   interactionPlugin
 ]);
+//Table
+import { MatTableModule } from '@angular/material/table';
 
 //HTPP
 import {HttpClientModule} from '@angular/common/http';
@@ -49,6 +51,9 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AccountRecoveryComponent } from './account-recovery/account-recovery.component';
 import { CalenderComponent } from './calender/calender.component';
+import { ListaTareas1Component } from './lista-tareas1/lista-tareas1.component';
+import { ListaTareas2Component } from './lista-tareas2/lista-tareas2.component';
+import { CalificarTareaComponent } from './calificar-tarea/calificar-tarea.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +68,10 @@ import { CalenderComponent } from './calender/calender.component';
     LoginComponent,
     RegisterComponent,
     AccountRecoveryComponent,
-    CalenderComponent
+    CalenderComponent,
+    ListaTareas1Component,
+    ListaTareas2Component,
+    CalificarTareaComponent
   ],
   imports: [
     BrowserModule,
@@ -93,6 +101,8 @@ import { CalenderComponent } from './calender/calender.component';
     //Calender
     FullCalendarModule,
     MatToolbarModule,
+    //Table
+    MatTableModule,
   ],
   bootstrap: [AppComponent],
   providers: [ErrorStateMatcher]

@@ -1,0 +1,27 @@
+table {
+    width: 100%;
+  }
+  .example-container {
+    height: 700px;
+    max-width: 100%;
+    overflow: auto;
+    margin: 5px;
+  }
+  .example-spacer {
+    flex: 1 1 auto;
+  }
+.navbar-calender{
+    background-color: #143058;
+    color: white;
+}
+.button-download{
+    display: flex;
+    justify-content: center;
+    float: right;
+    width: 120px;
+    margin-top: 10px;
+}
+.text-assign{
+    height: 100px;
+    padding: 20px;
+}

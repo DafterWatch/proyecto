@@ -1,0 +1,33 @@
+.list-homeworks {
+    height: 80%;
+    width: 100%;
+    border: 1px solid black;    
+    
+}
+.member-item {
+    height: 50px;
+    //border: solid 1px black;
+    padding: 5px;
+    width: 100%;
+}
+.example-spacer {
+    flex: 1 1 auto;
+  }
+.navbar-calender{
+    background-color: #143058;
+    color: white;
+}
+.list{
+    height: 88%;
+    width: 98%;
+    padding: 1%;
+}
+.button-list-homeworks{
+    background-color: #4379c9;
+    color: white;
+    height: 80px;
+    width: 400px;
+    cursor: pointer;
+    border-radius: 5px;  
+    box-sizing: border-box; 
+}

@@ -1,0 +1,19 @@
+<mat-toolbar class="navbar-calender">
+    <span>Lista Tareas</span>
+    <span class="example-spacer"></span>
+    <button mat-icon-button routerLink="/home">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+<div class="list">
+    <cdk-virtual-scroll-viewport itemSize="50" class="list-homeworks">
+        <div *ngFor="let item of items" class="member-item">
+          <button mat-button style="height: 100%; width: 100%; text-align: left;" routerLink="/assign">
+            {{item}}            
+            <mat-icon style="float: right; padding-top: 5px;">keyboard_arrow_right</mat-icon>
+            <span style="float: right;">{{entregados}}/{{totalEntregas}} entregaron</span>
+          </button>         
+        </div>   
+    </cdk-virtual-scroll-viewport><br>
+    <button class="button-list-homeworks">Crear Nueva Tarea</button>
+</div>
