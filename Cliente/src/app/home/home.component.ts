@@ -2,6 +2,7 @@ import { TOUCH_BUFFER_MS } from '@angular/cdk/a11y';
 import { Component, OnInit } from '@angular/core';
 import { WebSocketService } from '../web-socket.service';
 import {HttpClient} from '@angular/common/http';
+import { identifierModuleUrl } from '@angular/compiler';
 
 @Component({
   selector: 'app-home',
@@ -10,6 +11,7 @@ import {HttpClient} from '@angular/common/http';
 })
 export class HomeComponent implements OnInit {
 
+  
   currentUserId : any;
   currentUser : any={}; 
   mensajes : Array<String> = [];
@@ -42,8 +44,12 @@ export class HomeComponent implements OnInit {
         this.http.post('http://localhost:3000/gruposId/',this.currentUser.grupos).subscribe(data =>{      
           let userData = JSON.stringify(data);          
           this.grupos = JSON.parse(userData);                                       
-        });        
-    });                
+        }); 
+
+    });  
+    
+    
+          
 
   }
 
@@ -95,21 +101,17 @@ export class HomeComponent implements OnInit {
       chatWindow.style.display="none";
       groupWindow.style.display="flex";
       addMemberWindow.style.display="none";
-      
+     
+
     }
     if(index==3){
       chatWindow.style.display="none";
       groupWindow.style.display="none";
       addMemberWindow.style.display="flex";
-      this.cleanAddMemberFields();
       var checkBoxAdmin:any = document.getElementById('checkboxAdmin');
-      //if(this.currentNewgroupAdmin!=-1){
-      if(this.NewGroupAdmins.length!=0){
-        checkBoxAdmin.disabled=true;
-      }
-      else{
-        checkBoxAdmin.disabled=false;
-      }
+      checkBoxAdmin.disabled=false;
+      this.cleanAddMemberFields();
+
     }
     if(index == 4){
       chatWindow.style.display="flex";
@@ -121,11 +123,13 @@ export class HomeComponent implements OnInit {
   createGroup(){
 
 
-    let groupsQuantity=0;
-    for (const group in this.grupos) {
-      groupsQuantity++;
-    }
-    alert("Grupo creado")
+
+
+    this.http.post('http://localhost:3000/grupos/',this.currentUser.grupos).subscribe(data1 =>{      
+      let userData = JSON.stringify(data1);          
+      var groupSistems:[] = JSON.parse(userData); 
+
+      
     let groupName:any = document.getElementById('idInputNombreDegrupo');
     let groupDescription:any = document.getElementById('idDescripcionDeGrupo'); 
 
@@ -156,12 +160,13 @@ export class HomeComponent implements OnInit {
       }
     }
 
+
     let miembrosDelGrupo={
         integrantes:integrantesGrupo,
         admin:this.NewGroupAdmins
         //admin:this.currentNewgroupAdmin
     };
-    let grupo_n = {id: groupsQuantity, miembrosDelGrupo:miembrosDelGrupo,informacion:informacionDelGrupo1,mensaje:mensaje}
+    let grupo_n = {id:groupSistems.length+1, miembrosDelGrupo:miembrosDelGrupo,informacion:informacionDelGrupo1,mensaje:mensaje}
  
     
     this.http.post('http://localhost:3000/createG',grupo_n).subscribe( data =>{
@@ -180,6 +185,9 @@ export class HomeComponent implements OnInit {
     });    
     */
     this.createComponent(4);
+
+    });      
+  
   }
   copy (obj) {
     let result;
@@ -193,34 +201,74 @@ export class HomeComponent implements OnInit {
     }
     return result;
   }
+  addMember(){
+ 
+    const userdata2 = this.copy(this.userData);
+    var checkBoxAdmin:any = document.getElementById('checkboxAdmin');
+  
+    var newMemberAdmin=false;
+    if(checkBoxAdmin.checked){
+      newMemberAdmin=true;
+    }
+    const idNewMember=userdata2.id;
+    this.currentGroupId;
+    newMemberAdmin;
+    this.http.post(`http://localhost:3000/addfromGroup/${idNewMember}/${this.currentGroupId}/${newMemberAdmin}`,{}).subscribe(data =>{
+   
+   
+    }); 
+    alert("Se añadió un nuevo miembro al grupo");
+    this.createComponent(1);  
+  }
   addUser(){
 
-    const userdata2 = this.copy(this.userData);
-    
-    var checkBoxAdmin:any = document.getElementById('checkboxAdmin');
-    if(checkBoxAdmin.checked && checkBoxAdmin.disabled==false){
+        console.log(this.miembros);
+          const userdata2 = this.copy(this.userData);
+        
+          var checkBoxAdmin:any = document.getElementById('checkboxAdmin');
+          checkBoxAdmin.disabled=false;
+          if(checkBoxAdmin.checked){
+            
+            this.NewGroupAdmins.push(userdata2.id);
+          }
+          
+          var userAlreadyRegistered=false;
+          this.miembros.forEach(element => {
+            if(userdata2.id==element.id){
+              userAlreadyRegistered=true;
+            }
+          });
+          
+          if(!userAlreadyRegistered){
+            this.miembros[this.miembroscount]=userdata2;
+            this.miembroscount++;
+          }
+          else{
+            alert("¡¡Usuario ya registrado!!");
+            this.createComponent(3);  
+          }
+
+  }
+
+  addMemberCommon(){
+  
+    this.cleanCreateGroupFields();
+    var addMemberToGroup = document.getElementById('addMemberToGroup');
+    var addMemberButton = document.getElementById('addMemberButton');
+    addMemberToGroup.style.display="none";
+    addMemberButton.style.display="flex";
+    this.createComponent(2)
    
-      //this.currentNewgroupAdmin=userdata2.id;
-      this.NewGroupAdmins.push(userdata2.id);
-    
-    }
-    
-    var userAlreadyRegistered=false;
-    this.miembros.forEach(element => {
-      if(userdata2.id==element.id){
-        userAlreadyRegistered=true;
-      }
-    });
-    
-    if(!userAlreadyRegistered){
-      this.miembros[this.miembroscount]=userdata2;
-      this.miembroscount++;
-    }
-    else{
-      alert("¡¡Usuario ya registrado!!");
-      this.createComponent(3);  
-    }
- 
+  }
+  addMemberToGroup(){
+  
+
+    var addMemberToGroup = document.getElementById('addMemberToGroup');
+    var addMemberButton = document.getElementById('addMemberButton');
+    addMemberToGroup.style.display="flex";
+    addMemberButton.style.display="none";
+    this.createComponent(3)
+   
   }
   searchUser(id:any){
 
@@ -238,23 +286,43 @@ export class HomeComponent implements OnInit {
               
     });    
   }
+
+  currentGroupId;
+  deleteMember(buton:any){
+
+
+    this.http.post(`http://localhost:3000/DeletefromGroup/${buton.value.id}/${this.currentGroupId}`,{}).subscribe(data =>{
+
+    }); 
+    alert("Miembro borrado");
+
+      
+  }
+
+
   showGroup(buton:any){
 
     this.currentMembers=[]; 
 
     this.currentGroup=buton.informacion.nombre;   
     this.currentDescription=buton.informacion.descripcion;
+    this.currentGroupId=buton.id;
+    console.log(this.currentGroupId);
     this.currentGroupItems=buton.miembrosDelGrupo.integrantes;
+
 
     this.currentGroupItems.forEach(element => {
         this.http.post(`http://localhost:3000/usuarios/${element}`,{}).subscribe(data =>{
-        let userData2 = JSON.stringify(data[0]);
+
+        let userData2 = JSON.stringify(data);
+ 
         let userData2_ = JSON.parse(userData2);
         this.currentMembers.push(userData2_);
       }); 
     });
     this.createComponent(4);    
   }
+ 
   // ------------------------------------------------------------------------Menu Grupo -----------------------------------------------------------------------------
   // -------------------De aqui para abajo son funciones del menu de grupos ----------------------------------------
   public items = [];

@@ -12,6 +12,65 @@ module.exports = function(router){
 
     //Para borrar un usuario de un grupo: Grupo.updateOne({id:id},{ $pull: { ??? } })
 
+     router.post('/DeletefromGroup/:id/:idGroup',(req,res)=>{
+        let id = req.params.id;  
+        let idGroup = req.params.idGroup;
+        Usuario.updateOne({"id": id},{ $pullAll: {"grupos": [idGroup] }}).exec((err,usuarios)=>{
+            if(err){
+                console.log('Error con los usuarios');
+                return;
+            }                    
+           
+        });
+        Grupo.updateOne({"id": idGroup},{ $pullAll: {"miembrosDelGrupo.integrantes":[id]}}).exec((err,usuarios)=>{
+            if(err){
+                console.log('Error con los grupos');
+                return;
+            }                    
+        
+        });
+        Grupo.updateOne({"id": idGroup},{ $pullAll: {"miembrosDelGrupo.admin":[id]}}).exec((err,usuarios)=>{
+            if(err){
+                console.log('Error con los grupos');
+                return;
+            }                    
+           
+        });
+    });
+
+    router.post('/addfromGroup/:id/:idGroup/:isAdmin',(req,res)=>{
+        let id = req.params.id;  
+        let idGroup = req.params.idGroup;
+        let isAdmin = req.params.isAdmin;
+       console.log(id);
+       console.log(idGroup);
+       console.log(isAdmin);
+
+       Usuario.updateOne({id: id}, {$push: {grupos:[idGroup]}}).exec((err,usuarios)=>{
+        if(err){
+            console.log('Error con los usuarios');
+            return;
+        }                    
+        });
+        Grupo.updateOne({"id": idGroup}, {$push: {"miembrosDelGrupo.integrantes":[id]}}).exec((err,usuarios)=>{
+            if(err){
+                console.log('Error con los grupos');
+                return;
+            }                    
+        });
+        if(isAdmin){
+            Grupo.updateOne({"id": idGroup}, {$push: {"miembrosDelGrupo.admin":[id]}}).exec((err,usuarios)=>{
+                if(err){
+                    console.log('Error con los grupos de administradores');
+                    return;
+                }                    
+            });
+        }
+        
+
+    });
+
+
     router.get('/con',(req,res)=>{
         Usuario.find({}).exec((err,usuarios)=>{
             if(err){

@@ -32,5 +32,9 @@ export class AddMemberComponent implements OnInit {
   addUser(){
     this.addUserEvent.emit();
   }
+  @Output() addMemberEvent= new EventEmitter();
+  addMember(){
+    this.addMemberEvent.emit();
+  }
   
 }

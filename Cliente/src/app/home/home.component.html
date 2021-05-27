@@ -46,7 +46,9 @@
     <button mat-raised-button style="width: 100%; height: 100%; background-color: white;">Asignar Tarea</button>
   </div>
   <div id="text-members-group" fxflex="5" style="flex: 1 1 100%; box-sizing: border-box; max-height: 5%;">
-    <h1>Integrantes</h1>    
+    
+    <h1 style="float: left;">Integrantes</h1>  
+    <button style="float: right;" (click)="addMemberToGroup()">Añadir Miembro</button>  
   </div>
   <div id="members-group" fxflex="35" style="flex: 1 1 100%; box-sizing: border-box; max-height: 35%;">
     <cdk-virtual-scroll-viewport itemSize="50" class="list-members">
@@ -55,7 +57,7 @@
           {{item.value.nombre}}
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item>Eliminar del grupo</button>
+          <button mat-menu-item (click)="deleteMember(item)">Eliminar del grupo</button>
           <button mat-menu-item>Hacer administrador</button>
         </mat-menu>
       </div>   
@@ -104,7 +106,7 @@
             <div class="colored-box" style="flex-direction: column; box-sizing: border-box; display: flex;">
                 <div class="options" style="flex: 1 1 100%; box-sizing: border-box; max-height: 25%;">
                     <h3>Opciones</h3>
-                    <button (click)='createComponent(2)' (click)="this.cleanCreateGroupFields()">Crear grupo</button>
+                    <button (click)='addMemberCommon()' (click)="this.cleanCreateGroupFields()">Crear grupo</button>
                 </div>
                 <div class="my-groups" fxflex="" style="flex: 1 1 1e-09px; box-sizing: border-box;" >
                     <h3>Mis Grupos</h3>
@@ -122,7 +124,7 @@
     <!--ContenedorCrearGrupo--> 
     <app-create-group (myEvent2)="createGroup()" (myEvent)="createComponent($event)" [miembros]="miembros" ></app-create-group>
     <!--ContenedorAñadirMiembro-->         
-    <app-add-member (addUserEvent)="addUser()" (buscarMiembroEvento)="searchUser($event)" (myEvent)="createComponent($event)" [userData]="userData"></app-add-member>
+    <app-add-member (addUserEvent)="addUser()" (addMemberEvent)="addMember()" (buscarMiembroEvento)="searchUser($event)" (myEvent)="createComponent($event)" [userData]="userData"></app-add-member>
     <!----------------------------------------------------------------------------------------------------------------------------------------------------------------------->
 
 
