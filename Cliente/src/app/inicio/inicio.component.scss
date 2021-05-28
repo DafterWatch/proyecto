@@ -1,0 +1,17 @@
+.example-spacer {
+    flex: 1 1 auto;
+  }
+.navbar-calender{
+    background-color: #143058;
+    color: white;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}  
+.main {
+    padding: 16px;
+    margin-top: 5%;
+    height: 1500px; /* Used in this example to enable scrolling */
+    text-align: center;
+}

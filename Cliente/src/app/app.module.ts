@@ -60,6 +60,7 @@ import { CalificarTareaComponent } from './calificar-tarea/calificar-tarea.compo
 import { CrearComponent } from './crear/crear.component';
 import { EntregarComponent } from './entregar/entregar.component';
 import { PerfilComponent } from './perfil/perfil.component';
+import { InicioComponent } from './inicio/inicio.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { PerfilComponent } from './perfil/perfil.component';
     CalificarTareaComponent,
     CrearComponent,
     EntregarComponent,
-    PerfilComponent
+    PerfilComponent,
+    InicioComponent
   ],
   imports: [
     BrowserModule,

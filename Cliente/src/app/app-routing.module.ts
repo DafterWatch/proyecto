@@ -9,6 +9,7 @@ import { EntregarComponent } from './entregar/entregar.component';
 import { GroupMenuComponent } from './group-menu/group-menu.component';
 
 import { HomeComponent } from './home/home.component';
+import { InicioComponent } from './inicio/inicio.component';
 import { ListaTareas1Component } from './lista-tareas1/lista-tareas1.component';
 import { ListaTareas2Component } from './lista-tareas2/lista-tareas2.component';
 import { LoginComponent } from './login/login.component';
@@ -18,7 +19,7 @@ import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   // Con este hacemos q al ir a Localhost:4200 lo envie al login - a la primera pantalla q deseamos q vea
-  { path: '', redirectTo: 'login', pathMatch: 'full'},
+  { path: '', redirectTo: 'inicio', pathMatch: 'full'},
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
@@ -30,6 +31,7 @@ const routes: Routes = [
   { path: 'create', component: CrearComponent },
   { path: 'send', component: EntregarComponent },
   { path: 'perfil', component: PerfilComponent },
+  { path: 'inicio', component: InicioComponent },
   //componente de pruebas - Jose
   //{ path: 'demo', component: DemoComponent },
   //{ path: 'group-menu', component: GroupMenuComponent },
