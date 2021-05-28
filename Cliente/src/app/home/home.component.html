@@ -58,7 +58,8 @@
     height: 100%;
     background-color: white;" 
     (click)="_toggleOpened()"
-    routerLink="/homework1">Lista Tareas</button>
+    routerLink="/homework1"><!--homework1 == vista de docente || homework2 == vista de estudiante -->
+    Lista Tareas</button>
   </div>
   <div id="text-members-group" fxflex="5" style="flex: 1 1 100%; box-sizing: border-box; max-height: 5%;">
     <h1 style="float: left;">Integrantes</h1>
@@ -98,7 +99,8 @@
             </div>
             <div class="button-container" id="button-usuario">
                 <button mat-fab 
-                color="primary">
+                color="primary"
+                routerLink="/perfil">
                 <mat-icon>person</mat-icon>
                 </button>
             </div>

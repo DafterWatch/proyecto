@@ -1,0 +1,27 @@
+<mat-toolbar class="navbar-calender">
+    <span>Entregar Tarea</span>
+    <span class="example-spacer"></span>
+    <button mat-icon-button routerLink="/homework2">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+
+<div class="colored-box" style="flex-direction: row; box-sizing: border-box; display: flex;">
+<div style="flex: 1 1 100%; box-sizing: border-box; max-width: 20%; background-color: #f6f6f6;"> 
+    </div>
+<div fxflex="60" style="flex: 1 1 100%; box-sizing: border-box; max-width: 60%;">
+    <div class="container">
+        <button class="button-list-homeworks" routerLink="/homework2">Entregar Tarea</button>
+    <p>Tarea {{numeroTarea}}</p>
+    <p>Vence el {{fechaVencimiento}} {{horaVencimiento}}</p>
+    <p>Instrucciones</p>
+    <p>{{instruccionesTexto}}</p>
+    <p>Mi Trabajo</p>
+    <button>Subir mi trabajo</button>
+    
+    </div>
+</div>
+<div fxflex="" style="flex: 1 1 0%; box-sizing: border-box;  background-color: #f6f6f6;"> 
+    </div>
+</div>
+  

@@ -21,7 +21,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 //Card
 import {MatCardModule} from '@angular/material/card';
-import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+import { ErrorStateMatcher, MatNativeDateModule, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 //List
 import {MatListModule} from '@angular/material/list';
 //Scrolling
@@ -41,6 +41,9 @@ FullCalendarModule.registerPlugins([
 ]);
 //Table
 import { MatTableModule } from '@angular/material/table';
+//Date Picker
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 //HTPP
 import {HttpClientModule} from '@angular/common/http';
@@ -54,6 +57,9 @@ import { CalenderComponent } from './calender/calender.component';
 import { ListaTareas1Component } from './lista-tareas1/lista-tareas1.component';
 import { ListaTareas2Component } from './lista-tareas2/lista-tareas2.component';
 import { CalificarTareaComponent } from './calificar-tarea/calificar-tarea.component';
+import { CrearComponent } from './crear/crear.component';
+import { EntregarComponent } from './entregar/entregar.component';
+import { PerfilComponent } from './perfil/perfil.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +77,10 @@ import { CalificarTareaComponent } from './calificar-tarea/calificar-tarea.compo
     CalenderComponent,
     ListaTareas1Component,
     ListaTareas2Component,
-    CalificarTareaComponent
+    CalificarTareaComponent,
+    CrearComponent,
+    EntregarComponent,
+    PerfilComponent
   ],
   imports: [
     BrowserModule,
@@ -103,6 +112,10 @@ import { CalificarTareaComponent } from './calificar-tarea/calificar-tarea.compo
     MatToolbarModule,
     //Table
     MatTableModule,
+    //Date
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSlideToggleModule
   ],
   bootstrap: [AppComponent],
   providers: [ErrorStateMatcher]

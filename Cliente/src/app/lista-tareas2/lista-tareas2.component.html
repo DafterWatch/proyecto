@@ -9,7 +9,7 @@
     <cdk-virtual-scroll-viewport itemSize="50" class="list-homeworks">
         <div *ngFor="let item of items" class="member-item">
           <button mat-button style="height: 100%; width: 100%; 
-          text-align: left;" >
+          text-align: left;" routerLink="/send">
             {{item}}
           </button>         
         </div>   
