@@ -21,6 +21,11 @@ export class ChatGroupComponent implements OnInit {
   _toggleOpened(){
     this.myEvent.emit();
   }
+  /*@Output() myEvent2= new EventEmitter();
+  isAdmin2(){
+    this.myEvent2.emit();
+    console.log("enviado");
+  }*/
   @Output() myEventSendMessage= new EventEmitter<String>();
   sendMensaje(message:String){
     this.myEventSendMessage.emit(message);

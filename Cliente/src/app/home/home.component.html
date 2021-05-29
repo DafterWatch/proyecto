@@ -50,6 +50,7 @@
     white;"
     (click)="_toggleOpened()" 
     (click)="addMemberToGroup()"
+    *ngIf="si"
     >Añadir miembro</button>
   </div>
   <div id="assign-homework-group" fxflex="5" style="flex: 1 1 100%; box-sizing: border-box; max-height: 5%;">
@@ -58,7 +59,8 @@
     height: 100%;
     background-color: white;" 
     (click)="_toggleOpened()"
-    routerLink="/homework1"><!--homework1 == vista de docente || homework2 == vista de estudiante -->
+    (click)="isAdmin()"    
+    >
     Lista Tareas</button>
   </div>
   <div id="text-members-group" fxflex="5" style="flex: 1 1 100%; box-sizing: border-box; max-height: 5%;">
@@ -71,8 +73,8 @@
           {{item.value.nombre}}
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="deleteMember(item)">Eliminar del grupo</button>
-          <button mat-menu-item>Hacer administrador</button>
+          <button mat-menu-item (click)="deleteMember(item)" *ngIf="si">Eliminar del grupo</button>
+          <button mat-menu-item *ngIf="si">Hacer administrador</button>
         </mat-menu>
       </div>   
     </cdk-virtual-scroll-viewport> 
@@ -115,7 +117,12 @@
                     <h3>Mis Grupos</h3>
                     <div *ngFor="let grupo of grupos | keyvalue">
                     <!--TODO: Crear en forma de ListView y arreglar problema con los nombres-->
-                    <button mat-raised-button (click)='showGroup(grupo.value)' name='grupo.value.informacion.nombre' id="btnC">{{grupo.value.informacion.nombre}}</button>                
+                    <button mat-raised-button 
+                      (click)='showGroup(grupo.value)' 
+                      name='grupo.value.informacion.nombre' 
+                      id="btnC"
+                      (click)="isAdmin2()"
+                    >{{grupo.value.informacion.nombre}}</button>                
                     </div>                
                 </div>
             </div>

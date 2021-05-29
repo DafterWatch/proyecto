@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { WebSocketService } from '../web-socket.service';
 import {HttpClient} from '@angular/common/http';
 import { identifierModuleUrl } from '@angular/compiler';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -33,8 +34,8 @@ export class HomeComponent implements OnInit {
   }
   currentGroup = "";
   currentDescription="Desc:";
-
-  constructor(private socket: WebSocketService, private http:HttpClient) {
+  router;
+  constructor(private socket: WebSocketService, private http:HttpClient, private route:Router) {
 
     this.currentUserId = sessionStorage.getItem('currentUser');
     console.log(this.currentUserId);    
@@ -45,13 +46,29 @@ export class HomeComponent implements OnInit {
         this.http.post('http://localhost:3000/gruposId/',this.currentUser.grupos).subscribe(data =>{      
           let userData = JSON.stringify(data);          
           this.grupos = JSON.parse(userData);                                       
-        }); 
-
-    });  
-    
-    
-          
-
+        });
+    });
+    this.router = route;
+  }
+  si = true;
+  isAdmin2(){ 
+    this.http.post(`http://localhost:3000/isAdmin/${this.currentUserId}/${this.currentGroupId}`,{}).subscribe(data =>{
+      if(data){
+        this.si = true;
+      } else {      
+        this.si = false;
+      }
+    });
+    console.log(this.si+" estado");
+  }
+  isAdmin(){    
+    this.http.post(`http://localhost:3000/isAdmin/${this.currentUserId}/${this.currentGroupId}`,{}).subscribe(data =>{
+      if(data){
+        this.router.navigate(['/', 'homework1']);
+      } else {      
+        this.router.navigate(['/', 'homework2']);
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -323,7 +340,7 @@ export class HomeComponent implements OnInit {
     });
     this.createComponent(4);    
   }
- 
+  
   // ------------------------------------------------------------------------Menu Grupo -----------------------------------------------------------------------------
   // -------------------De aqui para abajo son funciones del menu de grupos ----------------------------------------
   public items = [];

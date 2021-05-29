@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AccountRecoveryComponent } from './account-recovery/account-recovery.component';
 import { CalenderComponent } from './calender/calender.component';
 import { CalificarTareaComponent } from './calificar-tarea/calificar-tarea.component';
+import { CrearFormularioComponent } from './crear-formulario/crear-formulario.component';
 import { CrearComponent } from './crear/crear.component';
 import { DemoComponent } from './demo/demo.component';
 import { EntregarComponent } from './entregar/entregar.component';
@@ -31,7 +32,8 @@ const routes: Routes = [
   { path: 'create', component: CrearComponent },
   { path: 'send', component: EntregarComponent },
   { path: 'perfil', component: PerfilComponent },
-  { path: 'inicio', component: InicioComponent },
+  { path: 'inicio', component: InicioComponent },  
+  { path: 'form', component: CrearFormularioComponent },
   //componente de pruebas - Jose
   //{ path: 'demo', component: DemoComponent },
   //{ path: 'group-menu', component: GroupMenuComponent },

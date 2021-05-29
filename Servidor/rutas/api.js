@@ -127,5 +127,31 @@ module.exports = function(router){
         //id_grupo++;
         res.send(true);
     });
+
+    router.post('/isAdmin/:idUser/:idGroup',(req,res)=>{ 
+        let user = req.params.idUser;
+        let group = req.params.idGroup;
+        console.log(user);
+        console.log(group);     
+        Usuario.findOne({"id": user}).exec((err,usuarios)=>{
+            if(err){
+                console.log('Error con los usuarios');
+                return;
+            }
+            Grupo.findOne({"id": group}).exec((err,grupos)=>{
+                if(err){
+                    console.log('Error con el grupo');
+                    return;
+                }
+                var admins = grupos.miembrosDelGrupo.admin; 
+                if(admins.includes(usuarios.id.toString())){
+                    res.send(true)
+                }            
+                else{                
+                    res.send(false)
+                }
+            });
+        });   
+    });
     return router;
 }

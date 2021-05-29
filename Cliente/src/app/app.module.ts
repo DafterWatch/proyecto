@@ -44,6 +44,8 @@ import { MatTableModule } from '@angular/material/table';
 //Date Picker
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+//FormReactive
+import { ReactiveFormsModule } from '@angular/forms';
 
 //HTPP
 import {HttpClientModule} from '@angular/common/http';
@@ -61,6 +63,7 @@ import { CrearComponent } from './crear/crear.component';
 import { EntregarComponent } from './entregar/entregar.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { InicioComponent } from './inicio/inicio.component';
+import { CrearFormularioComponent } from './crear-formulario/crear-formulario.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +85,8 @@ import { InicioComponent } from './inicio/inicio.component';
     CrearComponent,
     EntregarComponent,
     PerfilComponent,
-    InicioComponent
+    InicioComponent,
+    CrearFormularioComponent
   ],
   imports: [
     BrowserModule,
@@ -117,7 +121,9 @@ import { InicioComponent } from './inicio/inicio.component';
     //Date
     MatDatepickerModule,
     MatNativeDateModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    //ReactForm
+    ReactiveFormsModule,
   ],
   bootstrap: [AppComponent],
   providers: [ErrorStateMatcher]

@@ -1,0 +1,44 @@
+<mat-toolbar class="navbar-calender">
+    <span>Crear Formulario</span>
+    <span class="example-spacer"></span>
+    <button mat-icon-button routerLink="/home">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+
+<div class="colored-box" style="cursor: pointer; flex-direction: row; box-sizing: border-box; display: flex;">
+    <div style="flex: 1 1 100%; box-sizing: border-box; max-width: 25%; background-color: #f6f6f6;"> 
+        </div>
+    <div fxflex="50" style="flex: 1 1 100%; box-sizing: border-box; max-width: 50%;"> 
+
+        <form [formGroup]="formulario">
+            <h3>
+              Experiencia Laboral:
+            </h3>
+            <div formArrayName="experienciaLaboral">
+                <div *ngFor="let trabajo of experienciaLaboral.controls; let i = index;">
+                    <div>
+                    <label>Empresa:</label><br />
+                    <input type="text" />
+                    </div>
+                    <div>
+                    <label>Puesto:</label><br />
+                    <input type="text" />
+                    </div>
+                    <div>
+                    <label>Descripción:</label><br />
+                    <textarea></textarea>
+                    </div>
+                    <hr />                
+                    <button (click)="borrarTrabajo(i)">Borrar</button>
+                </div>              
+                <button (click)="anadirExperienciaLaboral()">
+                + Añadir
+                </button>
+            </div>
+          </form>
+
+    </div>
+    <div fxflex="25" style="flex: 1 1 0%; box-sizing: border-box; max-width: 25%; background-color: #f6f6f6;"> 
+    </div>
+</div>
