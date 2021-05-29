@@ -11,43 +11,34 @@ import {Router} from '@angular/router';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-
   
   currentUserId : any;
-  currentUser : any={}; 
+  currentUser : any=null; 
   mensajes : Array<String> = [];
   miembros2 = ["a","b","c"]
   miembros =[];
   miembroscount=0;
   currentMembers=[];
   currentGroupItems=[];
-  userData : any = {
-    name: "",
-    id: "",
-    description : "",
-    profile_picture : ""
-  }
-  //currentNewgroupAdmin:Number=-1;
+  userData : any = {}  
   NewGroupAdmins:Array<Number> = [];
-  grupos : any = {    
-    
-  }
+  grupos : any = {}
   currentGroup = "";
   currentDescription="Desc:";
   router;
   constructor(private socket: WebSocketService, private http:HttpClient, private route:Router) {
 
-    this.currentUserId = sessionStorage.getItem('currentUser');
-    console.log(this.currentUserId);    
-    this.http.post(`http://localhost:3000/usuarios/${this.currentUserId}`,{}).subscribe(data=>{
-        let aux = JSON.stringify(data);         
+    this.currentUserId = sessionStorage.getItem('currentUser');    
+    this.http.post(`http://localhost:3000/usuarios/${this.currentUserId}`,{}).subscribe(async data=>{
+        let aux = await JSON.stringify(data);         
         this.currentUser = JSON.parse(aux);   
-
+        
         this.http.post('http://localhost:3000/gruposId/',this.currentUser.grupos).subscribe(data =>{      
           let userData = JSON.stringify(data);          
           this.grupos = JSON.parse(userData);                                       
         });
-    });
+    });        
+
     this.router = route;
   }
   si = true;
@@ -77,6 +68,12 @@ export class HomeComponent implements OnInit {
     });
     this.socket.listen('nuevoGrupo').subscribe((data:any)=>{            
       this.grupos.push(data);      
+    });
+    this.socket.listen('admin-nuevo').subscribe((data:any)=>{
+      alert('Te acaban de ascender a administrador')
+    });
+    this.socket.listen('salir-grupo').subscribe((mensaje:string) =>{
+      alert(mensaje);
     });
   } 
 
@@ -138,15 +135,64 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  createGroup(){
+  async createGroup(){
 
+    let groupName =<HTMLInputElement> document.getElementById('idInputNombreDegrupo');
+    let groupDescription =<HTMLInputElement> document.getElementById('idDescripcionDeGrupo'); 
 
+    if(this.miembros && Object.keys(this.miembros).length===0 && this.miembros.constructor===Object){
+      alert('No se han seleccionado miembros')
+      return;
+    } 
 
+    let integrantesGrupo=[];
+    for (let miembro of this.miembros) {
+          integrantesGrupo.push(miembro.id)
+    }
+    integrantesGrupo.push(this.currentUserId);
 
+    let informacionDelGrupo1={
+      nombre: groupName.value,
+      descripcion:groupDescription.value,
+      foto:""
+    }
+
+    let mensaje:{
+      archivo:{
+          mensaje:"",
+          remitente:"",
+          hora:Date
+      }
+    }
+
+    let miembrosDelGrupo={
+        integrantes:integrantesGrupo,
+        admin:this.NewGroupAdmins        
+    };
+    let idGroup:number = -1;
+            
+    await this.http.post('http://localhost:3000/getGroupCount',{}).toPromise().then((data:any) => idGroup = data.conteo);            
+    idGroup++;    
+    if(idGroup === -1){
+      alert('Erro con el id de grupo');
+      return;
+    }
+    
+    let grupo_n = {id:idGroup, miembrosDelGrupo:miembrosDelGrupo,informacion:informacionDelGrupo1,mensaje:mensaje}
+    //this.http.post('http://localhost:3000/createG',grupo_n);
+    let data = {
+      ids: integrantesGrupo,
+      infoGrupo:grupo_n
+    }
+
+    this.socket.emit('nuevoGrupo',data);
+    this.createComponent(4);
+    
+    //BORRAR TODO DE AQUÍ PARA ABAJO    
+    /*
     this.http.post('http://localhost:3000/grupos/',this.currentUser.grupos).subscribe(data1 =>{      
       let userData = JSON.stringify(data1);          
       var groupSistems:[] = JSON.parse(userData); 
-
       
     let groupName:any = document.getElementById('idInputNombreDegrupo');
     let groupDescription:any = document.getElementById('idDescripcionDeGrupo'); 
@@ -160,11 +206,7 @@ export class HomeComponent implements OnInit {
           integrantesGrupo.push(miembro.id)
     }
     integrantesGrupo.push(this.currentUserId);
-    /* array.forEach es 50% más lento que el for normal
-    this.miembros.forEach(element => {
-      integrantesGrupo.push(element.id)
-    });
-    */
+
     let informacionDelGrupo1={
       nombre: groupName.value,
       descripcion:groupDescription.value,
@@ -195,17 +237,10 @@ export class HomeComponent implements OnInit {
       infoGrupo:grupo_n
     }
     this.socket.emit('nuevoGrupo',data);
-    /*
-    Deprecamos este post xd 
-    this.http.post('http://localhost:3000/grupos/',{}).subscribe(data =>{      
-      let userData = JSON.stringify(data);                      
-      this.grupos = JSON.parse(userData); 
-    });    
-    */
     this.createComponent(4);
 
     });      
-  
+    */
   }
   copy (obj) {
     let result;
@@ -222,50 +257,49 @@ export class HomeComponent implements OnInit {
   addMember(){
  
     const userdata2 = this.copy(this.userData);
-    var checkBoxAdmin:any = document.getElementById('checkboxAdmin');
-  
-    var newMemberAdmin=false;
-    if(checkBoxAdmin.checked){
-      newMemberAdmin=true;
-    }
+    let checkBoxAdmin:any = document.getElementById('checkboxAdmin');
+      
+    let newMemberAdmin = checkBoxAdmin.checked;
     const idNewMember=userdata2.id;
-    this.currentGroupId;
-    newMemberAdmin;
-    this.http.post(`http://localhost:3000/addfromGroup/${idNewMember}/${this.currentGroupId}/${newMemberAdmin}`,{}).subscribe(data =>{
-   
-   
-    }); 
+    
+    let data : Object = {
+      userId:idNewMember,
+      groupId:this.currentGroupId,
+      isAdmin:newMemberAdmin
+    }
+    this.socket.emit('usuario-nuevo',data);
     alert("Se añadió un nuevo miembro al grupo");
     this.createComponent(1);  
   }
-  addUser(){
-
-        console.log(this.miembros);
-          const userdata2 = this.copy(this.userData);
+  addUser(){      
+      const userdata2 = this.copy(this.userData);    
+      var checkBoxAdmin:any = document.getElementById('checkboxAdmin');
+      checkBoxAdmin.disabled=false;
+      if(checkBoxAdmin.checked){
         
-          var checkBoxAdmin:any = document.getElementById('checkboxAdmin');
-          checkBoxAdmin.disabled=false;
-          if(checkBoxAdmin.checked){
-            
-            this.NewGroupAdmins.push(userdata2.id);
-          }
-          
-          var userAlreadyRegistered=false;
-          this.miembros.forEach(element => {
-            if(userdata2.id==element.id){
-              userAlreadyRegistered=true;
-            }
-          });
-          
-          if(!userAlreadyRegistered){
-            this.miembros[this.miembroscount]=userdata2;
-            this.miembroscount++;
-          }
-          else{
-            alert("¡¡Usuario ya registrado!!");
-            this.createComponent(3);  
-          }
-
+        this.NewGroupAdmins.push(userdata2.id);
+      }
+      
+      var userAlreadyRegistered=false;
+      for(let element of this.miembros){
+        if(userdata2.id==element.id){
+          userAlreadyRegistered=true;
+        }
+      }
+      /*this.miembros.forEach(element => {
+        if(userdata2.id==element.id){
+          userAlreadyRegistered=true;
+        }
+      });*/
+      
+      if(!userAlreadyRegistered){
+        this.miembros[this.miembroscount]=userdata2;
+        this.miembroscount++;
+      }
+      else{
+        alert("¡¡Usuario ya registrado!!");
+        this.createComponent(3);  
+      }
   }
 
   addMemberCommon(){
@@ -278,8 +312,7 @@ export class HomeComponent implements OnInit {
     this.createComponent(2)
    
   }
-  addMemberToGroup(){
-  
+  addMemberToGroup(){  
 
     var addMemberToGroup = document.getElementById('addMemberToGroup');
     var addMemberButton = document.getElementById('addMemberButton');
@@ -306,29 +339,30 @@ export class HomeComponent implements OnInit {
   }
 
   currentGroupId;
-  deleteMember(buton:any){
+  deleteMember(memberInformation:any){
 
-
-    this.http.post(`http://localhost:3000/DeletefromGroup/${buton.value.id}/${this.currentGroupId}`,{}).subscribe(data =>{
-
-    }); 
-    alert("Miembro borrado");
-
+    let userId = memberInformation.value.id;
+    let groupId = this.currentGroupId;
+    this.socket.emit('salir-grupo',{userId,groupId,expulsado:true});
       
   }
+  makeAdmin(memberInformation:any){
+    let userId = memberInformation.value.id;
+    let groupId = this.currentGroupId;   
+    
+    this.socket.emit('admin-nuevo',{userId,groupId});
+  }
 
-
-  showGroup(buton:any){
-
+  showGroup(groupInformation:any){    
+    
     this.currentMembers=[]; 
 
-    this.currentGroup=buton.informacion.nombre;   
-    this.currentDescription=buton.informacion.descripcion;
-    this.currentGroupId=buton.id;
+    this.currentGroup=groupInformation.informacion.nombre;   
+    this.currentDescription=groupInformation.informacion.descripcion;
+    this.currentGroupId=groupInformation.id;
     console.log(this.currentGroupId);
-    this.currentGroupItems=buton.miembrosDelGrupo.integrantes;
-
-
+    this.currentGroupItems=groupInformation.miembrosDelGrupo.integrantes; 
+    //--------------------------------------------------------------------------REVISAR -------------------------------------------------------------------------------------------------------------------------
     this.currentGroupItems.forEach(element => {
         this.http.post(`http://localhost:3000/usuarios/${element}`,{}).subscribe(data =>{
 
@@ -339,6 +373,11 @@ export class HomeComponent implements OnInit {
       }); 
     });
     this.createComponent(4);    
+  }
+  exitGroup():void{
+    let userId = this.currentUser;
+    let groupId = this.currentGroupId;
+    this.socket.emit('salir-grupo',{userId,groupId,expulsado:false})
   }
   
   // ------------------------------------------------------------------------Menu Grupo -----------------------------------------------------------------------------

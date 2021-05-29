@@ -9,34 +9,8 @@ module.exports = function(router){
     const Grupo = require('../modelos/grupos');
 
     id_grupo = 2;
-
-    //Para borrar un usuario de un grupo: Grupo.updateOne({id:id},{ $pull: { ??? } })
-
-     router.post('/DeletefromGroup/:id/:idGroup',(req,res)=>{
-        let id = req.params.id;  
-        let idGroup = req.params.idGroup;
-        Usuario.updateOne({"id": id},{ $pullAll: {"grupos": [idGroup] }}).exec((err,usuarios)=>{
-            if(err){
-                console.log('Error con los usuarios');
-                return;
-            }                    
-           
-        });
-        Grupo.updateOne({"id": idGroup},{ $pullAll: {"miembrosDelGrupo.integrantes":[id]}}).exec((err,usuarios)=>{
-            if(err){
-                console.log('Error con los grupos');
-                return;
-            }                    
-        
-        });
-        Grupo.updateOne({"id": idGroup},{ $pullAll: {"miembrosDelGrupo.admin":[id]}}).exec((err,usuarios)=>{
-            if(err){
-                console.log('Error con los grupos');
-                return;
-            }                    
-           
-        });
-    });
+   
+    /*Moví el método a los sockets */     
 
     router.post('/addfromGroup/:id/:idGroup/:isAdmin',(req,res)=>{
         let id = req.params.id;  
@@ -65,9 +39,7 @@ module.exports = function(router){
                     return;
                 }                    
             });
-        }
-        
-
+        }        
     });
 
 
@@ -116,23 +88,25 @@ module.exports = function(router){
         
         var grupo = new Grupo(req.body);
         grupo.save(function (err) {
-        if (err) {
-            console.log(err);
-            return;
-        } 
-        
+            if (err) {
+                console.log(err);
+                res.send(false);
+                return;
+            }         
         });
-
-        //grupos[id_grupo.toString()] = req.body;    
-        //id_grupo++;
+        
         res.send(true);
     });
 
+    router.post('/getGroupCount',(req,res)=>{            
+        Grupo.countDocuments({},async (err,c)=>{
+            res.json({conteo:c});
+        });        
+    });
     router.post('/isAdmin/:idUser/:idGroup',(req,res)=>{ 
         let user = req.params.idUser;
         let group = req.params.idGroup;
-        console.log(user);
-        console.log(group);     
+ 
         Usuario.findOne({"id": user}).exec((err,usuarios)=>{
             if(err){
                 console.log('Error con los usuarios');
@@ -153,5 +127,6 @@ module.exports = function(router){
             });
         });   
     });
+
     return router;
 }

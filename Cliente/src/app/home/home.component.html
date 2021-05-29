@@ -37,7 +37,7 @@
     </h1>
   </div>
   <div id="description-group" fxflex="15" style="flex: 1 1 100%; box-sizing: border-box; max-height: 15%;">
-    <h1 style="padding-top: 4%; color: black; font-size: 25px;">DESCRIPCION</h1>
+    <h1 style="padding-top: 4%; color: black; font-size: 25px;">DESCRIPCIÓN</h1>
     <div>
       {{currentDescription}}
     </div>
@@ -74,7 +74,7 @@
         </button>
         <mat-menu #menu="matMenu">
           <button mat-menu-item (click)="deleteMember(item)" *ngIf="si">Eliminar del grupo</button>
-          <button mat-menu-item *ngIf="si">Hacer administrador</button>
+          <button mat-menu-item *ngIf="si" (click)="makeAdmin(item)">Hacer administrador</button>
         </mat-menu>
       </div>   
     </cdk-virtual-scroll-viewport> 
