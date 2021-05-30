@@ -58,18 +58,19 @@ module.exports = function (io){
            });        
         });       
 
-        socket.on('salir-grupo',async data =>{
+        socket.on('salir-grupo',data =>{
             let userId = data.userId;
             let groupId = data.groupId;
             let expulsado = data.expulsado;
+            
 
-            await Usuario.updateOne({"id": userId},{ $pull: {"grupos": groupId }}).exec((err)=>{
+            Usuario.updateOne({"id": userId},{ $pull: {"grupos": groupId }}).exec((err)=>{
                 if(err){
                     console.log('Error con los usuarios');                                        
                 }                               
             });
             
-            await Grupo.updateOne({"id":groupId},
+            Grupo.updateOne({"id":groupId.toString()},
                 { $pull: {
                     "miembrosDelGrupo.integrantes":userId,
                     "miembrosDelGrupo.admin":userId

@@ -31,15 +31,31 @@
   </div>
   <div id="icon-name-group" fxflex="20" style="flex: 1 1 100%; box-sizing: border-box; max-height: 20%;">
     <img  mat-card-image src="assets/images/chayan.png" style="border-radius: 50%; display: block; margin-left: auto; margin-right: auto; padding-top: 10px; width: 20%;">
-    <h1  style="padding-top: 4%; padding-left: 2%; color: white; font-size: 30px;" >
-        <!--Recibe el nombre del grupo-->
-        {{currentGroup}}
-    </h1>
+    <!--Botón para cambiar la foto de perfil-->
+    <div style="display: flex;" id="groupNameElementsContainer">
+      <h1  style="padding-top: 4%; padding-left: 2%; color: white; font-size: 30px;" id="label-nombreGrupo">
+          <!--Recibe el nombre del grupo-->
+          {{currentGroup}}
+      </h1>
+      <!--Botón para cambiar el nombre del grupo-->
+      <button *ngIf="this.si" mat-icon-button
+              id = "changeNameButton"                 
+              style="padding-top: 2%;"
+              (click)="replaceItem('label-nombreGrupo','changeNameButton','nombre')">
+              <mat-icon>update</mat-icon>
+      </button>
+    </div>
   </div>
   <div id="description-group" fxflex="15" style="flex: 1 1 100%; box-sizing: border-box; max-height: 15%;">
     <h1 style="padding-top: 4%; color: black; font-size: 25px;">DESCRIPCIÓN</h1>
-    <div>
-      {{currentDescription}}
+    <div style="display: flex;">
+      <p id="labelGroupDescription" >{{currentDescription}}</p>
+      <!--Botón para cambiar la información de grupo -->
+      <button *ngIf="this.si" mat-icon-button
+              id="btnChangeDescription"
+              (click)="replaceItem('labelGroupDescription','btnChangeDescription','descripcion')">
+              <mat-icon>update</mat-icon>
+      </button>
     </div>
   </div>
   <div id="assign-homework-group" fxflex="5" style="flex: 1 1 100%; box-sizing: border-box; max-height: 5%;">

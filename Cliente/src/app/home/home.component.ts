@@ -29,6 +29,7 @@ export class HomeComponent implements OnInit {
   constructor(private socket: WebSocketService, private http:HttpClient, private route:Router) {
 
     this.currentUserId = sessionStorage.getItem('currentUser');    
+    /* BORRAR LUEGO
     this.http.post(`http://localhost:3000/usuarios/${this.currentUserId}`,{}).subscribe(async data=>{
         let aux = await JSON.stringify(data);         
         this.currentUser = JSON.parse(aux);   
@@ -37,10 +38,25 @@ export class HomeComponent implements OnInit {
           let userData = JSON.stringify(data);          
           this.grupos = JSON.parse(userData);                                       
         });
-    });        
+    });
+    */  
+    this.generateUserData();
 
     this.router = route;
   }
+
+  async generateUserData() {
+    await this.http.post(`http://localhost:3000/usuarios/${this.currentUserId}`,{}).toPromise().then(data =>{
+        let aux = JSON.stringify(data);         
+        this.currentUser = JSON.parse(aux);
+    });
+
+    this.http.post('http://localhost:3000/gruposId/',this.currentUser.grupos).subscribe(data =>{      
+          let userData = JSON.stringify(data);          
+          this.grupos = JSON.parse(userData);                                       
+    });
+  }
+
   hclick = false;
   si = true;
   isAdmin2(){ 
@@ -166,6 +182,7 @@ export class HomeComponent implements OnInit {
           hora:Date
       }
     }
+    this.NewGroupAdmins.push(this.currentUserId);
 
     let miembrosDelGrupo={
         integrantes:integrantesGrupo,
@@ -280,8 +297,7 @@ export class HomeComponent implements OnInit {
       const userdata2 = this.copy(this.userData);    
       var checkBoxAdmin:any = document.getElementById('checkboxAdmin');
       checkBoxAdmin.disabled=false;
-      if(checkBoxAdmin.checked){
-        
+      if(checkBoxAdmin.checked){        
         this.NewGroupAdmins.push(userdata2.id);
       }
       
@@ -345,9 +361,9 @@ export class HomeComponent implements OnInit {
 
   currentGroupId;
   deleteMember(memberInformation:any){
-
-    let userId = memberInformation.value.id;
-    let groupId = this.currentGroupId;
+    /*NOTA: TENER CUIDADO AL MANDAR DATOS, MONGODB ES SENSIBLE A STRINGS E INTS */
+    let userId = memberInformation.value.id.toString();
+    let groupId = this.currentGroupId.toString();
     this.socket.emit('salir-grupo',{userId,groupId,expulsado:true});
       
   }
@@ -384,6 +400,39 @@ export class HomeComponent implements OnInit {
     let groupId = this.currentGroupId;
     this.socket.emit('salir-grupo',{userId,groupId,expulsado:false})
   }
+
+  replaceItem(itemId:string, actionButton : string,info:string):void{
+    let originalNameElement : HTMLElement = document.getElementById(itemId);    
+    let button : HTMLElement = document.getElementById(actionButton);
+    
+    const confirmButton : HTMLButtonElement = document.createElement('button');
+    const newNameInput = document.createElement('input');    
+    newNameInput.type='text';
+    newNameInput.value = originalNameElement.innerHTML;
+    newNameInput.style.marginLeft = "10px";
+    
+    confirmButton.innerHTML = "Confirmar";
+
+    let actualGroupName = originalNameElement.innerHTML;
+
+    originalNameElement.parentElement.replaceChild(newNameInput,originalNameElement);
+    button.parentElement.replaceChild(confirmButton,button);
+
+    confirmButton.onclick = ()=>{
+      let newName = newNameInput.value;      
+      if(actualGroupName.trim() === newName.trim() || actualGroupName === newName){
+        alert('Sin cambios');        
+      }else{
+        //TODO: Cargar a la base de datos
+        originalNameElement.innerHTML = newName;
+      }
+      
+      newNameInput.parentElement.replaceChild(originalNameElement,newNameInput);
+      confirmButton.parentElement.replaceChild(button,confirmButton);
+      
+    }
+  }
+  
   
   // ------------------------------------------------------------------------Menu Grupo -----------------------------------------------------------------------------
   // -------------------De aqui para abajo son funciones del menu de grupos ----------------------------------------
