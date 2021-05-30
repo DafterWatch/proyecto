@@ -86,7 +86,7 @@
   </div>
 </div>  
 </ng-sidebar>
-<div ng-sidebar-content style="height: 100%; width: 100%;">
+<div ng-sidebar-content style="height: 100%; width: 100%;" id="mainbody">
     <!--Toda la parte de arriba es el menu de gh-->
     <!-------------------------------------------------------------------------------------Esta seccion es Home - Pagina---------------------------------------------------------------------------------->
     <div class="colored-box" style="flex-direction: row; box-sizing: border-box; display: flex;">
@@ -127,7 +127,8 @@
                 </div>
             </div>
         </div>   
-        <div fxflex="" style="flex: 1 1 0%; box-sizing: border-box;" class="chat" id="principalContainer">
+        <div fxflex="" style="flex: 1 1 0%; box-sizing: border-box;" class="chat" id="principalContainer" *ngIf="hclick">
+          
     <!--MODULARIZAR-->
     <!--ContenedorDeChat--> 
     <app-chat-group (myEvent)="_toggleOpened()" [mensajes]="mensajes" (myEventSendMessage)="sendMensaje($event)" [currentGroup]="currentGroup"></app-chat-group>

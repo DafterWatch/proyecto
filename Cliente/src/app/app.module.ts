@@ -64,6 +64,7 @@ import { EntregarComponent } from './entregar/entregar.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { InicioComponent } from './inicio/inicio.component';
 import { CrearFormularioComponent } from './crear-formulario/crear-formulario.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -124,6 +125,8 @@ import { CrearFormularioComponent } from './crear-formulario/crear-formulario.co
     MatSlideToggleModule,
     //ReactForm
     ReactiveFormsModule,
+    //CheckBox
+    MatCheckboxModule,
   ],
   bootstrap: [AppComponent],
   providers: [ErrorStateMatcher]

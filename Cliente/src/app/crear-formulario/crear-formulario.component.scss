@@ -20,7 +20,29 @@
     margin-left: auto; 
     margin-right: auto;    
 }
-p{
-    font-size: 20px;
+.cuerpo{
+    padding: 20px;
+}
+#comun{
+    margin-top: 15px; 
+    width: 50%; 
+    height: 30px;
+}
+.btn{
+    background-color: #3386FF;
+    height: 50px;
+    width: 100px;
+    float: right;
+    color: white;    
+    border: none;
+    cursor: pointer;
+}
+.btn2{
     margin-top: 20px;
+    background-color: #3386FF;
+    height: 50px;
+    width: 200px;
+    color: white;    
+    border: none;
+    cursor: pointer;
 }

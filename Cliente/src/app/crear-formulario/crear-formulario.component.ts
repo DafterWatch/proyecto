@@ -25,14 +25,14 @@ export class CrearFormularioComponent implements OnInit {
   }
   anadirExperienciaLaboral() {
     const trabajo = this.fb.group({
-      empresa: new FormControl(''),
-      puesto: new FormControl(''),
-      descripcion: new FormControl('')
+        empresa: new FormControl('')
     });
   
     this.experienciaLaboral.push(trabajo);
   }
   borrarTrabajo(indice: number) {
-    this.experienciaLaboral.removeAt(indice);
+    if(indice>0){      
+      this.experienciaLaboral.removeAt(indice);
+    }
   }
 }

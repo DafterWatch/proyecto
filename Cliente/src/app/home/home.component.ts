@@ -41,6 +41,7 @@ export class HomeComponent implements OnInit {
 
     this.router = route;
   }
+  hclick = false;
   si = true;
   isAdmin2(){ 
     this.http.post(`http://localhost:3000/isAdmin/${this.currentUserId}/${this.currentGroupId}`,{}).subscribe(data =>{
@@ -50,6 +51,7 @@ export class HomeComponent implements OnInit {
         this.si = false;
       }
     });
+    this.hclick = true;
     console.log(this.si+" estado");
   }
   isAdmin(){    
