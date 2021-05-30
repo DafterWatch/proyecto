@@ -180,14 +180,17 @@ export class HomeComponent implements OnInit {
       return;
     }
     
-    let grupo_n = {id:idGroup, miembrosDelGrupo:miembrosDelGrupo,informacion:informacionDelGrupo1,mensaje:mensaje}
-    //this.http.post('http://localhost:3000/createG',grupo_n);
+    let grupo_n = {id:idGroup, miembrosDelGrupo:miembrosDelGrupo,informacion:informacionDelGrupo1,mensaje:mensaje}    
     let data = {
       ids: integrantesGrupo,
       infoGrupo:grupo_n
     }
-
-    this.socket.emit('nuevoGrupo',data);
+    
+    this.socket.socket.emit('nuevoGrupo',data,cb=>{
+      if(cb.err){
+        console.log(cb.error);        
+      }
+    });
     this.createComponent(4);
     
     //BORRAR TODO DE AQUÍ PARA ABAJO    

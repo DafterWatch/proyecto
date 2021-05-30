@@ -34,7 +34,7 @@ module.exports = function (io){
                 }                
                 await Usuario.updateOne({"id":id},{ $push:{ "grupos":data.infoGrupo.id.toString() } })
             }
-            
+            cb({err:false});
         });
 
         socket.on('login-nuevo', async (data,cb)=>{
