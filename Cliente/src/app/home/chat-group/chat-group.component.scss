@@ -138,7 +138,10 @@
 }
 #chatContainerDiv{
     flex: 1 1 1e-09px;
-    box-sizing: border-box; max-height: 80%;
+    box-sizing: border-box;
+    max-height: 80%;
+    overflow-y: scroll;
+    background-color: #efebe8;
 }
 #text-area-chat{
     flex: 1 1 100%;
@@ -436,4 +439,13 @@
   box-sizing:  border-box; 
   float: right; 
   box-sizing: border-box;
+}
+.mensajeDiv{
+  //background-color: white;
+  //text-align: left;
+  padding: 15px;
+  margin: 15px;
+  width: 47%;
+  height: auto;
+  word-wrap: break-word;
 }

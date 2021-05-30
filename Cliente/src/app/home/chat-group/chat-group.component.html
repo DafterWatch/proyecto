@@ -15,11 +15,18 @@
         </div> 
     </div>
     <div class="options" fxflex="80" id="chatContainerDiv">
-    <!--Mensajes--> 
-   
-    <div *ngFor="let mensaje of mensajes">
-        <div> {{mensaje}} </div> <br>
-    </div> 
+    <!--Mensajes-->
+        <div *ngFor="let mensaje of mensajes">
+            <div class="mensajeDiv" 
+            [ngStyle]="{
+                'background-color':mensaje.user === 1 ? '#4a83d9' : 'white',
+                'float':mensaje.user === 1 ? 'right' : 'left',
+                'text-align':mensaje.user === 1 ? 'right' : 'left'
+            }">
+                {{mensaje.message}} 
+            </div> <br>
+        </div>
+
     </div>
     <div id="text-area-chat" fxflex="10">
         <button mat-fab color="primary">
