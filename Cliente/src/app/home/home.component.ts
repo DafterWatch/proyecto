@@ -128,7 +128,8 @@ export class HomeComponent implements OnInit {
       groupWindow.style.display="none";
       addMemberWindow.style.display="none";
       //this.currentNewgroupAdmin=-1;
-      this.NewGroupAdmins = [];
+      this.NewGroupAdmins = [];      
+      this.hclick = false;
     }
     if(index==2){
       chatWindow.style.display="none";
