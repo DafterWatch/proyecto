@@ -23,9 +23,9 @@
                 'float':mensaje.user === 1 ? 'right' : 'left',
                 'text-align':mensaje.user === 1 ? 'right' : 'left'
             }">
-            <h3 *ngIf="mensaje.user != 1" class="messageName">{{mensaje.name}}</h3>
+            <h3 *ngIf="mensaje.user != 1; else showH" class="messageName"><strong>{{mensaje.name}} </strong> &nbsp; <span style="float: right;">{{mensaje.time.getHours().toString() +':'+ mensaje.time.getMinutes().toString()}}</span> </h3>
                 {{mensaje.message}} 
-            
+            <ng-template #showH> <h4> {{mensaje.time.getHours().toString() +':'+ mensaje.time.getMinutes().toString()}} </h4> </ng-template>
             <button mat-icon-button class="messageOptions" [matMenuTriggerFor] = "menu" [ngStyle]="{'background-color':mensaje.user === 1 ? '#3B65A5' : '#E9E9E9'}">
                 <mat-icon>arrow_downward</mat-icon>
             </button>
@@ -48,7 +48,7 @@
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
-        <div id="send-button" (click)='sendMensaje(txtMensaje.value)'>
+        <div id="send-button" (click)='sendMensaje(txtMensaje.value,"L")'>
             <button mat-fab color="primary" >
             <mat-icon>send</mat-icon>
             </button>

@@ -102,6 +102,7 @@ export class HomeComponent implements OnInit {
         }
       }
     });
+    
 
     this.socket.listen('group-info-change').subscribe((data:any)=>{
       //campo,nuevoCampo, idGroup  
@@ -138,8 +139,8 @@ export class HomeComponent implements OnInit {
     });
   } 
 
-  sendMensaje(mensaje:string){         
-    alert('Aún funciona');
+  sendMensaje(obj:any){         
+    alert(obj.message+' '+ obj.other);
     //this.socket.emit('nuevoMensaje',mensaje);    
   } 
 

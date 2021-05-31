@@ -9,14 +9,18 @@ import Messages from './Messages';
 export class ChatGroupComponent implements OnInit {
 
   
-  constructor() { }
+  constructor() { 
+        
+  }
 
   ngOnInit(): void {
+    console.log('current group: ',this.currentGroupId);
   }
 
   //@Input() mensajes : Array<String> = [];
   @Input() value : String;
   @Input() currentGroup: String;
+  @Input() currentGroupId : number;
   tamano: number = 10;
   // user=1 es el usuario en session
   // esto hara q dependiendo de q usuario este en session cambie el chat
@@ -33,67 +37,80 @@ export class ChatGroupComponent implements OnInit {
       Maecenas vitae faucibus urna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas lacinia consectetur tellus ornare maximus. Aliquam sodales nibh at molestie tempor. Donec eget justo at elit blandit accumsan. Mauris in sem in lectus gravida tincidunt. Cras ut elit et purus rutrum malesuada. Sed arcu tortor, venenatis non aliquam vitae, lobortis facilisis risus. Maecenas vel scelerisque felis. Cras est justo, molestie ac bibendum non, elementum sed dui. Phasellus semper ac nibh sit amet hendrerit. Sed posuere ultricies venenatis. Cras vel elit mauris. Duis eu sagittis nisi, vitae ullamcorper metus.
       
       Curabitur cursus ornare mattis. Duis at lectus in eros interdum placerat quis eget mauris. Nunc tortor risus, tincidunt sed accumsan a, dictum sit amet ante. Fusce eleifend augue sem, in molestie diam eleifend at. Nulla faucibus sapien et tellus fermentum auctor. Nunc a diam quis mi fringilla fringilla eu ut lectus. Suspendisse sodales purus vel lorem sagittis congue. Sed semper hendrerit dui rutrum aliquam. In at lorem sit amet nunc facilisis dictum tincidunt ut ante.`,
-      name:"Pablo"
+      name:"Pablo",
+      time: new Date(Date.now())
     },
     {
       user: 2,
       message: "aaa",
-      name:"Pablo"
+      name:"Pablo",
+      time: new Date(Date.now())
     },
     {
       user: 1,
       message: "aaa",
-      name:"Pablo"
+      name:"Pablo",
+      time: new Date(Date.now())
     },
     {
       user: 2,
       message: "aaa",
-      name:"Pablo"
+      name:"Pablo",
+      time: new Date(Date.now())
     },
     {
       user: 2,
       message: "aaa",
-      name:"Pablo"
+      name:"Pablo",
+      time: new Date(Date.now())
     },
     {
       user: 1,
       message: "aaa",
-      name:"Pablo"
+      name:"Pablo",
+      time: new Date(Date.now())
     },
     {
       user: 2,
       message: "aaa",
-      name:"Pablo"
+      name:"Pablo",
+      time: new Date(Date.now())
     },
     {
       user: 1,
       message: "aaa",
-      name:"Pablo"
+      name:"Pablo",
+      time: new Date(Date.now())
     },
     {
       user: 1,
       message: "aaa",
-      name:"Pablo"
+      name:"Pablo",
+      time: new Date(Date.now())
     },
     {
       user: 1,
       message: "aaa",
-      name:"Pablo"
+      name:"Pablo",
+      time: new Date(Date.now())
     },
     {
       user: 1,
       message: "aaa",
-      name:"Pablo"
+      name:"Pablo",
+      time: new Date(Date.now())
     },
     {
       user: 1,
       message: "aaa",
-      name:"Pablo"
+      name:"Pablo",
+      time: new Date(Date.now())
     },
     {
       user: 1,
       message: "aaa",
-      name:"Pablo"
+      name:"Pablo",
+      time: new Date(Date.now())
     }
   ]
   
@@ -102,9 +119,9 @@ export class ChatGroupComponent implements OnInit {
     this.myEvent.emit();
   }
   
-  @Output() myEventSendMessage= new EventEmitter<String>();
-  sendMensaje(message:String){
-    this.myEventSendMessage.emit(message);
+  @Output() myEventSendMessage= new EventEmitter<any>();
+  sendMensaje(message:String, other:String){
+    this.myEventSendMessage.emit({message , other});
     
   }
   
