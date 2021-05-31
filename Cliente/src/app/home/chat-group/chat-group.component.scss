@@ -441,11 +441,31 @@
   box-sizing: border-box;
 }
 .mensajeDiv{
-  //background-color: white;
-  //text-align: left;
+  position: relative;
   padding: 15px;
   margin: 15px;
   width: 47%;
   height: auto;
   word-wrap: break-word;
+  border-radius: 5px;
 }
+
+.messageOptions{
+  position: absolute;   
+  right: 10px; 
+  top: 5px;   
+  opacity: 0;  
+  background: #b9b9b9;    
+  transform: rotateY(-60deg);
+}
+
+.mensajeDiv:hover > .messageOptions{
+  transform-origin: right;  
+  opacity: 1;
+  transform: rotateY(0deg);
+  transition: all .2s;  
+}
+.messageName{
+  border-bottom: 2px solid red;
+}
+

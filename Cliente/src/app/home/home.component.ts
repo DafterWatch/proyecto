@@ -104,8 +104,7 @@ export class HomeComponent implements OnInit {
     });
 
     this.socket.listen('group-info-change').subscribe((data:any)=>{
-      //campo,nuevoCampo, idGroup
-      console.log(data);
+      //campo,nuevoCampo, idGroup  
       let idg = parseInt(data.idGroup)
       if(idg === this.currentGroupId){
         //TODO: Recuperar las etiquetas y cambiar la información
@@ -134,17 +133,17 @@ export class HomeComponent implements OnInit {
       alert('Te han quitado privilegios de administrador');
     });
     this.socket.listen('usuario-nuevo').subscribe((data:any)=>{
-      alert('Funciona el evento');
-      //push grupo !!
+      alert('Funciona el evento');    
       this.grupos.push(data);
     });
   } 
 
   sendMensaje(mensaje:string){         
-    this.socket.emit('nuevoMensaje',mensaje);    
+    alert('Aún funciona');
+    //this.socket.emit('nuevoMensaje',mensaje);    
   } 
 
-  cleanCreateGroupFields(){
+  cleanCreateGroupFields(){    
     var groupName:any =document.getElementById('idInputNombreDegrupo');
     var groupDescription:any  = document.getElementById('idDescripcionDeGrupo');
     
@@ -463,7 +462,6 @@ export class HomeComponent implements OnInit {
     this.currentGroup=groupInformation.informacion.nombre;   
     this.currentDescription=groupInformation.informacion.descripcion;
     this.currentGroupId=groupInformation.id;
-    console.log(this.currentGroupId);
     this.currentGroupItems=groupInformation.miembrosDelGrupo.integrantes; 
     //--------------------------------------------------------------------------REVISAR -------------------------------------------------------------------------------------------------------------------------
     this.currentGroupItems.forEach(element => {
@@ -472,8 +470,7 @@ export class HomeComponent implements OnInit {
         let userData2 = JSON.stringify(data);
  
         let userData2_ = JSON.parse(userData2);
-        this.currentMembers.push(userData2_);
-        console.log(this.currentMembers);  
+        this.currentMembers.push(userData2_);   
       }); 
     });
     this.createComponent(4);    
