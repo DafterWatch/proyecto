@@ -87,11 +87,12 @@
     <cdk-virtual-scroll-viewport itemSize="50" class="list-members">
       <div *ngFor="let item of currentMembers | keyvalue" class="member-item">
         <button mat-button [matMenuTriggerFor]="menu" style="height: 100%; width: 100%;">
-          {{item.value.nombre}}
+          {{(this.currentUserId === item.value.id.toString())? "Tú":item.value.nombre}}
         </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="deleteMember(item)" *ngIf="si">Eliminar del grupo</button>
-          <button mat-menu-item *ngIf="si" (click)="makeAdmin(item)">Hacer administrador</button>
+        <mat-menu  #menu="matMenu" >
+          <button mat-menu-item (click)="deleteMember(item)" *ngIf="this.si">Eliminar del grupo</button>
+          <button mat-menu-item (click)="makeAdmin(item)" *ngIf='!isIntegrantAdmin(item.value.id); else quitAdmin' >Hacer administrador</button>
+          <ng-template #quitAdmin ><button mat-menu-item (click)="deleteAdmin(item)">Quitar derechos de administrador</button></ng-template>
         </mat-menu>
       </div>   
     </cdk-virtual-scroll-viewport> 

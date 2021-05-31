@@ -56,7 +56,22 @@ module.exports = function (io){
                if(err)
                 console.log(err.message);
            });        
-        });       
+        });
+
+        socket.on('quitar-admin',data =>{
+            console.log(data);
+            let userId = data.userId;
+            let groupId = data.groupId;
+
+            if(userId in usuarios){
+                usuarios[userId].emit('quitar-admin',null);
+            }
+
+            Grupo.updateOne({"id":groupId}, {$pull:{"miembrosDelGrupo.admin": userId.toString()}}).exec(err=>{
+                if(err)
+                 console.log(err.message);
+            });      
+        }); 
 
         socket.on('salir-grupo',data =>{
             let userId = data.userId;
@@ -82,16 +97,16 @@ module.exports = function (io){
             });
             let mensaje = (expulsado)? "Te han expulsado del grupo" : "Saliste del grupo";
             if(userId in usuarios){
-                usuarios[userId].emit('salir-grupo',mensaje);
+                usuarios[userId].emit('salir-grupo',{mensaje,groupId});
             }
         });
 
-        socket.on('usuario-nuevo',data=>{
+        socket.on('usuario-nuevo',async (data,cb)=>{
             let userId = data.userId;
             let groupId = data.groupId;
             let isAdmin = data.isAdmin;
 
-            Usuario.updateOne({"id":userId}, {$push:{"grupos":groupId} }).exec(err => {
+            Usuario.updateOne({"id":userId}, {$push:{"grupos":groupId.toString()} }).exec(err => {
                 if(err)
                     console.log('Error agregando grupo');
             });
@@ -106,7 +121,55 @@ module.exports = function (io){
                         console.log('Error agregando miembro');
                 });
             }
+            let newGroup;
+            await Grupo.findOne({"id":groupId}).exec().then(grupo =>{
+                newGroup= grupo;
+            });
+            let user;
+            await Usuario.findOne({"id":userId}).exec().then(user_=>{
+                user = user_;
+            });
+            if(userId in usuarios){
+                usuarios[userId].emit('usuario-nuevo',newGroup);
+            }
+            cb(user);
         });
+
+        socket.on('group-info-change',async data=>{
+            //{ idgroup , campo , nuevoCampo }
+            let idGroup = data.idGroup;
+            let campo = data.campo;
+            let nuevoCampo = data.nuevoCampo;            
+            
+            switch (campo) {
+                case "nombre":
+                    Grupo.updateOne({"id":idGroup},{$set: {"informacion.nombre":nuevoCampo }}).exec((err)=>{
+                        if(err){
+                            console.log(err.message);
+                        }
+                    });
+                    break;
+            
+                case "descripcion":
+                    Grupo.updateOne({"id":idGroup},{$set: {"informacion.descripcion":nuevoCampo }}).exec((err)=>{
+                        if(err){
+                            console.log(err.message);
+                        }
+                    });
+                    break;
+            }
+            
+            let ids = [];
+            await Grupo.findOne({"id":idGroup}).exec().then((grupo) =>{                                
+                ids = grupo.miembrosDelGrupo.integrantes;
+            });            
+            for(let i = 0;i<ids.length;i++){
+                let id = parseInt(ids[i]);
+                if(id in usuarios){                    
+                    usuarios[id].emit('group-info-change',{campo,nuevoCampo,idGroup});                       
+                }  
+            }
+        });       
 
     });
 };

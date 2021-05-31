@@ -128,5 +128,14 @@ module.exports = function(router){
         });   
     });
 
+    router.post('/p',(req,res)=>{
+        Grupo.updateOne({"id":2},{$set: {"informacion.nombre":"Química" }}).exec((err)=>{
+            if(err){
+                console.log(err.message);
+            }
+        });
+        res.send(true);
+    });
+
     return router;
 }

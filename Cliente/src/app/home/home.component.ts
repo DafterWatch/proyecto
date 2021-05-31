@@ -42,7 +42,8 @@ export class HomeComponent implements OnInit {
     */  
     this.generateUserData();
 
-    this.router = route;
+    this.router = route;    
+    
   }
 
   async generateUserData() {
@@ -53,8 +54,9 @@ export class HomeComponent implements OnInit {
 
     this.http.post('http://localhost:3000/gruposId/',this.currentUser.grupos).subscribe(data =>{      
           let userData = JSON.stringify(data);          
-          this.grupos = JSON.parse(userData);                                       
+          this.grupos = JSON.parse(userData);                                                                     
     });
+    
   }
 
   hclick = false;
@@ -90,8 +92,51 @@ export class HomeComponent implements OnInit {
     this.socket.listen('admin-nuevo').subscribe((data:any)=>{
       alert('Te acaban de ascender a administrador')
     });
-    this.socket.listen('salir-grupo').subscribe((mensaje:string) =>{
-      alert(mensaje);
+    this.socket.listen('salir-grupo').subscribe((data:any) =>{
+      alert(data.mensaje);
+      //TODO:Colocar un mensaje de alaerta en los mensajes: 
+      for (let index = 0; index < this.grupos.length; index++) {
+        const element = this.grupos[index];
+        if(element.id == data.groupId){
+          this.grupos.splice(index,1);
+        }
+      }
+    });
+
+    this.socket.listen('group-info-change').subscribe((data:any)=>{
+      //campo,nuevoCampo, idGroup
+      console.log(data);
+      let idg = parseInt(data.idGroup)
+      if(idg === this.currentGroupId){
+        //TODO: Recuperar las etiquetas y cambiar la información
+        if(data.campo === "nombre"){
+          this.currentGroup = data.nuevoCampo;
+
+        }else if(data.campo === "descripcion"){
+          this.currentDescription = data.nuevoCampo;
+        }
+        
+      }
+      for (let index = 0; index < this.grupos.length; index++) {        
+        const element = this.grupos[index];                       
+        if(element.id === idg){
+          if(data.campo === "nombre"){
+            element.informacion.nombre = data.nuevoCampo;          
+          }else if(data.campo === "descripcion"){
+            element.informacion.descripcion = data.nuevoCampo;          
+          }                    
+        }        
+      }          
+      
+    });
+
+    this.socket.listen('quitar-admin').subscribe((data:any)=>{
+      alert('Te han quitado privilegios de administrador');
+    });
+    this.socket.listen('usuario-nuevo').subscribe((data:any)=>{
+      alert('Funciona el evento');
+      //push grupo !!
+      this.grupos.push(data);
     });
   } 
 
@@ -290,7 +335,12 @@ export class HomeComponent implements OnInit {
       groupId:this.currentGroupId,
       isAdmin:newMemberAdmin
     }
-    this.socket.emit('usuario-nuevo',data);
+    //this.socket.emit('usuario-nuevo',data);
+    this.socket.socket.emit('usuario-nuevo',data,cb=>{    
+      console.log('callback: ',cb);
+      console.log('miembros: ',this.currentMembers);
+      this.currentMembers.push(cb);
+    });
     alert("Se añadió un nuevo miembro al grupo");
     this.createComponent(1);  
   }
@@ -363,8 +413,16 @@ export class HomeComponent implements OnInit {
   currentGroupId;
   deleteMember(memberInformation:any){
     /*NOTA: TENER CUIDADO AL MANDAR DATOS, MONGODB ES SENSIBLE A STRINGS E INTS */
-    let userId = memberInformation.value.id.toString();
+    let userId = memberInformation.value.id;
     let groupId = this.currentGroupId.toString();
+
+    for (let index = 0; index < this.currentMembers.length; index++) {
+      const member = this.currentMembers[index];
+      if(member.id === userId){
+        this.currentMembers.splice(index,1);
+      }
+    }
+    userId = userId.toString();
     this.socket.emit('salir-grupo',{userId,groupId,expulsado:true});
       
   }
@@ -373,6 +431,29 @@ export class HomeComponent implements OnInit {
     let groupId = this.currentGroupId;   
     
     this.socket.emit('admin-nuevo',{userId,groupId});
+  }
+  deleteAdmin(memberInformation:any){    
+    let userId = memberInformation.value.id;
+    let groupId = this.currentGroupId;   
+
+    this.socket.emit('quitar-admin',{userId,groupId});
+  }
+
+  isIntegrantAdmin(memberId:number){
+    let admins : Array<string>;    
+          
+    for (let index = 0; index < this.grupos.length; index++) {
+      const element = this.grupos[index];
+      if(element.id === this.currentGroupId){
+        admins = element.miembrosDelGrupo.admin;
+      }
+    }
+    
+    if(admins.includes(memberId.toString())){
+      return true;
+    }
+    
+    return false;
   }
 
   showGroup(groupInformation:any){    
@@ -392,9 +473,11 @@ export class HomeComponent implements OnInit {
  
         let userData2_ = JSON.parse(userData2);
         this.currentMembers.push(userData2_);
+        console.log(this.currentMembers);  
       }); 
     });
     this.createComponent(4);    
+     
   }
   exitGroup():void{
     let userId = this.currentUser;
@@ -402,7 +485,7 @@ export class HomeComponent implements OnInit {
     this.socket.emit('salir-grupo',{userId,groupId,expulsado:false})
   }
 
-  replaceItem(itemId:string, actionButton : string,info:string):void{
+  replaceItem(itemId:string, actionButton : string, info:string):void{
     let originalNameElement : HTMLElement = document.getElementById(itemId);    
     let button : HTMLElement = document.getElementById(actionButton);
     
@@ -414,7 +497,7 @@ export class HomeComponent implements OnInit {
     
     confirmButton.innerHTML = "Confirmar";
 
-    let actualGroupName = originalNameElement.innerHTML;
+    let actualGroupName = originalNameElement.innerText;
 
     originalNameElement.parentElement.replaceChild(newNameInput,originalNameElement);
     button.parentElement.replaceChild(confirmButton,button);
@@ -424,7 +507,12 @@ export class HomeComponent implements OnInit {
       if(actualGroupName.trim() === newName.trim() || actualGroupName === newName){
         alert('Sin cambios');        
       }else{
-        //TODO: Cargar a la base de datos
+        let data = {
+          idGroup : this.currentGroupId.toString(),
+          campo : info,
+          nuevoCampo : newName
+        }
+        this.socket.emit('group-info-change',data);
         originalNameElement.innerHTML = newName;
       }
       
