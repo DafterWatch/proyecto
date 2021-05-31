@@ -90,9 +90,11 @@
           {{(this.currentUserId === item.value.id.toString())? "Tú":item.value.nombre}}
         </button>
         <mat-menu  #menu="matMenu" >
-          <button mat-menu-item (click)="deleteMember(item)" *ngIf="this.si">Eliminar del grupo</button>
+        <span  *ngIf="this.si">
+          <button mat-menu-item (click)="deleteMember(item)">Eliminar del grupo</button>
           <button mat-menu-item (click)="makeAdmin(item)" *ngIf='!isIntegrantAdmin(item.value.id); else quitAdmin' >Hacer administrador</button>
           <ng-template #quitAdmin ><button mat-menu-item (click)="deleteAdmin(item)">Quitar derechos de administrador</button></ng-template>
+        </span>
         </mat-menu>
       </div>   
     </cdk-virtual-scroll-viewport> 
