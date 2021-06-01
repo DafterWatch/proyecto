@@ -16,6 +16,18 @@ export class ChatGroupComponent implements OnInit {
   ngOnInit(): void {
     console.log('current group: ',this.currentGroupId);
   }
+  
+  /*metodoCualquiera(){
+    alert("MensajeRecibido");
+  }*/
+  
+  updateGroupMessages(grupo:any){
+    this.currentGroupId=grupo.idGrupo;
+    //this.mensajes=grupo.mensajes;
+
+    //console.log(this.currentGroupId);
+    //console.log(this.mensajes);
+  }
 
   //@Input() mensajes : Array<String> = [];
   @Input() value : String;

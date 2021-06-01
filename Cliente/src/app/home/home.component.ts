@@ -1,9 +1,10 @@
 import { TOUCH_BUFFER_MS } from '@angular/cdk/a11y';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { WebSocketService } from '../web-socket.service';
 import {HttpClient} from '@angular/common/http';
 import { identifierModuleUrl } from '@angular/compiler';
 import {Router} from '@angular/router';
+import {ChatGroupComponent} from '../home/chat-group/chat-group.component';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +13,8 @@ import {Router} from '@angular/router';
 })
 export class HomeComponent implements OnInit {
   
+  @ViewChild(ChatGroupComponent) chatGroupComponent:ChatGroupComponent;
+
   currentUserId : any;
   currentUser : any=null; 
   mensajes : Array<String> = [];
@@ -474,6 +477,10 @@ export class HomeComponent implements OnInit {
         this.currentMembers.push(userData2_);   
       }); 
     });
+
+    this.chatGroupComponent.updateGroupMessages({idGrupo:this.currentGroupId,mensajes:this.mensajes});
+    //this.chatGroupComponent.metodoCualquiera();
+
     this.createComponent(4);    
      
   }
