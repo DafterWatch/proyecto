@@ -16,17 +16,17 @@
     </div>
     <div class="options" fxflex="80" id="chatContainerDiv">
     <!--Mensajes-->
-        <div *ngFor="let mensaje of mensajes" >
-            <div class="mensajeDiv" 
+        <div *ngFor="let mensaje of mensajes"  >
+            <div class="mensajeDiv" style="overflow: visible;"
             [ngStyle]="{
-                'background-color':mensaje.user === 1 ? '#4a83d9' : 'white',
-                'float':mensaje.user === 1 ? 'right' : 'left',
-                'text-align':mensaje.user === 1 ? 'right' : 'left'
+                'background-color':mensaje.user === this.currentUser.id ? '#4a83d9' : 'white',
+                'float':mensaje.user === this.currentUser.id ? 'right' : 'left',
+                'text-align':mensaje.user === this.currentUser.id ? 'right' : 'left'
             }">
-            <h3 *ngIf="mensaje.user != 1; else showH" class="messageName"><strong>{{mensaje.name}} </strong> &nbsp; <span style="float: right;">{{mensaje.time.getHours().toString() +':'+ mensaje.time.getMinutes().toString()}}</span> </h3>
+            <h3 *ngIf="mensaje.user !== this.currentUser.id; else showH" class="messageName"><strong>{{mensaje.name}} </strong> &nbsp; <span style="float: right;">{{mensaje.time.getHours().toString() +':'+ mensaje.time.getMinutes().toString()}}</span> </h3>
                 {{mensaje.message}} 
             <ng-template #showH> <h4> {{mensaje.time.getHours().toString() +':'+ mensaje.time.getMinutes().toString()}} </h4> </ng-template>
-            <button mat-icon-button class="messageOptions" [matMenuTriggerFor] = "menu" [ngStyle]="{'background-color':mensaje.user === 1 ? '#3B65A5' : '#E9E9E9'}">
+            <button mat-icon-button class="messageOptions" [matMenuTriggerFor] = "menu" [ngStyle]="{'background-color':mensaje.user === this.currentUser.id ? '#3B65A5' : '#E9E9E9'}">
                 <mat-icon>arrow_downward</mat-icon>
             </button>
                 <mat-menu  #menu="matMenu" >
@@ -48,7 +48,7 @@
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
-        <div id="send-button" (click)='sendMensaje(txtMensaje.value,"L")'>
+        <div id="send-button" (click)='sendMensaje(txtMensaje.value)'>
             <button mat-fab color="primary" >
             <mat-icon>send</mat-icon>
             </button>

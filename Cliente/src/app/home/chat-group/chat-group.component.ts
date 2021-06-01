@@ -1,3 +1,4 @@
+import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { Component, OnInit,Output,EventEmitter,Input  } from '@angular/core';
 import Messages from './Messages';
 
@@ -17,27 +18,26 @@ export class ChatGroupComponent implements OnInit {
     console.log('current group: ',this.currentGroupId);
   }
   
-  /*metodoCualquiera(){
-    alert("MensajeRecibido");
-  }*/
-  
   updateGroupMessages(grupo:any){
-    this.currentGroupId=grupo.idGrupo;
-    //this.mensajes=grupo.mensajes;
-
-    //console.log(this.currentGroupId);
-    //console.log(this.mensajes);
+    for(let msg of grupo.mensajes){
+      msg.time = new Date(msg.time);
+    }
+    
+    this.currentGroupId=grupo.idGrupo;    
+    this.mensajes=grupo.mensajes;
+    
   }
 
   //@Input() mensajes : Array<String> = [];
   @Input() value : String;
   @Input() currentGroup: String;
-  @Input() currentGroupId : number;
+  @Input() currentGroupId : number;  
+  @Input() currentUser : any;
   tamano: number = 10;
   // user=1 es el usuario en session
   // esto hara q dependiendo de q usuario este en session cambie el chat
   // se puede añadir mas cosas como el nombre envio el mensaje, la hora etc
-  mensajes : Messages[]= [
+  /*mensajes : Messages[]= [
     {
       user: 1,
       message: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas pretium accumsan aliquet. Quisque vulputate pretium nisl, sed fringilla magna aliquam a. Donec sed tortor urna. Duis ultrices maximus ante, nec vulputate nisi faucibus eu. Nullam turpis metus, pulvinar ut nisi non, tristique pretium augue. Nunc semper magna non neque rhoncus, eu rhoncus nibh porttitor. Curabitur tincidunt aliquam nibh, ac dapibus lectus.
@@ -124,17 +124,32 @@ export class ChatGroupComponent implements OnInit {
       name:"Pablo",
       time: new Date(Date.now())
     }
-  ]
+  ]*/
   
+  mensajes : Messages[] = [];
+
   @Output() myEvent= new EventEmitter();
   _toggleOpened(){
     this.myEvent.emit();
   }
   
   @Output() myEventSendMessage= new EventEmitter<any>();
-  sendMensaje(message:String, other:String){
-    this.myEventSendMessage.emit({message , other});
+  sendMensaje(message:String){
     
+    let new_msg:Messages = {
+      user: this.currentUser.id,
+      message : message,
+      name : this.currentUser.nombre,
+      time: new Date(Date.now())
+    }    
+
+    this.myEventSendMessage.emit(new_msg);
+    
+  }
+
+  addMessageToList(message:any){
+    message.time = new Date(message.time);
+    this.mensajes.push(message);
   }
   
   

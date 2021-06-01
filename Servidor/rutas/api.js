@@ -16,9 +16,6 @@ module.exports = function(router){
         let id = req.params.id;  
         let idGroup = req.params.idGroup;
         let isAdmin = req.params.isAdmin;
-       console.log(id);
-       console.log(idGroup);
-       console.log(isAdmin);
 
        Usuario.updateOne({id: id}, {$push: {grupos:[idGroup]}}).exec((err,usuarios)=>{
         if(err){
@@ -128,13 +125,18 @@ module.exports = function(router){
         });   
     });
 
-    router.post('/p',(req,res)=>{
-        Grupo.updateOne({"id":2},{$set: {"informacion.nombre":"Química" }}).exec((err)=>{
+    router.post('/getGroupMessages',jsonParser,(req,res)=>{        
+        let groupId = req.body.id;
+        
+        Grupo.findOne({"id":groupId}).exec((err,grupo) =>{
             if(err){
-                console.log(err.message);
+                console.log("Erro recuperando grupo: "+err.message);                
             }
-        });
-        res.send(true);
+            let aux = JSON.stringify(grupo);         
+            let grupo_ = JSON.parse(aux);            
+            res.send(grupo_.mensajes);
+       });
+       
     });
 
     return router;

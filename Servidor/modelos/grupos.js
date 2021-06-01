@@ -4,14 +4,7 @@ const Schema = mongoose.Schema;
 
 const grupoSchema = new Schema ({
     id:Number,
-    mensaje:{
-        archivo:{
-            mensaje:String,
-            remitente:Number,
-            hora:Date
-
-        }
-    },
+    mensajes:Array,
     miembrosDelGrupo:{
         integrantes:Array,
         admin:Array,

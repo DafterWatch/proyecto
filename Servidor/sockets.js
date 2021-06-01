@@ -10,10 +10,15 @@ module.exports = function (io){
     io.on('connection', socket=>{
         console.log('Nueva conexión');
         
-        socket.on('nuevoMensaje', data=>{
-            console.log(data);
-            io.sockets.emit('nuevoMensaje',data);
-            //Llevar mensaje a la base de datos
+        socket.on('nuevoMensaje', data=>{            
+            //data = {idGrupo , mensaje}
+                     
+            Grupo.updateOne({"id":data.idGrupo}, { $push: {"mensajes":[data.mensaje]} }).exec(err=>{
+                if(err){
+                    console.log('Error cargando mensaje: '+err.message);
+                };
+            });
+            io.sockets.emit('nuevoMensaje',data.mensaje);    
         });
 
         socket.on('nuevoGrupo',async (data,cb)=>{       

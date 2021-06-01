@@ -87,7 +87,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.socket.listen('nuevoMensaje').subscribe((data:any)=>{
-      this.mensajes.push(data);
+      if(this.chatGroupComponent){      
+        this.chatGroupComponent.addMessageToList(data);
+      }
     });
     this.socket.listen('nuevoGrupo').subscribe((data:any)=>{            
       this.grupos.push(data);      
@@ -136,15 +138,14 @@ export class HomeComponent implements OnInit {
     this.socket.listen('quitar-admin').subscribe((data:any)=>{
       alert('Te han quitado privilegios de administrador');
     });
-    this.socket.listen('usuario-nuevo').subscribe((data:any)=>{
-      alert('Funciona el evento');    
+    this.socket.listen('usuario-nuevo').subscribe((data:any)=>{      
       this.grupos.push(data);
     });
   } 
 
-  sendMensaje(obj:any){         
-    alert(obj.message+' '+ obj.other);
-    //this.socket.emit('nuevoMensaje',mensaje);    
+  sendMensaje(message:any){         
+    
+    this.socket.emit('nuevoMensaje',{idGrupo:this.currentGroupId, mensaje:message});    
   } 
 
   cleanCreateGroupFields(){    
@@ -459,7 +460,7 @@ export class HomeComponent implements OnInit {
     return false;
   }
 
-  showGroup(groupInformation:any){    
+  async showGroup(groupInformation:any){    
     
     this.currentMembers=[]; 
 
@@ -477,8 +478,13 @@ export class HomeComponent implements OnInit {
         this.currentMembers.push(userData2_);   
       }); 
     });
-
-    this.chatGroupComponent.updateGroupMessages({idGrupo:this.currentGroupId,mensajes:this.mensajes});
+    //if(this.chatGroupComponent){
+      let mensaje;
+      await this.http.post('http://localhost:3000/getGroupMessages',{id:this.currentGroupId}).toPromise().then(data =>{                
+        mensaje = data;
+      });
+      this.chatGroupComponent.updateGroupMessages({idGrupo:this.currentGroupId,mensajes:mensaje});
+    
     //this.chatGroupComponent.metodoCualquiera();
 
     this.createComponent(4);    
