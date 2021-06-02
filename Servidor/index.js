@@ -2,9 +2,20 @@
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);
-const io = require('socket.io')(http);
+const io = require('socket.io')(http, {
+    cors:{
+        origin:"*",
+        methods: ["GET", "POST"]
+    }
+});
 const router = express.Router();
 const mongoose = require('mongoose');
+const cors = require('cors');
+
+app.use(
+    cors({
+        origin:'*'
+}));
 
 mongoose.connect('mongodb+srv://mongodbuser:huevos1@cluster0.uk8ak.mongodb.net/meanDatabase?retryWrites=true&w=majority',err =>{
     if(err){
