@@ -1,20 +1,21 @@
 
-    <div class="modal fade" id="exampleModalCenter"  fxflex="50" style="overflow-y: scroll;width: 100%;" > 
+    <div  style="overflow-y:scroll;width: 100%;height: 60vh "> 
 
-      <div class="modal-dialog">
-        <form [formGroup]="formulario"class="modal-content" >
+      <div class="modal-dialog"  fxflex="50"  style="height: 100%;">
+        <form  [formGroup]="formulario"class="modal-content"style="height: 100%;"(ngSubmit)="submit(formulario)" >
           <div class="cuerpo">
             <div>
+              <label  style="font-size: 30px;">{{data.idGroup}}</label><br />
               <label style="font-size: 30px;">Pregunta:</label><br />
-              <input placeholder="Pregunta" id="comun" type="text" />
+              <input name="pregunta" placeholder="Pregunta" value="4"  id="pregunta1" type="text" />
             </div>
             <button (click)="anadirExperienciaLaboral()" class="btn2">Agregar Opción</button>
             <mat-checkbox color="primary" style="float: right;">Varias Respuestas</mat-checkbox>
-            <div formArrayName="experienciaLaboral" style="margin-top: 10px;">
+            <div formArrayName="experienciaLaboral" style="margin-top: 10px;" id="formularios" >
                 <div *ngFor="let trabajo of experienciaLaboral.controls; let i = index;">
                     <div style="background-color: dodgerblue; margin-top: 1px; padding-bottom: 10px;">
                     <mat-icon>keyboard_arrow_right</mat-icon>
-                    <input placeholder="Opción {{i+1}}" id="comun" type="text"/>
+                    <input placeholder="Opción {{i+1}}" name="respuesta" id="comun" type="text"/>
                     <button mat-icon-button (click)="borrarTrabajo(i)" style="float: right; margin-top: 10px;" *ngIf="i>0">
                       <mat-icon>delete</mat-icon>
                     </button>
@@ -23,7 +24,7 @@
             </div>
             <div style="margin-top: 20px;">
               <mat-checkbox color="primary" style="float: left;">Compartir respuesas luego de votar</mat-checkbox>
-              <button class="btn" routerLink="/home">Crear</button>
+              <button class="btn" type="submit">Crear</button>
             </div>            
           </div>
           </form>

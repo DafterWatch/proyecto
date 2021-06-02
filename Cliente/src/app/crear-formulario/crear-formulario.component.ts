@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Inject } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA,MatDialogModule} from '@angular/material/dialog';
 @Component({
   selector: 'app-crear-formulario',
   templateUrl: './crear-formulario.component.html',
   styleUrls: ['./crear-formulario.component.scss']
 })
+
+
 export class CrearFormularioComponent implements OnInit {
 
   formulario: FormGroup;
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder,public dialogRef: MatDialogRef<CrearFormularioComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
 
 
   ngOnInit(): void {
@@ -35,5 +39,9 @@ export class CrearFormularioComponent implements OnInit {
     if(indice>0){      
       this.experienciaLaboral.removeAt(indice);
     }
+  }
+  
+  submit(form) {
+    this.dialogRef.close(form);
   }
 }

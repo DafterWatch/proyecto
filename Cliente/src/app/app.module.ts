@@ -66,6 +66,8 @@ import { InicioComponent } from './inicio/inicio.component';
 import { CrearFormularioComponent } from './crear-formulario/crear-formulario.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 
+import {MatDialogModule, MatDialogRef,MAT_DIALOG_DATA} from '@angular/material/dialog';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -90,6 +92,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     CrearFormularioComponent
   ],
   imports: [
+    MatDialogModule,
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
@@ -129,6 +132,6 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatCheckboxModule,
   ],
   bootstrap: [AppComponent],
-  providers: [ErrorStateMatcher]
+  providers: [ErrorStateMatcher,{provide:MAT_DIALOG_DATA,useValue: {}},{provide:MatDialogRef,useValue: {}}]
 })
 export class AppModule { }

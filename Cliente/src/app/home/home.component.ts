@@ -6,6 +6,11 @@ import { identifierModuleUrl } from '@angular/compiler';
 import {Router} from '@angular/router';
 import {ChatGroupComponent} from '../home/chat-group/chat-group.component';
 
+
+
+import { CrearFormularioComponent } from '../crear-formulario/crear-formulario.component';
+import {MatDialog, MAT_DIALOG_DATA} from '@angular/material/dialog';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -29,7 +34,7 @@ export class HomeComponent implements OnInit {
   currentGroup = "";
   currentDescription="Desc:";
   router;
-  constructor(private socket: WebSocketService, private http:HttpClient, private route:Router) {
+  constructor(private socket: WebSocketService, private http:HttpClient, private route:Router,public dialog: MatDialog) {
 
     this.currentUserId = sessionStorage.getItem('currentUser');    
     /* BORRAR LUEGO
@@ -47,6 +52,20 @@ export class HomeComponent implements OnInit {
 
     this.router = route;    
     
+  }
+  
+
+  resultadoDormulario:String;
+  openDialog(): void {
+    let dialogRef = this.dialog.open(CrearFormularioComponent, {
+      width: '50%',
+      data: {idGroup:this.currentGroup}
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      alert(result);
+    });
   }
 
   async generateUserData() {

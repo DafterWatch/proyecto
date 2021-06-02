@@ -17,6 +17,10 @@ export class ChatGroupComponent implements OnInit {
   ngOnInit(): void {
     console.log('current group: ',this.currentGroupId);
   }
+  @Output() openDialogEvent= new EventEmitter();
+  abrirDialog(){
+    this.openDialogEvent.emit();
+  }
   
   updateGroupMessages(grupo:any){
     for(let msg of grupo.mensajes){
