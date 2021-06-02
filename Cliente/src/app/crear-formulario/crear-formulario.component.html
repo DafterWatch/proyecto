@@ -1,17 +1,8 @@
-<mat-toolbar class="navbar-calender">
-    <span>Crear Formulario</span>
-    <span class="example-spacer"></span>
-    <button mat-icon-button routerLink="/home">
-      <mat-icon>close</mat-icon>
-    </button>
-  </mat-toolbar>
 
-<div class="colored-box" style="flex-direction: row; box-sizing: border-box; display: flex;">
-    <div style="flex: 1 1 100%; box-sizing: border-box; max-width: 25%; background-color: #f6f6f6;"> 
-        </div>
-    <div fxflex="50" style="flex: 1 1 100%; box-sizing: border-box; max-width: 50%; overflow-y: scroll;"> 
+    <div class="modal fade" id="exampleModalCenter"  fxflex="50" style="overflow-y: scroll;width: 100%;" > 
 
-        <form [formGroup]="formulario">
+      <div class="modal-dialog">
+        <form [formGroup]="formulario"class="modal-content" >
           <div class="cuerpo">
             <div>
               <label style="font-size: 30px;">Pregunta:</label><br />
@@ -37,7 +28,7 @@
           </div>
           </form>
 
+      </div>
+       
     </div>
-    <div fxflex="25" style="flex: 1 1 0%; box-sizing: border-box; max-width: 25%; background-color: #f6f6f6;"> 
-    </div>
-</div>
+    

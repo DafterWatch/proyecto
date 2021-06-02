@@ -10,7 +10,7 @@
             </button>                   
             <mat-menu #menu="matMenu">
             <button mat-menu-item (click)="_toggleOpened()">Informacion del grupo</button>
-            <button mat-menu-item routerLink="/form">Crear Formulario</button>
+            <button mat-menu-item data-toggle="modal" data-target="#exampleModalCenter">Crear Formulario</button>
             </mat-menu>
         </div> 
     </div>
@@ -55,3 +55,5 @@
         </div>
     </div>            
 </div>
+
+<app-crear-formulario></app-crear-formulario>

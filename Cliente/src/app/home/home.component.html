@@ -150,8 +150,11 @@
         <div fxflex="" style="flex: 1 1 0%; box-sizing: border-box;" class="chat" id="principalContainer" *ngIf="hclick">
           
     <!--MODULARIZAR-->
+  
     <!--ContenedorDeChat--> 
-    <app-chat-group (myEvent)="_toggleOpened()" [mensajes]="mensajes" (myEventSendMessage)="sendMensaje($event)"[currentGroupId]="this.currentGroupId" [currentUser]="this.currentUser" [currentGroup]="this.currentGroup"></app-chat-group>
+    <app-chat-group (myEvent)="_toggleOpened()" [mensajes]="mensajes" (myEventSendMessage)="sendMensaje($event)"[currentGroupId]="this.currentGroupId" [currentUser]="this.currentUser" [currentGroup]="this.currentGroup">
+     
+    </app-chat-group>
     <!--ContenedorCrearGrupo--> 
     <app-create-group (myEvent2)="createGroup()" (myEvent)="createComponent($event)" [miembros]="miembros" ></app-create-group>
     <!--ContenedorAñadirMiembro-->         

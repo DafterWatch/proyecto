@@ -11,6 +11,7 @@ export class CrearFormularioComponent implements OnInit {
   formulario: FormGroup;
   constructor(private fb: FormBuilder) { }
 
+
   ngOnInit(): void {
     this.crearFormulario();
     this.anadirExperienciaLaboral();
