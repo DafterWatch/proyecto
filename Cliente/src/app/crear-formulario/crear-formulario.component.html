@@ -5,14 +5,15 @@
         <form  [formGroup]="formulario"class="modal-content"style="height: 100%;"(ngSubmit)="submit(formulario)" >
           <div class="cuerpo">
             <div>
-              <label  style="font-size: 30px;">{{data.idGroup}}</label><br />
-              <label style="font-size: 30px;">Pregunta:</label><br />
+              <label  style="font-size: 30px;">{{data.idGroup}}</label><br /><br />
+              <label style="font-size: 30px;">Pregunta:</label><br /> <br />
               <input name="pregunta" placeholder="Pregunta" value="4"  id="pregunta1" type="text" />
             </div>
-            <button (click)="anadirExperienciaLaboral()" class="btn2">Agregar Opción</button>
+            <button (click)="other()" class="btn2">Agregar Opción</button>
             <mat-checkbox color="primary" style="float: right;">Varias Respuestas</mat-checkbox>
             <div formArrayName="experienciaLaboral" style="margin-top: 10px;" id="formularios" >
-                <div *ngFor="let trabajo of experienciaLaboral.controls; let i = index;">
+              <!-- DIV QUE CONTIENE LAS PREGUNAS -->
+                <div *ngFor="let trabajo of preguntas.controls; let i = index;">
                     <div style="background-color: dodgerblue; margin-top: 1px; padding-bottom: 10px;">
                     <mat-icon>keyboard_arrow_right</mat-icon>
                     <input placeholder="Opción {{i+1}}" name="respuesta" id="comun" type="text"/>
@@ -21,6 +22,7 @@
                     </button>
                     </div>
                 </div>
+
             </div>
             <div style="margin-top: 20px;">
               <mat-checkbox color="primary" style="float: left;">Compartir respuesas luego de votar</mat-checkbox>

@@ -15,29 +15,36 @@ export class CrearFormularioComponent implements OnInit {
   constructor(private fb: FormBuilder,public dialogRef: MatDialogRef<CrearFormularioComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
-
   ngOnInit(): void {
     this.crearFormulario();
-    this.anadirExperienciaLaboral();
+    //this.anadirPreguntas();
+    this.other();
   }
   crearFormulario() {
     this.formulario = this.fb.group({
-      experienciaLaboral: this.fb.array([])
+      pregunta: this.fb.array([])
     });
   }
-  get experienciaLaboral(): FormArray {
-    return this.formulario.get('experienciaLaboral') as FormArray;
+  get preguntas(): FormArray {
+    return this.formulario.get('pregunta') as FormArray;
   }
-  anadirExperienciaLaboral() {
+  anadirPreguntas() {
     const trabajo = this.fb.group({
-        empresa: new FormControl('')
+        pregunta: new FormControl('')
     });
   
-    this.experienciaLaboral.push(trabajo);
+    this.preguntas.push(trabajo);
+  }
+  other(){
+    const trabajo = this.fb.group({
+      pregunta: new FormControl('')
+  });
+
+  this.preguntas.push(trabajo);
   }
   borrarTrabajo(indice: number) {
     if(indice>0){      
-      this.experienciaLaboral.removeAt(indice);
+      this.preguntas.removeAt(indice);
     }
   }
   

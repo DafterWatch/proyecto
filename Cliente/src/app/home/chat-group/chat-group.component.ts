@@ -15,7 +15,7 @@ export class ChatGroupComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('current group: ',this.currentGroupId);
+    
   }
   @Output() openDialogEvent= new EventEmitter();
   abrirDialog(){
@@ -38,9 +38,7 @@ export class ChatGroupComponent implements OnInit {
   @Input() currentGroupId : number;  
   @Input() currentUser : any;
   tamano: number = 10;
-  // user=1 es el usuario en session
-  // esto hara q dependiendo de q usuario este en session cambie el chat
-  // se puede añadir mas cosas como el nombre envio el mensaje, la hora etc
+
   /*mensajes : Messages[]= [
     {
       user: 1,
