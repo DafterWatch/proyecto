@@ -7,6 +7,7 @@ import { CrearFormularioComponent } from './crear-formulario/crear-formulario.co
 import { CrearComponent } from './crear/crear.component';
 import { DemoComponent } from './demo/demo.component';
 import { EntregarComponent } from './entregar/entregar.component';
+import { FormularioComponent } from './formulario/formulario.component';
 import { GroupMenuComponent } from './group-menu/group-menu.component';
 
 import { HomeComponent } from './home/home.component';
@@ -34,6 +35,7 @@ const routes: Routes = [
   { path: 'perfil', component: PerfilComponent },
   { path: 'inicio', component: InicioComponent },  
   { path: 'form', component: CrearFormularioComponent },
+  { path: 'formulario', component: FormularioComponent },
   //componente de pruebas - Jose
   //{ path: 'demo', component: DemoComponent },
   //{ path: 'group-menu', component: GroupMenuComponent },

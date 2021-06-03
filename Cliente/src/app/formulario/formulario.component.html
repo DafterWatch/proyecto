@@ -1,0 +1,25 @@
+<div class="formBox">
+    <mat-icon>announcement</mat-icon>
+    <h1>Encuesta</h1>
+    <div style="border: solid 1px black; padding: 5px;">
+        <h1>{{pregunta}}</h1>
+        <div *ngFor="let opcion of preguntas">       
+            <h2>{{opcion}}</h2>
+            <mat-progress-bar [value]="value"></mat-progress-bar>
+        </div>
+        <mat-radio-group
+        class="radio-group">
+        <mat-radio-button class="radio-button" 
+        *ngFor="let opcion of preguntas" 
+        [value]="opcion" 
+        color="primary"
+        (click)="sumar()">
+            <span style="font-size: 20px;">{{opcion}}</span>
+        </mat-radio-button>
+        <div style="width: 100%; margin-top: 20px;">      
+            <h2 style="float: left;">N Votos: {{cantVotos}}</h2>
+            <button mat-raised-button color="primary" style="float: right; width: 300px;">Enviar</button>
+        </div>
+        </mat-radio-group>
+    </div>
+</div>

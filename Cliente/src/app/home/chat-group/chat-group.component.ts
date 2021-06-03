@@ -1,5 +1,5 @@
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
-import { Component, OnInit,Output,EventEmitter,Input  } from '@angular/core';
+import { Component, OnInit,Output,EventEmitter,Input,Renderer2, ViewChild, ElementRef} from '@angular/core';
 import { Form,Messages,ChatEvent,ChatNotification} from './Messages';
 
 @Component({
@@ -9,8 +9,8 @@ import { Form,Messages,ChatEvent,ChatNotification} from './Messages';
 })
 export class ChatGroupComponent implements OnInit {
 
-  
-  constructor() { 
+  @ViewChild('div') div: ElementRef;
+  constructor(private renderer: Renderer2) { 
         
   }
 
@@ -153,6 +153,55 @@ export class ChatGroupComponent implements OnInit {
     message.time = new Date(message.time);
     this.eventosChat.push(message);
   }
-  
-  
+  //-----------------------------------------------------------------------------------
+  numeroOpcion = 0;
+  htmlToAdd = "";
+  //Con esta función se añaden las opciones
+  addElement() {
+    if(this.numeroOpcion>5){
+      return;
+    }
+    this.numeroOpcion++;
+    const container : HTMLDivElement = this.renderer.createElement('div');
+    container.className = "cuestion_box";
+    const input : HTMLInputElement = this.renderer.createElement('input');    
+    input.className = "cuestion_input";
+    input.value = "Opción "+this.numeroOpcion;
+
+    container.append(input);
+    
+
+    if(this.numeroOpcion > 1){
+      const deleteButton : HTMLButtonElement = this.renderer.createElement('button');      
+      deleteButton.innerText = "Borrar";      
+      deleteButton.onclick = ()=>{        
+        container.parentElement.removeChild(container);
+        this.numeroOpcion--;
+      };
+      container.append(deleteButton);                
+    }
+    this.renderer.appendChild(this.div.nativeElement, container);
+    /*const input: HTMLParagraphElement = this.renderer.createElement('input');
+    const p: HTMLParagraphElement = this.renderer.createElement('p');
+    const div2: HTMLParagraphElement = this.renderer.createElement('div');
+    p.innerHTML = "Opcion "+this.numeroOpcion;
+    //.renderer.addClass(div2, 'formBox');
+    //this.renderer.appendChild(this.div.nativeElement, div2);   
+    this.renderer.appendChild(this.div.nativeElement, p);
+    this.renderer.appendChild(this.div.nativeElement, input);*/
+
+    /*const dateIcon = this.renderer.createElement('mat-icon');
+    this.renderer.appendChild(dateIcon, this.renderer.createText('today'));
+    this.renderer.addClass(dateIcon, 'mat-icon');
+    this.renderer.addClass(dateIcon, 'material-icons');
+    this.renderer.appendChild(this.div.nativeElement, dateIcon);*/
+
+    /*const progressBar = this.renderer.createElement('mat-progress-bar');
+    this.renderer.setProperty(progressBar, 'mode', 'determinate');
+    this.renderer.setProperty(progressBar, 'value', '40');
+    this.renderer.addClass(progressBar, 'mat-progress-bar');
+    this.renderer.addClass(progressBar, 'material-progress-bar');
+    this.renderer.appendChild(this.div.nativeElement, progressBar);
+    console.log(progressBar);*/
+    }
 }

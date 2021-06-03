@@ -46,6 +46,9 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 //FormReactive
 import { ReactiveFormsModule } from '@angular/forms';
+//ProgressBar
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+
 
 //HTPP
 import {HttpClientModule} from '@angular/common/http';
@@ -65,8 +68,11 @@ import { PerfilComponent } from './perfil/perfil.component';
 import { InicioComponent } from './inicio/inicio.component';
 import { CrearFormularioComponent } from './crear-formulario/crear-formulario.component';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatSliderModule} from '@angular/material/slider';
 
 import {MatDialogModule, MatDialogRef,MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { FormularioComponent } from './formulario/formulario.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +95,8 @@ import {MatDialogModule, MatDialogRef,MAT_DIALOG_DATA} from '@angular/material/d
     EntregarComponent,
     PerfilComponent,
     InicioComponent,
-    CrearFormularioComponent
+    CrearFormularioComponent,
+    FormularioComponent
   ],
   imports: [
     MatDialogModule,
@@ -130,6 +137,9 @@ import {MatDialogModule, MatDialogRef,MAT_DIALOG_DATA} from '@angular/material/d
     ReactiveFormsModule,
     //CheckBox
     MatCheckboxModule,
+    MatProgressBarModule,
+    MatRadioModule,
+    MatSliderModule,
   ],
   bootstrap: [AppComponent],
   providers: [ErrorStateMatcher,{provide:MAT_DIALOG_DATA,useValue: {}},{provide:MatDialogRef,useValue: {}}]
