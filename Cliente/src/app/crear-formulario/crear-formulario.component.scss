@@ -6,7 +6,7 @@
     height: 100%;
     width: 100%;
 }
-.example-spacer {
+.exa|ple-spacer {
     flex: 1 1 auto;
   }
 .navbar-calender{
@@ -45,4 +45,16 @@
     color: white;    
     border: none;
     cursor: pointer;
+}
+.opciones{
+    padding: 20px;
+}
+.opcionesDiv{
+    height: 30px;
+    width: 40%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.blackborder {
+    border: 1px solid black;
 }

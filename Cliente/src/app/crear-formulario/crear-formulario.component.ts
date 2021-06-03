@@ -1,54 +1,30 @@
-import { Component, OnInit,Inject } from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild, ElementRef} from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA,MatDialogModule} from '@angular/material/dialog';
 @Component({
   selector: 'app-crear-formulario',
   templateUrl: './crear-formulario.component.html',
   styleUrls: ['./crear-formulario.component.scss']
 })
-
-
 export class CrearFormularioComponent implements OnInit {
-
-  formulario: FormGroup;
-  constructor(private fb: FormBuilder,public dialogRef: MatDialogRef<CrearFormularioComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
-
+  //--------Aqui busca el div llamado '#div' en el html para generar las nuevas opciones------------
+  @ViewChild('div') div: ElementRef;
+  //--------------------
+  //Se utiliza Renderer2 para generar con los appends
+  constructor(private renderer: Renderer2) { }
   ngOnInit(): void {
-    this.crearFormulario();
-    //this.anadirPreguntas();
-    this.other();
   }
-  crearFormulario() {
-    this.formulario = this.fb.group({
-      pregunta: this.fb.array([])
-    });
-  }
-  get preguntas(): FormArray {
-    return this.formulario.get('pregunta') as FormArray;
-  }
-  anadirPreguntas() {
-    const trabajo = this.fb.group({
-        pregunta: new FormControl('')
-    });
-  
-    this.preguntas.push(trabajo);
-  }
-  other(){
-    const trabajo = this.fb.group({
-      pregunta: new FormControl('')
-  });
-
-  this.preguntas.push(trabajo);
-  }
-  borrarTrabajo(indice: number) {
-    if(indice>0){      
-      this.preguntas.removeAt(indice);
-    }
-  }
-  
-  submit(form) {
-    this.dialogRef.close(form);
-  }
+  numeroOpcion = 0;
+  //Con esta función se añaden las opciones
+  addElement() {
+    this.numeroOpcion++;
+    const input: HTMLParagraphElement = this.renderer.createElement('input');
+    const p: HTMLParagraphElement = this.renderer.createElement('p');
+    const br: HTMLParagraphElement = this.renderer.createElement('br');
+    p.innerHTML = "Opcion "+this.numeroOpcion;
+    this.renderer.appendChild(this.div.nativeElement, p)
+    this.renderer.addClass(input, 'opcionesDiv');
+    this.renderer.appendChild(this.div.nativeElement, input)
+    this.renderer.appendChild(this.div.nativeElement, br)
+  } 
 }
