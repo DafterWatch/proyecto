@@ -7,8 +7,10 @@
             <h2>{{opcion}}</h2>
             <mat-progress-bar [value]="value"></mat-progress-bar>
         </div>
+
         <mat-radio-group
-        class="radio-group">
+        class="radio-group"
+        *ngIf="multiplesOpciones">
         <mat-radio-button class="radio-button" 
         *ngFor="let opcion of preguntas" 
         [value]="opcion" 
@@ -17,9 +19,20 @@
             <span style="font-size: 20px;">{{opcion}}</span>
         </mat-radio-button>
         <div style="width: 100%; margin-top: 20px;">      
-            <h2 style="float: left;">N Votos: {{cantVotos}}</h2>
+            <h2 style="float: left;">N Votos:{{cantVotos}}</h2>
             <button mat-raised-button color="primary" style="float: right; width: 300px;">Enviar</button>
         </div>
         </mat-radio-group>
+
+        <div *ngIf="multiplesOpciones" class="radio-group">
+            <div *ngFor="let opcion of preguntas">       
+                <mat-checkbox color="primary" class="radio-button" (click)="sumar()">{{opcion}}</mat-checkbox>               
+            </div>
+            <div style="width: 100%; margin-top: 20px;">      
+                <h2 style="float: left;">N Votos:{{cantVotos}}</h2>
+                <button mat-raised-button color="primary" style="float: right; width: 300px;">Enviar</button>
+            </div>
+        </div>
+
     </div>
 </div>
