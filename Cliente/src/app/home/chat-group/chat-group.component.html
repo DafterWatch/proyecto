@@ -16,7 +16,7 @@
     </div>
     <div class="options" fxflex="80" id="chatContainerDiv">
     <!--Mensajes-->
-        <div *ngFor="let mensaje of mensajes"  >
+        <div *ngFor="let mensaje of eventosChat"  >
             <div class="mensajeDiv" style="overflow: visible;"
             [ngStyle]="{
                 'background-color':mensaje.user === this.currentUser.id ? '#4a83d9' : 'white',
@@ -55,5 +55,4 @@
         </div>
     </div>            
 </div>
-
-<app-crear-formulario></app-crear-formulario>
+<!--<app-crear-formulario ></app-crear-formulario>-->

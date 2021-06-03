@@ -1,6 +1,6 @@
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { Component, OnInit,Output,EventEmitter,Input  } from '@angular/core';
-import Messages from './Messages';
+import { Form,Messages,ChatEvent,ChatNotification} from './Messages';
 
 @Component({
   selector: 'app-chat-group',
@@ -14,21 +14,20 @@ export class ChatGroupComponent implements OnInit {
         
   }
 
-  ngOnInit(): void {
-    
+  ngOnInit(): void {          
   }
   @Output() openDialogEvent= new EventEmitter();
-  abrirDialog(){
+  abrirDialog(){         
     this.openDialogEvent.emit();
-  }
-  
+  }  
+
   updateGroupMessages(grupo:any){
     for(let msg of grupo.mensajes){
       msg.time = new Date(msg.time);
     }
     
     this.currentGroupId=grupo.idGrupo;    
-    this.mensajes=grupo.mensajes;
+    this.eventosChat=grupo.mensajes;
     
   }
 
@@ -37,7 +36,7 @@ export class ChatGroupComponent implements OnInit {
   @Input() currentGroup: String;
   @Input() currentGroupId : number;  
   @Input() currentUser : any;
-  tamano: number = 10;
+  tamano: number = 10;  
 
   /*mensajes : Messages[]= [
     {
@@ -128,7 +127,7 @@ export class ChatGroupComponent implements OnInit {
     }
   ]*/
   
-  mensajes : Messages[] = [];
+  eventosChat : ChatEvent[] = [];
 
   @Output() myEvent= new EventEmitter();
   _toggleOpened(){
@@ -139,6 +138,7 @@ export class ChatGroupComponent implements OnInit {
   sendMensaje(message:String){
     
     let new_msg:Messages = {
+      type: 1,
       user: this.currentUser.id,
       message : message,
       name : this.currentUser.nombre,
@@ -151,7 +151,7 @@ export class ChatGroupComponent implements OnInit {
 
   addMessageToList(message:any){
     message.time = new Date(message.time);
-    this.mensajes.push(message);
+    this.eventosChat.push(message);
   }
   
   

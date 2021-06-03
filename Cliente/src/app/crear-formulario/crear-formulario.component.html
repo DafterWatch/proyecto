@@ -3,19 +3,22 @@
       <form class="modal-content" >
         <div class="cuerpo">
           <div>
-            <label style="font-size: 30px;">Pregunta:</label><br />
-            <input placeholder="Pregunta" id="comun" type="text" />
+            <button [mat-dialog-close]="true" mat-icon-button style="float: right;">
+              <mat-icon>clear</mat-icon>
+            </button>
+            <label style="font-size: 30px; width: 70%;">Pregunta:</label><br /> <br />
+            <input placeholder="Pregunta" #txtPregunta type="text" value=""/>
           </div>
           <!--Aqui se añaden elementos con append-->
           <button (click)="addElement()" class="btn2">Agregar Opción</button>
-          <mat-checkbox color="primary" style="float: right;">Varias Respuestas</mat-checkbox>   
+          <mat-checkbox color="primary" #cbMultiple style="float: right;">Varias Respuestas</mat-checkbox>   
           <!--En este div se van a ir agregando los inputs 'opciones'-->
           <div class="opciones" #div>
           </div>
           
         <div style="margin-top: 20px;">
           <mat-checkbox color="primary" style="float: left;">Compartir respuesas luego de votar</mat-checkbox>
-          <button class="btn" routerLink="/home">Crear</button>
+          <button class="btn" routerLink="/home" (click)="sendForm(txtPregunta.value,cbMultiple.checked )" [mat-dialog-close]="true">Crear</button>
         </div><br><br>
       </div>
     </form>

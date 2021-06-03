@@ -176,5 +176,10 @@ module.exports = function (io){
             }
         });       
 
+        socket.on('nuevo-form', data =>{
+            // data = {cuestions , cuestion , multipleAnswer , groupId}
+            io.sockets.emit('nuevo-form',data);
+        });
+
     });
 };

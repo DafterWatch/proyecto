@@ -53,20 +53,33 @@ export class HomeComponent implements OnInit {
     this.router = route;    
     
   }
-  
-
+  dialogRef : any = null;
   resultadoDormulario:String;
+
+  createForm(data : any){
+    let new_data = {
+      cuestions : data.cuestions,
+      cuestion : data.cuestion,
+      multipleAnswer : data.multipleAnswer,
+      groupId : this.currentGroupId
+    }
+    console.log(new_data);
+    
+    //this.socket.emit('nuevo-form',new_data);
+  }
+
   openDialog(): void {
-    let dialogRef = this.dialog.open(CrearFormularioComponent, {
+    this.dialogRef = this.dialog.open(CrearFormularioComponent, {
       width: '50%',
-      data: {idGroup:this.currentGroup}
-    });
-  
-    dialogRef.afterClosed().subscribe(result => {
+      data: this.createForm
+    });    
+
+    /*this.dialogRef.afterClosed().subscribe(result => {
       console.log(result);
       alert(result);
-    });
+    });*/
   }
+
 
   async generateUserData() {
     await this.http.post(`http://localhost:3000/usuarios/${this.currentUserId}`,{}).toPromise().then(data =>{
