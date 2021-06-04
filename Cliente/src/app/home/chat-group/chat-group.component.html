@@ -17,7 +17,8 @@
     <div class="options" fxflex="80" id="chatContainerDiv">
     <!--Mensajes-->
         <div *ngFor="let mensaje of eventosChat"  >
-            <div class="mensajeDiv" style="overflow: visible;"
+            <!--DIV PARA EL MENSAJE-->
+            <div *ngIf="mensaje.type === 1; else formDiv" class="mensajeDiv" style="overflow: visible;"
             [ngStyle]="{
                 'background-color':mensaje.user === this.currentUser.id ? '#4a83d9' : 'white',
                 'float':mensaje.user === this.currentUser.id ? 'right' : 'left',
@@ -35,7 +36,14 @@
                     </span>
                 </mat-menu>
             </div> <br>
-        </div>
+            <!--DIV PARA EL FORMULARIO-->
+            <ng-template #formDiv>       
+                <div class="formContainer">                     
+                    <app-formulario *ngIf="mensaje.type===2" [currentUserId]="currentUser.id" [cantidadVotos]="mensaje.cantidadVotos" [values]="mensaje.valores" [idForm]="mensaje.idForm" [pregunta]="mensaje.cuestion" [preguntas]="mensaje.cuestions" [multipleAnswer]="mensaje.multipleAnswer" [membersLength]="mensaje.CurrentMembersLength"></app-formulario>
+                    <!--<app-formulario *ngIf="mensaje.type===2" [currentUserId]="currentUser.id" [cantidadVotos] = "mensaje.cantidadVotos" [values]="valuesForm[mensaje.idForm].valores" [idForm]="mensaje.idForm" [pregunta]="mensaje.cuestion" [preguntas]="mensaje.cuestions" [multipleAnswer]="mensaje.multipleAnswer" [membersLength]="mensaje.CurrentMembersLength"></app-formulario>-->
+                </div>
+            </ng-template>
+        </div>        
     </div>
     <div id="text-area-chat" fxflex="10">
         <button mat-fab color="primary">

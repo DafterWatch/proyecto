@@ -176,9 +176,45 @@ module.exports = function (io){
             }
         });       
 
-        socket.on('nuevo-form', data =>{
-            // data = {cuestions , cuestion , multipleAnswer , groupId}
-            io.sockets.emit('nuevo-form',data);
+        socket.on('nuevo-form', async data =>{
+            // data = {groupId , formulario}            
+            let groupId = data.groupId;
+            data.formulario["respuestas"] = [];
+            data.formulario["cantidadVotos"] = 0;
+            data.formulario["valores"] = Array(data.formulario.cuestions.length).fill(0);
+            Grupo.updateOne({"id":groupId} , {$push : {"mensajes": data.formulario}}).exec(err=>{err?console.log(err.message):""})
+            let idForm = -1;
+            await Grupo.findOne({"id":groupId}).exec().then((grupo)=>{
+                let count = 0;
+                for(let i = 0;i<grupo.mensajes.length;i++){
+                    let item = grupo.mensajes[i];
+                    if(item.type === 2){
+                        count++;
+                    }
+                }
+                idForm=count;
+            });
+            //data.formulario.idForm = idForm;            
+            data.formulario['idForm']=idForm;
+            io.sockets.emit('nuevo-form',data.formulario);
+        });
+
+        socket.on('respuesta-form', data =>{       
+            let userId = data.userId;
+            let formId = data.idForm;
+            let groupId = data.groupId;
+            console.log(data);
+            /*Grupo.updateOne({"id":groupId,"mensajes.idForm":formId}, { $push:{"mensajes.respuestas":userId} }).exec((err)=>{
+                if(err){
+                    console.log(err.message);
+                }
+            });*/
+
+            Grupo.findOne({"id":groupId,"mensajes.idForm":formId}).exec((err,grupo)=>{
+                console.log(grupo);
+            });
+
+            io.sockets.emit('respuesta-form',data);
         });
 
     });

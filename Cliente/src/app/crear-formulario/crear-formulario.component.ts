@@ -1,6 +1,7 @@
 import { ThrowStmt } from '@angular/compiler';
 import { Component, OnInit, Renderer2, ViewChild, ElementRef,EventEmitter, Inject} from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { WebSocketService } from '../web-socket.service';
 
 @Component({
   selector: 'app-crear-formulario',
@@ -12,26 +13,35 @@ export class CrearFormularioComponent implements OnInit {
   @ViewChild('div') div: ElementRef;
   //--------------------
   //Se utiliza Renderer2 para generar con los appends
-  constructor(private renderer: Renderer2, @Inject(MAT_DIALOG_DATA) public dataFromParent: any) { }    
+  constructor(private renderer: Renderer2, @Inject(MAT_DIALOG_DATA) public dataFromParent: any, private socket: WebSocketService) { }    
   
-  ngOnInit(): void {
-    
+  ngOnInit(): void {    
   }
   
   sendForm(pregunta : string, multipleAnswer: boolean) : void {     
-    let preguntas : Array<string> = [];    
+    let preguntas : Array<string> = [];                
                 
     let cuestionInputs = document.getElementsByClassName('cuestion_input');
     for (let index = 0; index < cuestionInputs.length; index++) {
       const element : any = cuestionInputs[index];      
       preguntas.push(element.value);
     }             
-    let fields = {
-      cuestions : preguntas,
-      cuestion : pregunta,
-      multipleAnswer
-    }
-    this.dataFromParent(fields);
+  
+    let new_data = {
+      formulario : {
+        type : 2,
+        user : this.dataFromParent.user.id,
+        time : new Date(Date.now()),      
+        name : this.dataFromParent.user.nombre,
+        cuestions : preguntas,
+        cuestion : pregunta,
+        multipleAnswer,
+        CurrentMembersLength : this.dataFromParent.membersList.length
+      },
+      groupId : this.dataFromParent.groupId
+    }    
+    
+    this.socket.emit('nuevo-form',new_data);
   }
   numeroOpcion = 0;
   //Con esta función se añaden las opciones
@@ -59,14 +69,6 @@ export class CrearFormularioComponent implements OnInit {
       container.append(deleteButton);                
     }
     this.renderer.appendChild(this.div.nativeElement, container);
-    /*
-    const input: HTMLParagraphElement = this.renderer.createElement('input');
-    const p: HTMLParagraphElement = this.renderer.createElement('p');
-    const br: HTMLParagraphElement = this.renderer.createElement('br');
-    p.innerHTML = "Opcion "+this.numeroOpcion;    
-    this.renderer.appendChild(this.div.nativeElement, p);
-    this.renderer.addClass(input, 'opcionesDiv');
-    this.renderer.appendChild(this.div.nativeElement, input);
-    this.renderer.appendChild(this.div.nativeElement, br);*/
+
   } 
 }

@@ -481,3 +481,11 @@
   background-color: #efebe8;
   float: right;
 }
+.formContainer{
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  width: 100%; 
+  height: auto;
+  margin: 5px;
+}

@@ -18,6 +18,7 @@ export class Form extends ChatEvent{
     cuestions : Array<String>;
     cuestion : String;
     multipleAnswer : boolean;    
+    membersLenght : number;    
 }
 export class ChatNotification extends ChatEvent{    
     notification : String;

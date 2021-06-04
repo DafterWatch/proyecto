@@ -3,36 +3,36 @@
     <h1>Encuesta</h1>
     <div style="border: solid 1px black; padding: 5px;">
         <h1>{{pregunta}}</h1>
-        <div *ngFor="let opcion of preguntas">       
+        <div *ngFor="let opcion of preguntas; let i = index">       
             <h2>{{opcion}}</h2>
-            <mat-progress-bar [value]="value"></mat-progress-bar>
+            <mat-progress-bar [value]="values[i]" class="progressClass"></mat-progress-bar>
         </div>
 
         <mat-radio-group
         class="radio-group"
-        *ngIf="multiplesOpciones">
+        *ngIf="!multipleAnswer; else not_multiple">
         <mat-radio-button class="radio-button" 
         *ngFor="let opcion of preguntas" 
         [value]="opcion" 
         color="primary"
-        (click)="sumar()">
+        (click)="selectOption(opcion)">
             <span style="font-size: 20px;">{{opcion}}</span>
         </mat-radio-button>
         <div style="width: 100%; margin-top: 20px;">      
-            <h2 style="float: left;">N Votos:{{cantVotos}}</h2>
-            <button mat-raised-button color="primary" style="float: right; width: 300px;">Enviar</button>
+            <h2 style="float: left;">N Votos:{{cantidadVotos}}</h2>
+            <button mat-raised-button color="primary" style="float: right; width: 30%;" (click)="sendAnswer(false)">Enviar</button>
         </div>
         </mat-radio-group>
-
-        <div *ngIf="multiplesOpciones" class="radio-group">
-            <div *ngFor="let opcion of preguntas">       
-                <mat-checkbox color="primary" class="radio-button" (click)="sumar()">{{opcion}}</mat-checkbox>               
+        <ng-template #not_multiple>
+            <div class="radio-group">
+                <div *ngFor="let opcion of preguntas; let i = index">       
+                    <mat-checkbox color="primary" class="radio-button" [(ngModel)]="checks[i]">{{opcion}}</mat-checkbox>               
+                </div>
+                <div style="width: 100%; margin-top: 20px;">      
+                    <h2 style="float: left;">N Votos:{{cantidadVotos}}</h2>
+                    <button mat-raised-button color="primary" style="float: right; width: 30%;" (click)="sendAnswer(true)">Enviar</button>
+                </div>
             </div>
-            <div style="width: 100%; margin-top: 20px;">      
-                <h2 style="float: left;">N Votos:{{cantVotos}}</h2>
-                <button mat-raised-button color="primary" style="float: right; width: 300px;">Enviar</button>
-            </div>
-        </div>
-
+        </ng-template>
     </div>
 </div>

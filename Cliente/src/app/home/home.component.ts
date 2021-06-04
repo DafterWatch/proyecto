@@ -9,7 +9,7 @@ import {ChatGroupComponent} from '../home/chat-group/chat-group.component';
 
 
 import { CrearFormularioComponent } from '../crear-formulario/crear-formulario.component';
-import {MatDialog, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-home',
@@ -56,22 +56,10 @@ export class HomeComponent implements OnInit {
   dialogRef : any = null;
   resultadoDormulario:String;
 
-  createForm(data : any){
-    let new_data = {
-      cuestions : data.cuestions,
-      cuestion : data.cuestion,
-      multipleAnswer : data.multipleAnswer,
-      groupId : this.currentGroupId
-    }
-    console.log(new_data);
-    
-    //this.socket.emit('nuevo-form',new_data);
-  }
-
   openDialog(): void {
     this.dialogRef = this.dialog.open(CrearFormularioComponent, {
       width: '50%',
-      data: this.createForm
+      data: {user: this.currentUser, groupId : this.currentGroupId, membersList : this.currentGroupItems}
     });    
 
     /*this.dialogRef.afterClosed().subscribe(result => {
@@ -172,6 +160,16 @@ export class HomeComponent implements OnInit {
     });
     this.socket.listen('usuario-nuevo').subscribe((data:any)=>{      
       this.grupos.push(data);
+    });
+    this.socket.listen('nuevo-form').subscribe((data:any)=>{
+      if(this.chatGroupComponent){      
+        this.chatGroupComponent.addMessageToList(data);
+      }
+    });
+    this.socket.listen('respuesta-form').subscribe((data:any)=>{
+      if(this.chatGroupComponent){      
+        this.chatGroupComponent.updateFormAnswers(data);
+      }
     });
   } 
 
