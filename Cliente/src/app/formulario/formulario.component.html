@@ -20,7 +20,7 @@
         </mat-radio-button>
         <div style="width: 100%; margin-top: 20px;">      
             <h2 style="float: left;">N Votos:{{cantidadVotos}}</h2>
-            <button mat-raised-button color="primary" style="float: right; width: 30%;" (click)="sendAnswer(false)">Enviar</button>
+            <button mat-raised-button color="primary" style="float: right; width: 30%;" (click)="sendAnswer(false)" [disabled]="canSend">Enviar</button>
         </div>
         </mat-radio-group>
         <ng-template #not_multiple>
@@ -30,7 +30,7 @@
                 </div>
                 <div style="width: 100%; margin-top: 20px;">      
                     <h2 style="float: left;">N Votos:{{cantidadVotos}}</h2>
-                    <button mat-raised-button color="primary" style="float: right; width: 30%;" (click)="sendAnswer(true)">Enviar</button>
+                    <button mat-raised-button color="primary" style="float: right; width: 30%;" (click)="sendAnswer(true)" [disabled]="canSend">Enviar</button>
                 </div>
             </div>
         </ng-template>

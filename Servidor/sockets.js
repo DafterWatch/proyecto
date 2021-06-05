@@ -182,7 +182,7 @@ module.exports = function (io){
             data.formulario["respuestas"] = [];
             data.formulario["cantidadVotos"] = 0;
             data.formulario["valores"] = Array(data.formulario.cuestions.length).fill(0);
-            Grupo.updateOne({"id":groupId} , {$push : {"mensajes": data.formulario}}).exec(err=>{err?console.log(err.message):""})
+            
             let idForm = -1;
             await Grupo.findOne({"id":groupId}).exec().then((grupo)=>{
                 let count = 0;
@@ -194,28 +194,99 @@ module.exports = function (io){
                 }
                 idForm=count;
             });
-            //data.formulario.idForm = idForm;            
+            
             data.formulario['idForm']=idForm;
+            Grupo.updateOne({"id":groupId} , {$push : {"mensajes": data.formulario}}).exec(err=>{err?console.log(err.message):""});
             io.sockets.emit('nuevo-form',data.formulario);
         });
 
-        socket.on('respuesta-form', data =>{       
+        socket.on('respuesta-form', async data =>{                   
             let userId = data.userId;
             let formId = data.idForm;
-            let groupId = data.groupId;
-            console.log(data);
-            /*Grupo.updateOne({"id":groupId,"mensajes.idForm":formId}, { $push:{"mensajes.respuestas":userId} }).exec((err)=>{
+            //let groupId = data.groupId;            
+            await Grupo.updateOne({"mensajes.idForm":formId}, { $push:{"mensajes.$.respuestas":userId} }).exec((err)=>{
                 if(err){
                     console.log(err.message);
                 }
-            });*/
-
-            Grupo.findOne({"id":groupId,"mensajes.idForm":formId}).exec((err,grupo)=>{
-                console.log(grupo);
             });
 
-            io.sockets.emit('respuesta-form',data);
+            await Grupo.updateOne({"mensajes.idForm":formId}, { $inc:{"mensajes.$.cantidadVotos":1} }).exec((err)=>{
+                if(err){
+                    console.log(err.message);
+                }
+            });            
+
+            let form = null;
+            await Grupo.findOne({"mensajes.idForm":formId}).exec().then((form_)=>{
+                
+                form = form_.mensajes.filter(x=> x.type === 2 && x.idForm=== formId);
+            });
+
+            let newValues = updatePercentages({answersInfo : data, formInfo : form[0]})
+            let newData = {valores: newValues, idForm: formId, cantVotos : form[0].cantidadVotos};
+            io.sockets.emit('respuesta-form',newData);
         });
+        function updatePercentages(data){
+            
+            let multipleAnswer = data.formInfo.multipleAnswer;
+            this.previousVoteCount = data.formInfo.cantidadVotos - 1;
+            
+            let voteCuantity = data.formInfo.cantidadVotos;
+            let voteValue = 100 / voteCuantity;
+            
+            if(multipleAnswer){      
+
+                let internalvoteCuantity = this.previousVoteCount * data.answersInfo.multipleAns.length;      
+                voteValue = 100 / (voteCuantity * data.answersInfo.multipleAns.length);
+
+                for(let index = 0;index < data.formInfo.valores.length;index++){
+
+                    let valor = data.formInfo.valores[index];
+                    let m = Math.ceil((valor * internalvoteCuantity)/100);              
+                    let newValor = m * voteValue;                        
+                    
+                    data.formInfo.valores[index] = newValor;
+
+                }      
+                
+                for(let index = 0; index < data.formInfo.cuestions.length;index++){
+                    const cuestion = data.formInfo.cuestions[index];
+                    
+                    if(data.answersInfo.multipleAns.includes(cuestion)){
+                    data.formInfo.valores[index] +=voteValue;
+                    
+                    }
+                }
+            
+
+            }else{      
+                for(let index = 0;index < data.formInfo.valores.length;index++){
+
+                    let valor = data.formInfo.valores[index];
+                    let m = Math.ceil((valor * this.previousVoteCount)/100);              
+                    let newValor = m * voteValue;                        
+                    
+                    data.formInfo.valores[index] = newValor;
+
+                }      
+                
+                for(let index = 0; index < data.formInfo.cuestions.length;index++){
+                    const cuestion = data.formInfo.cuestions[index];
+                    
+                    if(cuestion === data.answersInfo.selectedOpction){
+                    data.formInfo.valores[index] +=voteValue;
+                    break;
+                    }
+                }
+            }
+            
+            Grupo.findOneAndUpdate({"mensajes.idForm":data.answersInfo.idForm},{"mensajes.$.valores":data.formInfo.valores} ,{upsert:true}).exec((err)=>{
+                if(err) {
+                    console.log(err.message);   
+                }
+            });
+            return data.formInfo.valores;
+        }
 
     });
 };

@@ -18,7 +18,8 @@ export class FormularioComponent implements OnInit {
   @Input() values : Array<number>;
   @Input() cantidadVotos : number;  
   @Input() currentUserId : number;
-  @iNP
+  @Input() groupId : number;
+  @Input() canSend : boolean;
   
   selectedOpction : string;
   multipleOptions : Array <String>
@@ -36,7 +37,8 @@ export class FormularioComponent implements OnInit {
     this.selectedOpction = index;            
   }
   sendAnswer(multiple : boolean){
-    let info = {
+    this.canSend = true;
+    let info = {      
       userId : this.currentUserId,
       idForm : this.idForm,
       selectedOpction : "",

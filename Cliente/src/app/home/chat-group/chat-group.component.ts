@@ -13,7 +13,7 @@ export class ChatGroupComponent implements OnInit {
   constructor(private renderer: Renderer2) { 
         
   }
-  valuesForm : any = {}
+  //valuesForm : any = {}
 
   ngOnInit(): void {          
   }
@@ -27,7 +27,8 @@ export class ChatGroupComponent implements OnInit {
       if(event.type===2){
         let form : any = event;
         if(form.idForm === data.idForm){
-          this.updateFormPercentage( { answersInfo : data, formInfo : event } );
+          form.valores = data.valores;
+          form.cantidadVotos = data.cantVotos;
           break;
         }
       }
@@ -39,7 +40,7 @@ export class ChatGroupComponent implements OnInit {
     
     let multipleAnswer = data.formInfo.multipleAnswer;
     this.previousVoteCount = data.formInfo.cantidadVotos;
-    data.formInfo.cantidadVotos +=1;
+    data.formInfo.cantidadVotos +=1; //ver si aún es necesario incrementar
     let voteCuantity = data.formInfo.cantidadVotos;
     let voteValue = 100 / voteCuantity;
     if(multipleAnswer){      

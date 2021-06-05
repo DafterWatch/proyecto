@@ -39,7 +39,7 @@
             <!--DIV PARA EL FORMULARIO-->
             <ng-template #formDiv>       
                 <div class="formContainer">                     
-                    <app-formulario *ngIf="mensaje.type===2" [currentUserId]="currentUser.id" [cantidadVotos]="mensaje.cantidadVotos" [values]="mensaje.valores" [idForm]="mensaje.idForm" [pregunta]="mensaje.cuestion" [preguntas]="mensaje.cuestions" [multipleAnswer]="mensaje.multipleAnswer" [membersLength]="mensaje.CurrentMembersLength"></app-formulario>
+                    <app-formulario [canSend]="mensaje.respuestas.includes(currentUser.id)" *ngIf="mensaje.type===2" [currentUserId]="currentUser.id" [cantidadVotos]="mensaje.cantidadVotos" [values]="mensaje.valores" [idForm]="mensaje.idForm" [pregunta]="mensaje.cuestion" [preguntas]="mensaje.cuestions" [multipleAnswer]="mensaje.multipleAnswer" [membersLength]="mensaje.CurrentMembersLength"></app-formulario>
                     <!--<app-formulario *ngIf="mensaje.type===2" [currentUserId]="currentUser.id" [cantidadVotos] = "mensaje.cantidadVotos" [values]="valuesForm[mensaje.idForm].valores" [idForm]="mensaje.idForm" [pregunta]="mensaje.cuestion" [preguntas]="mensaje.cuestions" [multipleAnswer]="mensaje.multipleAnswer" [membersLength]="mensaje.CurrentMembersLength"></app-formulario>-->
                 </div>
             </ng-template>
