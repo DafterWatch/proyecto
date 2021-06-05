@@ -147,18 +147,37 @@
                 </div>
             </div>
         </div>   
-        <div fxflex="" style="flex: 1 1 0%; box-sizing: border-box;" class="chat" id="principalContainer" *ngIf="hclick">
-          
-    <!--MODULARIZAR-->
-  
+    <!--<div fxflex="" style="flex: 1 1 0%; box-sizing: border-box;" class="chat" id="principalContainer" *ngIf="hclick">-->
+    <!--Esta es la pantalla que usamos, para probar cambie a ngIf = false-->
+    <!--Para volver a como esta se debe descomentar el comentario de arriba que esta con: ngIf="hclick"-->
+    <div fxflex="" style="flex: 1 1 0%; box-sizing: border-box;" class="chat" id="principalContainer" *ngIf="false">          
+    <!--MODULARIZAR-->  
     <!--ContenedorDeChat--> 
-    <app-chat-group (openDialogEvent)="openDialog()" (myEvent)="_toggleOpened()" [mensajes]="mensajes" (myEventSendMessage)="sendMensaje($event)"[currentGroupId]="this.currentGroupId" [currentUser]="this.currentUser" [currentGroup]="this.currentGroup">
-     
+    <app-chat-group 
+    (openDialogEvent)="openDialog()" 
+    (myEvent)="_toggleOpened()" 
+    [mensajes]="mensajes" 
+    (myEventSendMessage)="sendMensaje($event)" 
+    [currentGroupId]="this.currentGroupId" 
+    [currentUser]="this.currentUser" 
+    [currentGroup]="this.currentGroup">     
     </app-chat-group>
     <!--ContenedorCrearGrupo--> 
-    <app-create-group (myEvent2)="createGroup()" (myEvent)="createComponent($event)" [miembros]="miembros" ></app-create-group>
+    <app-create-group 
+    (myEvent2)="createGroup()" 
+    (myEvent)="createComponent($event)" 
+    [miembros]="miembros">
+    </app-create-group>
     <!--ContenedorAñadirMiembro-->         
-    <app-add-member (addUserEvent)="addUser()" (addMemberEvent)="addMember()" (buscarMiembroEvento)="searchUser($event)" (myEvent)="createComponent($event)" [userData]="userData"></app-add-member>
-    <!----------------------------------------------------------------------------------------------------------------------------------------------------------------------->    
-</div>
+    <app-add-member 
+    (addUserEvent)="addUser()" 
+    (addMemberEvent)="addMember()" 
+    (buscarMiembroEvento)="searchUser($event)" 
+    (myEvent)="createComponent($event)" 
+    [userData]="userData"></app-add-member>    
+    </div>
+    <!--Aqui llamo a los otros componentes-->
+    <div fxflex="" style="flex: 1 1 0%; box-sizing: border-box;" class="chat" id="principalContainer" *ngIf="true">          
+      <app-lista-tareas1></app-lista-tareas1>
+    </div>
 
