@@ -73,6 +73,8 @@ import {MatSliderModule} from '@angular/material/slider';
 
 import {MatDialogModule, MatDialogRef,MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { FormularioComponent } from './formulario/formulario.component';
+import { DynamicModule } from 'ng-dynamic-component';
+import { NavegacionComponent } from './navegacion/navegacion.component';
 
 @NgModule({
   declarations: [
@@ -96,7 +98,9 @@ import { FormularioComponent } from './formulario/formulario.component';
     PerfilComponent,
     InicioComponent,
     CrearFormularioComponent,
-    FormularioComponent
+    FormularioComponent,
+    NavegacionComponent,
+    
   ],
   imports: [
     MatDialogModule,
@@ -140,8 +144,11 @@ import { FormularioComponent } from './formulario/formulario.component';
     MatProgressBarModule,
     MatRadioModule,
     MatSliderModule,
+    DynamicModule
   ],
   bootstrap: [AppComponent],
-  providers: [ErrorStateMatcher,{provide:MAT_DIALOG_DATA,useValue: {}},{provide:MatDialogRef,useValue: {}}]
+  providers: [ErrorStateMatcher,{provide:MAT_DIALOG_DATA,useValue: {}},{provide:MatDialogRef,useValue: {}}],
+  entryComponents: [ChatGroupComponent,CreateGroupComponent,AddMemberComponent]
+
 })
 export class AppModule { }

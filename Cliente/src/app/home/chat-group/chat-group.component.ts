@@ -135,11 +135,6 @@ export class ChatGroupComponent implements OnInit {
   }
 
   addMessageToList(message:any){
-    /*if(message.type === 2){
-      //this.valuesForm[message.idForm].valores = Array(message.cuestions.length).fill(0);
-      //this.valuesForm[message.idForm].cantidadVotos = 0;     
-      this.valuesForm[message.idForm] = {valores : Array(message.cuestions.length).fill(0), cantidadVotos:0 } 
-    }*/
     message.time = new Date(message.time);
     this.eventosChat.push(message);
   }

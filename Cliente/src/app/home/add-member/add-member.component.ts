@@ -36,5 +36,29 @@ export class AddMemberComponent implements OnInit {
   addMember(){
     this.addMemberEvent.emit();
   }
-  
+  cleanFieldToSearchUser(){
+    var searchUser:any =document.getElementById('fieldToSearchUser');
+    searchUser.value="";
+  }
+  enableCheckAdmin(){
+    var checkBoxAdmin:any = document.getElementById('checkboxAdmin');
+    checkBoxAdmin.disabled=false;
+  }
+  getCheckAdmin():any{
+    var checkBoxAdmin:any = document.getElementById('checkboxAdmin');
+    return checkBoxAdmin;
+  }
+  disableAddMemberToGroupButton(){
+    var addMemberToGroup = document.getElementById('addMemberToGroup');
+    var addMemberButton = document.getElementById('addMemberButton');
+    addMemberToGroup.style.display="none";
+    addMemberButton.style.display="flex";
+  }
+  getAddMemberButton(){
+    var addMemberToGroup = document.getElementById('addMemberToGroup');
+    var addMemberButton = document.getElementById('addMemberButton');
+    addMemberToGroup.style.display="flex";
+    addMemberButton.style.display="none";
+  }
+
 }

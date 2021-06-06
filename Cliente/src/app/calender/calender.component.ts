@@ -1,17 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Input,Output,EventEmitter} from '@angular/core';
 import { CalendarOptions } from '@fullcalendar/angular';
 import esLocale from '@fullcalendar/core/locales/es-us';
+import { ClaseMensaje } from './mensaje';
 
 @Component({
   selector: 'app-calender',
   templateUrl: './calender.component.html',
   styleUrls: ['./calender.component.scss']
 })
-export class CalenderComponent implements OnInit {
+export class CalenderComponent implements OnInit,ClaseMensaje {
+
+  public verMensaje1(){
+    alert("sadsad");
+  }
 
   constructor() { }
+  mensaje: String="asdsad";
 
   ngOnInit(): void {
+    
+  
   }
   locales = [esLocale];
   calendarOptions: CalendarOptions = {
@@ -26,6 +34,12 @@ export class CalenderComponent implements OnInit {
     ]
   };
   handleDateClick(arg) {
-    console.log('fecha ' + arg.dateStr);
+
   }
+
+
+  @Input()
+  hello:(hello:any)=>{alert(hello)};
+  @Output()
+  onSomething = new EventEmitter<string>();
 }

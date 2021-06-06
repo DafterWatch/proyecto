@@ -23,5 +23,19 @@ export class CreateGroupComponent implements OnInit {
   createGroup(){
     this.myEvent2.emit();
   }
+  cleangroupNameAndDescripction(){
+    var groupName:any =document.getElementById('idInputNombreDegrupo');
+    var groupDescription:any  = document.getElementById('idDescripcionDeGrupo');
+    groupName.value="";
+    groupDescription.value="";
+  }
+  getNombreDeGrupo():HTMLInputElement{
+    let groupName =<HTMLInputElement> document.getElementById('idInputNombreDegrupo');
+    return groupName;
+  }
+  getDescripcionDeGrupo():HTMLInputElement{
+    let groupDescription =<HTMLInputElement> document.getElementById('idDescripcionDeGrupo'); 
+    return groupDescription;
+  }
   
 }

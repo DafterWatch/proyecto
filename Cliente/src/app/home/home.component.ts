@@ -1,15 +1,25 @@
 import { TOUCH_BUFFER_MS } from '@angular/cdk/a11y';
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { Component,
+  ContentChild,
+  OnInit,
+  QueryList,
+  ViewContainerRef,
+  ComponentFactoryResolver,
+  ComponentRef,
+  ViewChild } from '@angular/core';
 import { WebSocketService } from '../web-socket.service';
 import {HttpClient} from '@angular/common/http';
 import { identifierModuleUrl } from '@angular/compiler';
 import {Router} from '@angular/router';
 import {ChatGroupComponent} from '../home/chat-group/chat-group.component';
-
-
-
 import { CrearFormularioComponent } from '../crear-formulario/crear-formulario.component';
 import {MatDialog} from '@angular/material/dialog';
+import { CalenderComponent } from '../calender/calender.component';
+import { PerfilComponent } from '../perfil/perfil.component';
+import { CreateGroupComponent } from './create-group/create-group.component';
+import { AddMemberComponent } from './add-member/add-member.component';
+import { ListaTareas1Component } from '../lista-tareas1/lista-tareas1.component';
+import { ListaTareas2Component } from '../lista-tareas2/lista-tareas2.component';
 
 @Component({
   selector: 'app-home',
@@ -17,8 +27,6 @@ import {MatDialog} from '@angular/material/dialog';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  
-  @ViewChild(ChatGroupComponent) chatGroupComponent:ChatGroupComponent;
 
   currentUserId : any;
   currentUser : any=null; 
@@ -34,27 +42,52 @@ export class HomeComponent implements OnInit {
   currentGroup = "";
   currentDescription="Desc:";
   router;
-  constructor(private socket: WebSocketService, private http:HttpClient, private route:Router,public dialog: MatDialog) {
+  currentGroupId:any =0;
+  componentRef= null;
+  constructor(private socket: WebSocketService, private http:HttpClient, private route:Router,public dialog: MatDialog,  private resolver: ComponentFactoryResolver) {
 
     this.currentUserId = sessionStorage.getItem('currentUser');    
-    /* BORRAR LUEGO
-    this.http.post(`http://localhost:3000/usuarios/${this.currentUserId}`,{}).subscribe(async data=>{
-        let aux = await JSON.stringify(data);         
-        this.currentUser = JSON.parse(aux);   
-        
-        this.http.post('http://localhost:3000/gruposId/',this.currentUser.grupos).subscribe(data =>{      
-          let userData = JSON.stringify(data);          
-          this.grupos = JSON.parse(userData);                                       
-        });
-    });
-    */  
+  
     this.generateUserData();
 
     this.router = route;    
     
   }
+  @ViewChild('groupContainer', { read: ViewContainerRef }) entry: ViewContainerRef;
   dialogRef : any = null;
   resultadoDormulario:String;
+
+  ////////////////////////////////////////////////////////////
+  currentComponent = null;
+ 
+  @ContentChild('template1') template;
+  inputs = {
+    hello: (arg:any)=>{console.log(arg)},
+    something: Function,
+  };
+  outputs = {
+    onSomething: type => alert(type),
+  };
+  openGroups(){
+    document.getElementById("submenu1").style.display="block";
+    document.getElementById("idComponents").style.display="none";
+  }
+  openCalendar(){
+    document.getElementById("submenu1").style.display="none";
+    document.getElementById("idComponents").style.display="block";
+    this.currentComponent=CalenderComponent;
+   
+    
+  }
+  openProfile(){
+    document.getElementById("submenu1").style.display="none";
+    document.getElementById("idComponents").style.display="block";
+    this.currentComponent=PerfilComponent;
+  }
+  /////////////////////////////////////////////////////////////
+
+
+
 
   openDialog(): void {
     this.dialogRef = this.dialog.open(CrearFormularioComponent, {
@@ -62,10 +95,6 @@ export class HomeComponent implements OnInit {
       data: {user: this.currentUser, groupId : this.currentGroupId, membersList : this.currentGroupItems}
     });    
 
-    /*this.dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-      alert(result);
-    });*/
   }
 
 
@@ -84,31 +113,25 @@ export class HomeComponent implements OnInit {
 
   hclick = false;
   si = true;
-  isAdmin2(){ 
-    this.http.post(`http://localhost:3000/isAdmin/${this.currentUserId}/${this.currentGroupId}`,{}).subscribe(data =>{
-      if(data){
-        this.si = true;
-      } else {      
-        this.si = false;
-      }
-    });
-    this.hclick = true;
-    console.log(this.si+" estado");
-  }
+
   isAdmin(){    
     this.http.post(`http://localhost:3000/isAdmin/${this.currentUserId}/${this.currentGroupId}`,{}).subscribe(data =>{
       if(data){
-        this.router.navigate(['/', 'homework1']);
+        this.entry.clear();
+        const factory = this.resolver.resolveComponentFactory(ListaTareas1Component);
+        this.componentRef = this.entry.createComponent(factory);
       } else {      
-        this.router.navigate(['/', 'homework2']);
+        this.entry.clear();
+        const factory = this.resolver.resolveComponentFactory(ListaTareas2Component);
+        this.componentRef = this.entry.createComponent(factory);
       }
     });
   }
 
   ngOnInit(): void {
     this.socket.listen('nuevoMensaje').subscribe((data:any)=>{
-      if(this.chatGroupComponent){      
-        this.chatGroupComponent.addMessageToList(data);
+      if(true){      
+        this.componentRef.instance.addMessageToList(data);
       }
     });
     this.socket.listen('nuevoGrupo').subscribe((data:any)=>{            
@@ -162,81 +185,95 @@ export class HomeComponent implements OnInit {
       this.grupos.push(data);
     });
     this.socket.listen('nuevo-form').subscribe((data:any)=>{
-      if(this.chatGroupComponent){      
-        this.chatGroupComponent.addMessageToList(data);
+      if(true){      
+        this.componentRef.instance.addMessageToList(data);
       }
     });
     this.socket.listen('respuesta-form').subscribe((data:any)=>{
-      if(this.chatGroupComponent){      
-        this.chatGroupComponent.updateFormAnswers(data);
+      if(true){      
+        console.log(data);
+        this.componentRef.instance.updateFormAnswers(data);
       }
     });
   } 
 
   sendMensaje(message:any){         
-    
     this.socket.emit('nuevoMensaje',{idGrupo:this.currentGroupId, mensaje:message});    
   } 
 
-  cleanCreateGroupFields(){    
-    var groupName:any =document.getElementById('idInputNombreDegrupo');
-    var groupDescription:any  = document.getElementById('idDescripcionDeGrupo');
-    
-    groupName.value="";
-    groupDescription.value="";
+  cleanCreateGroupFields(){
+    this.componentRef.instance.cleangroupNameAndDescripction();    
     this.miembros=[];
-    //this.currentNewgroupAdmin=-1;
     this.NewGroupAdmins = [];
-
   }
   cleanAddMemberFields(){
-    var searchUser:any =document.getElementById('fieldToSearchUser');
-    searchUser.value="";
+    this.componentRef.instance.cleanFieldToSearchUser();
     this.userData={}
   }
 
   value:string = "";
   
   createComponent(index){
-    var chatWindow = document.getElementById('chatContainer');
-    var groupWindow = document.getElementById('groupContainer');
-    var addMemberWindow = document.getElementById('addMemberContainer');
-
     if(index==1){
-      chatWindow.style.display="flex";
-      groupWindow.style.display="none";
-      addMemberWindow.style.display="none";
-      //this.currentNewgroupAdmin=-1;
+      this.entry.clear();
+      const factory = this.resolver.resolveComponentFactory(ChatGroupComponent);
+      this.componentRef = this.entry.createComponent(factory);
+      this.componentRef.instance.mensajes = this.mensajes;
+      this.componentRef.instance.currentGroupId = this.currentGroupId;
+      this.componentRef.instance.currentUser = this.currentUser;
+      this.componentRef.instance.currentGroup = this.currentGroup;
+      this.componentRef.instance.openDialogEvent.subscribe(() => {
+        this.openDialog();
+      });
+      this.componentRef.instance.myEvent.subscribe(() => {
+        this._toggleOpened();
+      });
+      this.componentRef.instance.myEventSendMessage.subscribe(($event) => {
+        this.sendMensaje($event);
+      });
       this.NewGroupAdmins = [];      
       this.hclick = false;
     }
     if(index==2){
-      chatWindow.style.display="none";
-      groupWindow.style.display="flex";
-      addMemberWindow.style.display="none";
-     
-
+      this.entry.clear();
+      const factory = this.resolver.resolveComponentFactory(CreateGroupComponent);
+      console.log(factory);
+      this.componentRef = this.entry.createComponent(factory);
+      this.componentRef.instance.miembros = this.miembros;
+      this.componentRef.instance.myEvent2.subscribe(() => {
+        this.createGroup();
+      });
+      this.componentRef.instance.myEvent.subscribe(($event) => {
+        this.createComponent($event);
+      });
     }
     if(index==3){
-      chatWindow.style.display="none";
-      groupWindow.style.display="none";
-      addMemberWindow.style.display="flex";
-      var checkBoxAdmin:any = document.getElementById('checkboxAdmin');
-      checkBoxAdmin.disabled=false;
+      this.entry.clear();
+      const factory = this.resolver.resolveComponentFactory(AddMemberComponent);
+      this.componentRef = this.entry.createComponent(factory);
+      this.componentRef.instance.userData = this.userData;
+      this.componentRef.instance.addUserEvent.subscribe(() => {
+        this.addUser();
+      });
+      this.componentRef.instance.addMemberEvent.subscribe(() => {
+        this.addMember();
+      });
+      this.componentRef.instance.buscarMiembroEvento.subscribe(($event) => {
+        this.searchUser($event);
+      });
+      this.componentRef.instance.myEvent.subscribe(($event) => {
+        this.createComponent($event);
+      });
+      this.componentRef.instance.enableCheckAdmin();
       this.cleanAddMemberFields();
 
-    }
-    if(index == 4){
-      chatWindow.style.display="flex";
-      groupWindow.style.display="none";
-      addMemberWindow.style.display="none";
     }
   }
 
   async createGroup(){
 
-    let groupName =<HTMLInputElement> document.getElementById('idInputNombreDegrupo');
-    let groupDescription =<HTMLInputElement> document.getElementById('idDescripcionDeGrupo'); 
+    let groupName =this.componentRef.instance.getNombreDeGrupo();
+    let groupDescription =this.componentRef.instance.getDescripcionDeGrupo(); 
 
     if(this.miembros && Object.keys(this.miembros).length===0 && this.miembros.constructor===Object){
       alert('No se han seleccionado miembros')
@@ -288,61 +325,9 @@ export class HomeComponent implements OnInit {
         console.log(cb.error);        
       }
     });
-    this.createComponent(4);
+    this.createComponent(1);
     
-    //BORRAR TODO DE AQUÍ PARA ABAJO    
-    /*
-    this.http.post('http://localhost:3000/grupos/',this.currentUser.grupos).subscribe(data1 =>{      
-      let userData = JSON.stringify(data1);          
-      var groupSistems:[] = JSON.parse(userData); 
-      
-    let groupName:any = document.getElementById('idInputNombreDegrupo');
-    let groupDescription:any = document.getElementById('idDescripcionDeGrupo'); 
-
-    if(this.miembros && Object.keys(this.miembros).length===0 && this.miembros.constructor===Object){
-      console.log('No se han seleccionado miembros');
-      return;
-    }            
-    let integrantesGrupo=[];
-    for (let miembro of this.miembros) {
-          integrantesGrupo.push(miembro.id)
-    }
-    integrantesGrupo.push(this.currentUserId);
-
-    let informacionDelGrupo1={
-      nombre: groupName.value,
-      descripcion:groupDescription.value,
-      foto:""
-    }
-    let mensaje:{
-      archivo:{
-          mensaje:"",
-          remitente:"",
-          hora:Date
-      }
-    }
-
-
-    let miembrosDelGrupo={
-        integrantes:integrantesGrupo,
-        admin:this.NewGroupAdmins
-        //admin:this.currentNewgroupAdmin
-    };
-    let grupo_n = {id:groupSistems.length+1, miembrosDelGrupo:miembrosDelGrupo,informacion:informacionDelGrupo1,mensaje:mensaje}
- 
     
-    this.http.post('http://localhost:3000/createG',grupo_n).subscribe( data =>{
-      console.log(data);      
-    });
-    let data = {
-      ids: integrantesGrupo,
-      infoGrupo:grupo_n
-    }
-    this.socket.emit('nuevoGrupo',data);
-    this.createComponent(4);
-
-    });      
-    */
   }
   copy (obj) {
     let result;
@@ -358,93 +343,85 @@ export class HomeComponent implements OnInit {
   }
   addMember(){
  
-    const userdata2 = this.copy(this.userData);
-    let checkBoxAdmin:any = document.getElementById('checkboxAdmin');
-      
-    let newMemberAdmin = checkBoxAdmin.checked;
-    const idNewMember=userdata2.id;
     
-    let data : Object = {
-      userId:idNewMember,
-      groupId:this.currentGroupId,
-      isAdmin:newMemberAdmin
-    }
-    //this.socket.emit('usuario-nuevo',data);
-    this.socket.socket.emit('usuario-nuevo',data,cb=>{    
-      console.log('callback: ',cb);
-      console.log('miembros: ',this.currentMembers);
-      this.currentMembers.push(cb);
-    });
-    alert("Se añadió un nuevo miembro al grupo");
-    this.createComponent(1);  
   }
-  addUser(){      
+  addUser(){  
+    console.log(this.esAñadirMiembrosAGrupoNuevo);
+    if(this.esAñadirMiembrosAGrupoNuevo){
       const userdata2 = this.copy(this.userData);    
-      var checkBoxAdmin:any = document.getElementById('checkboxAdmin');
-      checkBoxAdmin.disabled=false;
+      var checkBoxAdmin:any =this.componentRef.instance.getCheckAdmin(); 
+      this.componentRef.instance.enableCheckAdmin(); 
       if(checkBoxAdmin.checked){        
         this.NewGroupAdmins.push(userdata2.id);
       }
-      
+      console.log(this.miembros);
       var userAlreadyRegistered=false;
       for(let element of this.miembros){
         if(userdata2.id==element.id){
           userAlreadyRegistered=true;
         }
       }
-      /*this.miembros.forEach(element => {
-        if(userdata2.id==element.id){
-          userAlreadyRegistered=true;
-        }
-      });*/
-      
+
       if(!userAlreadyRegistered){
         this.miembros[this.miembroscount]=userdata2;
         this.miembroscount++;
+      
+        this.createComponent(2);  
       }
       else{
         alert("¡¡Usuario ya registrado!!");
         this.createComponent(3);  
       }
+    }
+    else{
+      const userdata2 = this.copy(this.userData);
+      let checkBoxAdmin:any = this.componentRef.instance.getCheckAdmin(); 
+        
+      let newMemberAdmin = checkBoxAdmin.checked;
+      const idNewMember=userdata2.id;
+      
+      let data : Object = {
+        userId:idNewMember,
+        groupId:this.currentGroupId,
+        isAdmin:newMemberAdmin
+      }
+      //this.socket.emit('usuario-nuevo',data);
+      this.socket.socket.emit('usuario-nuevo',data,cb=>{    
+        console.log('callback: ',cb);
+        console.log('miembros: ',this.currentMembers);
+        this.currentMembers.push(cb);
+      });
+      alert("Se añadió un nuevo miembro al grupo");
+      this.createComponent(1);  
+    }    
+      
   }
-
+esAñadirMiembrosAGrupoNuevo=false;
   addMemberCommon(){
-  
+    this.esAñadirMiembrosAGrupoNuevo=true;
+    this.createComponent(2);
     this.cleanCreateGroupFields();
-    var addMemberToGroup = document.getElementById('addMemberToGroup');
-    var addMemberButton = document.getElementById('addMemberButton');
-    addMemberToGroup.style.display="none";
-    addMemberButton.style.display="flex";
-    this.createComponent(2)
-   
   }
   addMemberToGroup(){  
-
-    var addMemberToGroup = document.getElementById('addMemberToGroup');
-    var addMemberButton = document.getElementById('addMemberButton');
-    addMemberToGroup.style.display="flex";
-    addMemberButton.style.display="none";
-    this.createComponent(3)
-   
+    this.esAñadirMiembrosAGrupoNuevo=false;
+    this.createComponent(3);
   }
   searchUser(id:any){
-
-      
       this.userData.id = id;
       this.http.post(`http://localhost:3000/usuarios/${id}`,{}).subscribe(data =>{
-      //TODO: Parsear mejor los datos.
-           
       let userData = JSON.stringify(data);
       let userData_ = JSON.parse(userData);
-
-     
+      console.log(id);  
+      console.log(userData);  
+      console.log(userData_);  
       this.userData.name = userData_.nombre;      
       this.userData.description = userData_.descripcion;
-              
+      this.createComponent(3);
+      
     });    
   }
 
-  currentGroupId;
+
   deleteMember(memberInformation:any){
     /*NOTA: TENER CUIDADO AL MANDAR DATOS, MONGODB ES SENSIBLE A STRINGS E INTS */
     let userId = memberInformation.value.id;
@@ -513,11 +490,12 @@ export class HomeComponent implements OnInit {
       await this.http.post('http://localhost:3000/getGroupMessages',{id:this.currentGroupId}).toPromise().then(data =>{                
         mensaje = data;
       });
-      this.chatGroupComponent.updateGroupMessages({idGrupo:this.currentGroupId,mensajes:mensaje});
+      this.createComponent(1);  
+      this.componentRef.instance.updateGroupMessages({idGrupo:this.currentGroupId,mensajes:mensaje});
     
     //this.chatGroupComponent.metodoCualquiera();
 
-    this.createComponent(4);    
+      
      
   }
   exitGroup():void{

@@ -15,6 +15,7 @@ import { InicioComponent } from './inicio/inicio.component';
 import { ListaTareas1Component } from './lista-tareas1/lista-tareas1.component';
 import { ListaTareas2Component } from './lista-tareas2/lista-tareas2.component';
 import { LoginComponent } from './login/login.component';
+import { NavegacionComponent } from './navegacion/navegacion.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { RegisterComponent } from './register/register.component';
@@ -36,6 +37,7 @@ const routes: Routes = [
   { path: 'inicio', component: InicioComponent },  
   { path: 'form', component: CrearFormularioComponent },
   { path: 'formulario', component: FormularioComponent },
+  { path: 'navegacion', component: NavegacionComponent },
   //componente de pruebas - Jose
   //{ path: 'demo', component: DemoComponent },
   //{ path: 'group-menu', component: GroupMenuComponent },

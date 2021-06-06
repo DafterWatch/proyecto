@@ -1,10 +1,3 @@
-<mat-toolbar class="navbar-calender">
-    <span>Lista Tareas</span>
-    <span class="example-spacer"></span>
-    <button mat-icon-button routerLink="/home">
-      <mat-icon>close</mat-icon>
-    </button>
-  </mat-toolbar>
 
 <div class="colored-box" style="cursor: pointer; flex-direction: row; box-sizing: border-box; display: flex;">
     <div style="flex: 1 1 100%; box-sizing: border-box; max-width: 25%; background-color: #f6f6f6;"> 
@@ -23,7 +16,8 @@
                 <p>Correo Electronico</p>
                 <p>{{correo}}</p>
             </div>
-            <div fxflex="13" style="flex: 1 1 1e-09px; box-sizing: border-box; max-height: 13%;  padding-top: 18px;"> 
+            <div fxflex="13" style="flex: 1 1 1e-09px; box-sizing: border-box; max-height: 13%;  padding-top: 18px;">
+                <button class="buttonBot" (click)="mostrar()">Pulsar</button><br> 
                 <button class="buttonBot" routerLink="/login">Cambiar Usuario</button><br>
                 <button class="buttonBot" routerLink="/inicio">Cerrar Sesión</button><br>
             </div>

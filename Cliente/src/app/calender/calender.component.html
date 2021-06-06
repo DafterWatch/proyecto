@@ -1,11 +1,16 @@
-<mat-toolbar class="navbar-calender">
-    <span>Calendario Estudiantil</span>
-    <span class="example-spacer"></span>
-    <button mat-icon-button routerLink="/home">
-      <mat-icon>close</mat-icon>
-    </button>
-  </mat-toolbar>
-
-<div class="calender">
-  <full-calendar [options]="calendarOptions"></full-calendar>
+<div style="height: 100px !important;">
+  <div style="height:50%" >
+      <mat-toolbar class="navbar-calender" >
+        <span>Calendario Estudiantil</span>
+        <span class="example-spacer"></span>
+        <button mat-icon-button routerLink="/home">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-toolbar>
+    
+    <div class="calender" style="overflow:visible">
+      <full-calendar [options]="calendarOptions"></full-calendar>
+    </div>
+  </div>
+  
 </div>

@@ -1,0 +1,33 @@
+  
+      <!-------------------------------------------------------BARRA DE NAVEGACIÓN-------------------------------------------------------------------->
+          <div style="flex: 1 1 100%; box-sizing: border-box; max-width: 5%; " class="menu">
+            <div class="logo">
+                <img src="assets/images/logo.png" height="90px" width="90px">
+            </div>
+         
+            <div class="button-container" id="button-usuario">
+                <button mat-fab 
+                color="primary"
+                (click)="openProfile()">
+                <mat-icon>person</mat-icon>
+                </button>
+            </div>
+            <div class="button-container" style="padding-top: 50px;">
+                <button mat-fab color="primary" (click)="openGroups()">
+                <mat-icon>calendar_today</mat-icon>
+                </button>
+            </div>
+          </div>
+        <div id="PaginaDeModulos" style="width: 100%; height: 100%;">
+
+        
+          <ng-template [ngComponentOutlet]="currentComponent"
+          [ndcDynamicInputs]="inputs"
+          [ndcDynamicOutputs]="outputs"
+          ></ng-template>
+
+            
+        </div>
+ 
+
+
