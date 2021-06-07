@@ -8,22 +8,23 @@
             <p>Por favor complete los campos vacios para su recuperacion de cuenta.</p>
             <hr>            
             <label for="email"><b>Correo</b></label>
-            <input type="text" placeholder="Ingrese su correo" name="email" id="email" required><br>
-            <!--
-            <label><b>Pregunta de seguridad</b></label><br>
+            <input type="text" placeholder="Ingrese su correo" name="email" id="email" required #correo><br>
+
+            <button class="registerbtn" (click)="checkIfMailExist(correo.value)" [disabled]="confirmEnabled">Confirmar</button>
+        </div>
+        <div class="security-cuestion" style="display:none;" id="question-container">
+          <label><b>Pregunta de seguridad</b></label><br>
             <mat-form-field appearance="fill">
-                <select name="question">
+                <select name="question" id="securityField">
                   <option *ngFor="let question of questions" [value]="question.value">
                     {{question.viewValue}}
                   </option>
                 </select>
               </mat-form-field><br>
             <label><b>Respuesta</b></label>
-            <input type="text" placeholder="Ingrese su respuesta">-->
-            <!---->
-            <button class="registerbtn">Confirmar</button>
+            <input type="text" placeholder="Ingrese su respuesta" #txtRespuesta><br>
+            <button (click)="confirmAnswer(txtRespuesta.value)">Enviar</button>
         </div>
-          
         <div class="container signin">
             <button class="cancelbtn">Cancelar</button>
             <span class="psw">¿Recuerda su contraseña? <a routerLink="/login">Inicie sesión</a></span>

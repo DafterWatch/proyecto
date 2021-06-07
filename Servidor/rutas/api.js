@@ -1,5 +1,15 @@
 const express = require('express');
 const jsonParser = express.json();
+const emailExistence = require('email-existence');
+const nodemailer = require('nodemailer');
+
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'mean.login.services@gmail.com',
+      pass: 'huevos12'
+    }
+  });
 
 module.exports = function(router){
 
@@ -138,6 +148,108 @@ module.exports = function(router){
        });
        
     });
+    router.post('/crearUser',jsonParser, async (req,res)=>{
+        let datos = req.body;
+        let existeCorreo;
+        let estaRegistrado = true;
+        await checkEmail(datos.email).then(res=> existeCorreo=res);        
+        await Usuario.find({'email':datos.email}).exec().then(usuario =>{
+            if(usuario.length === 0){
+                estaRegistrado=false
+            }
+        });
+
+        /*let fakeId = makeid(5);*/
+        
+        let mensaje = (!existeCorreo)? 'Dirección de correo no valida':'¡La cuenta ya está registrada!';
+        let error = !existeCorreo || estaRegistrado; 
+        let respuesta ={
+            error,
+            mensaje
+        };                
+
+        if(!error){
+            let id = -1;
+            await Usuario.find({}).exec().then(usuarios => id=usuarios.length + 1);
+
+            let newUser = {
+                id,
+                nombre : datos.name,
+                descripcion : "",
+                grupos : [],
+                email : datos.email,
+                contraseña : datos.password,
+                preguntaSeguridad : datos.securityQuestion,
+                respuesta : datos.securityAns
+            }
+
+            let nuevoUsuario = new Usuario(newUser);
+            nuevoUsuario.save(err=>{
+                if(err) console.log(err);
+            });
+        }
+
+        res.send(respuesta);
+    });
+
+    function checkEmail(email){
+        return new Promise(resolve =>{
+            emailExistence.check(email, (err,res)=> resolve(res));
+        });
+    }
+
+    router.post('/isRegistered/:mail',async (req,res)=>{
+        let userMail = req.params.mail;        
+        let fields = {
+            error : false,
+            pregunta : "",
+            respuesta : ""
+        }
+        await Usuario.findOne({"email":userMail}).exec().then(usuario =>{
+            if(usuario !== null){
+                fields.pregunta = usuario.preguntaSeguridad;
+                fields.respuesta = usuario.respuesta;
+            }else{
+                fields.error = true;
+            }
+        });
+        res.send(fields);
+    });
+    router.post('/sendPassword/:email', async (req,res)=>{
+        let password = "";
+        await Usuario.findOne({'email':req.params.email}).exec().then(usuario =>{
+            password = usuario.contraseña;
+        });
+
+        let mailOptions = {
+            from : 'mean.login.services@gmail.com',
+            to : req.params.email,
+            subject : 'Contraseña de cuenta',
+            text : 'Su contraseña es :' + password
+        }
+
+        transporter.sendMail(mailOptions,(err,info)=>{
+            if(err){
+                console.log(err);                
+            }else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+
+        res.send(true);
+
+    });
 
     return router;
+}
+
+function makeid(length) {
+    var result           = [];
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result.push(characters.charAt(Math.floor(Math.random() * 
+        charactersLength)));
+   }
+   return result.join('');
 }

@@ -453,3 +453,33 @@
   background-size: 100%;  
   background-size: cover;
 }
+.header{
+  height: 9%;
+  width: 60%;  
+  background: #074C80;  
+}
+#profile-label{
+  margin: 10px;
+  color: #FFFFFF;
+  font-size: xx-large;
+}
+#profile-container{
+  display: flex;
+  height: 100%;
+  box-sizing: border-box;  
+  width: 60%;
+  background: rgb(2,31,73);
+  background: linear-gradient(180deg, rgba(2,31,73,1) 7%, rgba(0,49,87,1) 100%);
+  align-items: center;
+  justify-content: center;
+}
+#profile-container #profile-image{
+  border-radius: 60%; 
+  display: block; 
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 30px;
+  width: 200px;
+  height: 200px;
+  -webkit-box-reflect: below 0px linear-gradient(to bottom, rgba(0,0,0,0.0), rgba(0,0,0,0.4));
+}

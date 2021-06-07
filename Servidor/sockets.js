@@ -42,10 +42,25 @@ module.exports = function (io){
             cb({err:false});
         });
 
-        socket.on('login-nuevo', async (data,cb)=>{
-            let user = await Usuario.findOne({"id":data});                        
-            /*if(exist user)*/ cb(false);
-            //else cb(true);
+        socket.on('login-nuevo', async (data,cb)=>{           
+
+            if(data.test){
+                socket.id = data.id;
+                usuarios[data.id] = socket;
+                return;
+            }
+
+            let user;
+            await Usuario.findOne({"email":data.id}).exec().then(usuario => user = usuario);
+            if(user === null){
+                cb({error:true,mensaje:"El usuario no está registrado"});
+                return;
+            }
+            if(user.contraseña !==data.password){
+                cb({error:true,mensaje:"La contraseña es incorrecta"});
+                return;
+            }
+            cb({error:false, user});
             socket.id = user.id;
             usuarios[user.id] = socket;
         });

@@ -8,12 +8,17 @@ import { Component, OnInit,Input,Output,EventEmitter } from '@angular/core';
 export class PerfilComponent implements OnInit {
 
   constructor() { }
-
+  userData : any;
   ngOnInit(): void {
+    this.userData = sessionStorage.getItem('currentUserData');   
+    this.userData = JSON.parse(this.userData);
+    this.usuario= this.userData.nombre;
+    this.informacion = this.userData.descripcion;
+    this.correo = this.userData.email; 
   }
-  usuario = "Usuario1";
-  informacion = "Aveces respiro";
-  correo = "123@gmail.com";
+  usuario = "";
+  informacion = "";
+  correo = "";
 
   mostrar(){
     console.log(this.hello);
