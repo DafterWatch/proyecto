@@ -108,8 +108,31 @@
 </ng-sidebar>
 <div ng-sidebar-content style="height: 100%; width: 100%;" id="mainbody" >
 
-
-
+  <div class="userProfile" id="userProfileContainer" #userP>
+    <div class="userProfileHeader">
+      <div class="headerInfo">
+        <b><mat-icon style="color: white; font-size: 30px; margin-left: 10px; cursor: pointer;"(click)="userP.style.display='none'">keyboard_backspace</mat-icon> <span>Perfil</span></b>
+      </div>
+    </div>
+    <div class="userInfo">
+      <img  src="assets/images/chayan.png" id="profile-image"/>
+      <span>Tú nombre</span>
+      <div id="nameContainer">
+        <span>{{currentUser?.nombre }}</span><mat-icon style="float: right;">edit</mat-icon>
+      </div>
+      <hr style="width: 99%; border: 1px solid black;">
+      <span>Descripción</span>
+      <div id="userDescription">
+        <span>{{currentUser?.descripcion}}</span><mat-icon style="float: right;">edit</mat-icon>
+      </div>
+      <hr style="width: 99%; border: 1px solid black;">
+      <span>Correo</span>
+      <div id="userMail">
+        <span>{{currentUser?.email}}</span>
+      </div>
+      <b><p id="userId">ID: {{currentUserId}} </p></b>
+    </div>
+  </div>
 
 
     <!-------------------------------------------------------------------------------------Esta seccion es Home - Pagina---------------------------------------------------------------------------------->

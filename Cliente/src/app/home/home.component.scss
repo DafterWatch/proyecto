@@ -453,3 +453,56 @@
   background-size: 100%;  
   background-size: cover;
 }
+.userProfile{
+  margin-left: 5%;
+  height: 100%;
+  width: 19%;
+  background-color: #0e499e;
+  display:none;
+  position: absolute;
+  
+}
+.userProfile .userInfo{
+  display: flex;    
+  flex-direction: column;
+}
+
+.userProfile .userProfileHeader{
+  background: #143058;
+  width: 100%;
+  height: 10%;
+}
+
+
+.userProfile .userProfileHeader span{
+  color: #FFFFFF;
+  font-size: 20px;
+  margin-left: 25px;
+  cursor: context-menu;
+  align-self: flex-end;
+}
+
+.userProfile .userInfo #profile-image{
+  border-radius: 50%; 
+  display: block; 
+  margin-left: 30%;
+  margin-right: auto;
+  padding-top: 30px;
+}
+
+.userProfile .userInfo span{
+  margin: 20px;
+  color: #00112C;
+  font-size: 17px;
+}
+.userProfile .userInfo #userId{
+  color: #FFFFFF;
+  font-size: 20px;
+  margin: 20px;
+}
+.userProfile .userInfo div{
+  width: 80%;
+}
+.userProfile .userInfo mat-icon{
+  cursor: pointer;
+}

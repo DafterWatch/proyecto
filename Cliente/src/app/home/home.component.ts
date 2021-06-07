@@ -20,6 +20,7 @@ import { CreateGroupComponent } from './create-group/create-group.component';
 import { AddMemberComponent } from './add-member/add-member.component';
 import { ListaTareas1Component } from '../lista-tareas1/lista-tareas1.component';
 import { ListaTareas2Component } from '../lista-tareas2/lista-tareas2.component';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -43,7 +44,8 @@ export class HomeComponent implements OnInit {
   currentDescription="Desc:";
   router;
   currentGroupId:any =0;
-  componentRef= null;
+  componentRef= null;  
+
   constructor(private socket: WebSocketService, private http:HttpClient, private route:Router,public dialog: MatDialog,  private resolver: ComponentFactoryResolver) {
 
     this.currentUserId = sessionStorage.getItem('currentUser');    
@@ -75,19 +77,16 @@ export class HomeComponent implements OnInit {
   openCalendar(){
     document.getElementById("submenu1").style.display="none";
     document.getElementById("idComponents").style.display="block";
-    this.currentComponent=CalenderComponent;
-   
-    
+    this.currentComponent=CalenderComponent;       
   }
   openProfile(){
-    document.getElementById("submenu1").style.display="none";
+    document.getElementById("userProfileContainer").style.display="block";
+    /*
     document.getElementById("idComponents").style.display="block";
-    this.currentComponent=PerfilComponent;
+    this.currentComponent=PerfilComponent;*/
+    
   }
   /////////////////////////////////////////////////////////////
-
-
-
 
   openDialog(): void {
     this.dialogRef = this.dialog.open(CrearFormularioComponent, {
@@ -102,7 +101,7 @@ export class HomeComponent implements OnInit {
     await this.http.post(`http://localhost:3000/usuarios/${this.currentUserId}`,{}).toPromise().then(data =>{
         let aux = JSON.stringify(data);         
         this.currentUser = JSON.parse(aux);
-    });
+    });    
 
     this.http.post('http://localhost:3000/gruposId/',this.currentUser.grupos).subscribe(data =>{      
           let userData = JSON.stringify(data);          
