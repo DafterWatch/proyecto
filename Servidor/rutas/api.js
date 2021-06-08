@@ -207,13 +207,15 @@ module.exports = function(router){
                 email : datos.email,
                 contraseña : datos.password,
                 preguntaSeguridad : datos.securityQuestion,
-                respuesta : datos.securityAns
+                respuesta : datos.securityAns,
+                fotoPerfil:"uploads\\default.png"
             }
 
             let nuevoUsuario = new Usuario(newUser);
-            nuevoUsuario.save(err=>{
+            await nuevoUsuario.save(err=>{
                 if(err) console.log(err);
             });
+            respuesta['user'] = newUser;
         }
 
         res.send(respuesta);
@@ -293,9 +295,10 @@ module.exports = function(router){
                 
         let previousImage = './'+req.body.previousImage.substring(22);
         try{
+            if(!previousImage === './uploads\\default.png')
             fs.unlinkSync(previousImage);
         }catch{
-
+            console.log('Error borrando la foto anterior');
         }
         await Usuario.updateOne({'id':req.body.id},{$set:{'fotoPerfil':req.file.path}}).exec(err=>{
             if(err){

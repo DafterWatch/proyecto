@@ -44,6 +44,12 @@ module.exports = function (io){
 
         socket.on('login-nuevo', async (data,cb)=>{           
 
+            if(data.created){
+                socket.id = data.id;
+                usuarios[data.id] = socket;
+                return;
+            }
+
             if(data.test){
                 socket.id = data.id;
                 usuarios[data.id] = socket;

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-//import { WebSocketService } from '../web-socket.service';
+import { WebSocketService } from '../web-socket.service';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 interface Question {
   value: string;
@@ -13,7 +14,7 @@ interface Question {
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(private http:HttpClient) {
+  constructor(private http:HttpClient, private router:Router, private socket:WebSocketService) {
 
   }
 
@@ -27,7 +28,7 @@ export class RegisterComponent implements OnInit {
 
   registerFields : any = {};
 
-  register(){
+  async register(){
     let nameField : any = document.getElementById('txtNombre');
     let emailField : any = document.getElementById('email');
     let securityField : any = document.getElementById('cbSecurityQ');
@@ -54,16 +55,23 @@ export class RegisterComponent implements OnInit {
         return;
       }
     }
-
-    this.http.post('http://localhost:3000/crearUser',this.registerFields).subscribe((res:any)=>{
+    let newUser;
+    await this.http.post('http://localhost:3000/crearUser',this.registerFields).toPromise().then((res:any)=>{
       if(res.error){
         alert(res.mensaje);
         return;
       }else{
-        alert('Registrado!');
+        alert('Registrado!');                   
+        newUser = res.user;
       }      
-    });
-    
-  }
+    });                
 
+    this.socket.emit('login-nuevo',{id: newUser.id,created:true});
+    sessionStorage.setItem('currentUser',newUser.id);    
+    let userDataSave = JSON.stringify(newUser);
+    sessionStorage.setItem('currentUserData',userDataSave);
+    this.router.navigate(['/','home']);
+  }  
+
+  
 }
