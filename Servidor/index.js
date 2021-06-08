@@ -16,6 +16,7 @@ app.use(
     cors({
         origin:'*'
 }));
+app.use('/uploads',express.static('uploads'));
 
 mongoose.connect('mongodb+srv://mongodbuser:huevos1@cluster0.uk8ak.mongodb.net/meanDatabase?retryWrites=true&w=majority',err =>{
     if(err){

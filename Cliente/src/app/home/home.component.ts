@@ -44,12 +44,11 @@ export class HomeComponent implements OnInit {
   currentDescription="Desc:";
   router;
   currentGroupId:any =0;
-  componentRef= null;  
+  componentRef= null;    
 
   constructor(private socket: WebSocketService, private http:HttpClient, private route:Router,public dialog: MatDialog,  private resolver: ComponentFactoryResolver) {
 
-    this.currentUserId = sessionStorage.getItem('currentUser');    
-  
+    this.currentUserId = sessionStorage.getItem('currentUser');        
     this.generateUserData();
 
     this.router = route;    
@@ -102,6 +101,7 @@ export class HomeComponent implements OnInit {
         let aux = JSON.stringify(data);         
         this.currentUser = JSON.parse(aux);
     });    
+    this.currentUser.fotoPerfil = `http://localhost:3000/${this.currentUser.fotoPerfil}`;
 
     this.http.post('http://localhost:3000/gruposId/',this.currentUser.grupos).subscribe(data =>{      
           let userData = JSON.stringify(data);          
@@ -539,7 +539,66 @@ esAñadirMiembrosAGrupoNuevo=false;
       
     }
   }
+  changeProfilePicture(){
+    let inputEl : any = document.getElementById('btnDiscretFile');    
+    
+    const formData : FormData = new FormData;    
+
+    inputEl.onchange = (e)=>{
+      formData.append('profileImage',inputEl.files[0]);     
+      formData.append('id',this.currentUserId); 
+      formData.append('previousImage',this.currentUser.fotoPerfil);
+      this.http.post('http://localhost:3000/changeImage',formData,{responseType: 'text'}).subscribe(
+        (res)=>{
+          console.log(res);          
+          this.currentUser.fotoPerfil = res; 
+        },
+        (err)=>console.log(err)
+      );
+    };
+    inputEl.click();
+
+
+  }
   
+  replaceItemProfileInfo(itemId:string,actionButton:string,info:string){
+    let originalNameElement : HTMLElement = document.getElementById(itemId);    
+    let button : HTMLElement = document.getElementById(actionButton);
+    
+    const confirmButton : HTMLButtonElement = document.createElement('button');
+    const newNameInput = document.createElement('input');    
+    newNameInput.type='text';
+    newNameInput.value = originalNameElement.innerHTML;
+    newNameInput.style.marginLeft = "10px";
+    
+    confirmButton.innerHTML = "Confirmar";
+
+    let actualGroupName = originalNameElement.innerText;
+
+    originalNameElement.parentElement.replaceChild(newNameInput,originalNameElement);
+    button.parentElement.replaceChild(confirmButton,button);
+
+    confirmButton.onclick = ()=>{
+      let newName = newNameInput.value;      
+      if(actualGroupName.trim() === newName.trim() || actualGroupName === newName){
+        alert('Sin cambios');        
+      }else{
+        let data = {
+          id : this.currentUser.id,
+          field : info,
+          newField : newName
+        }
+        this.http.post('http://localhost:3000/changeInfo',data).subscribe((err)=>{
+          if(err) console.log(err);
+        });
+        originalNameElement.innerHTML = newName;
+      }
+      
+      newNameInput.parentElement.replaceChild(originalNameElement,newNameInput);
+      confirmButton.parentElement.replaceChild(button,confirmButton);
+      
+    }
+  }
   
   // ------------------------------------------------------------------------Menu Grupo -----------------------------------------------------------------------------
   // -------------------De aqui para abajo son funciones del menu de grupos ----------------------------------------

@@ -107,7 +107,7 @@
 </div>  
 </ng-sidebar>
 <div ng-sidebar-content style="height: 100%; width: 100%;" id="mainbody" >
-
+  <!--PERFIL DE USUARIO-->
   <div class="userProfile" id="userProfileContainer" #userP>
     <div class="userProfileHeader">
       <div class="headerInfo">
@@ -115,15 +115,29 @@
       </div>
     </div>
     <div class="userInfo">
-      <img  src="assets/images/chayan.png" id="profile-image"/>
+      <div>
+        <div class="image-container" (click)="changeProfilePicture()">
+          <div id="imageInfoContainer">
+            <div id="changeProfileLabel">          
+              <mat-icon style="margin-left: 35%;">camera_alt</mat-icon> 
+              <span style="color: white; text-align: center;  margin-left: -0px; ">CAMBIAR FOTO DEL PERFIL</span>          
+            </div>
+
+            <div id="changeProfilePicture">          
+            </div>               
+            <input type="file" id="btnDiscretFile" style="display: none;" name="profileImage"/>
+          </div>
+          <img  [src]="currentUser?.fotoPerfil || 'assets/images/chayan.png'"  id="profile-image" height="150" width="150"/>
+        </div>            
+      </div>
       <span>Tú nombre</span>
       <div id="nameContainer">
-        <span>{{currentUser?.nombre }}</span><mat-icon style="float: right;">edit</mat-icon>
+        <span id="lblCurrentUserName">{{currentUser?.nombre }}</span><mat-icon style="float: right;" (click)="replaceItemProfileInfo('lblCurrentUserName','btnNameEdit','nombre')" id="btnNameEdit">edit</mat-icon>
       </div>
       <hr style="width: 99%; border: 1px solid black;">
       <span>Descripción</span>
       <div id="userDescription">
-        <span>{{currentUser?.descripcion}}</span><mat-icon style="float: right;">edit</mat-icon>
+        <span id="lblCurrentDesc">{{currentUser?.descripcion}}</span><mat-icon style="float: right;" id="btnDescEdit" (click)="replaceItemProfileInfo('lblCurrentDesc','btnDescEdit','descripcion')">edit</mat-icon>
       </div>
       <hr style="width: 99%; border: 1px solid black;">
       <span>Correo</span>
@@ -133,7 +147,7 @@
       <b><p id="userId">ID: {{currentUserId}} </p></b>
     </div>
   </div>
-
+  <!--PERFIL DE USUARIO-->
 
     <!-------------------------------------------------------------------------------------Esta seccion es Home - Pagina---------------------------------------------------------------------------------->
     <div class="colored-box" style="flex-direction: row; box-sizing: border-box; display: flex;">      

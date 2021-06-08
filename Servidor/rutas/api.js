@@ -2,6 +2,33 @@ const express = require('express');
 const jsonParser = express.json();
 const emailExistence = require('email-existence');
 const nodemailer = require('nodemailer');
+const multer = require('multer');
+const fs = require('fs');
+
+const fileFilter = (req,file,cb)=>{
+    if(['image/jpeg','image/png','image/jpg'].includes(file.mimetype)){
+        cb(null,true);
+    }else
+        cb(null,false);    
+}
+
+const storage = multer.diskStorage({
+    destination: (req,file,cb)=>{
+        cb(null, './uploads/');
+    },
+    filename: (req,file,cb)=>{
+        cb(null, Date.now() + file.originalname); //Potential error
+    }
+});
+
+
+const upload = multer({storage:storage, 
+    limits:
+    {
+        fileSize: 1024 * 1024 * 5
+    },
+    fileFilter : fileFilter
+});
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -238,6 +265,44 @@ module.exports = function(router){
 
         res.send(true);
 
+    });
+
+    router.post('/changeInfo',jsonParser,(req,res)=>{
+        let id = req.body.id;
+        let field = req.body.field;
+        let newField = req.body.newField;
+
+        switch(field){
+            case "nombre":
+                Usuario.updateOne({"id":id},{$set:{"nombre":newField }}).exec(err=>{
+                    if(err)
+                        console.log(err);
+                });
+                break;
+            case "descripcion":
+                Usuario.updateOne({"id":id},{$set:{"descripcion":newField }}).exec(err=>{
+                    if(err)
+                        console.log(err);
+                });
+                break;
+        }
+        res.send(true);
+    });
+
+    router.post('/changeImage',upload.single('profileImage'),async (req,res)=>{   
+                
+        let previousImage = './'+req.body.previousImage.substring(22);
+        try{
+            fs.unlinkSync(previousImage);
+        }catch{
+
+        }
+        await Usuario.updateOne({'id':req.body.id},{$set:{'fotoPerfil':req.file.path}}).exec(err=>{
+            if(err){
+                console.log(err.message);
+            }
+        });
+        res.send('http://localhost:3000/'+req.file.path);
     });
 
     return router;

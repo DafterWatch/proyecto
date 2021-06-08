@@ -10,7 +10,8 @@ const usuarioSchema = new Schema ({
     email : String,
     contraseña : String,
     preguntaSeguridad : String,
-    respuesta : String
+    respuesta : String,
+    fotoPerfil : String
 });
 
 module.exports = mongoose.model('usuario',usuarioSchema,'usuarios');

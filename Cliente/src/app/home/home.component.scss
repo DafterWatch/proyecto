@@ -487,7 +487,8 @@
   display: block; 
   margin-left: 30%;
   margin-right: auto;
-  padding-top: 30px;
+  margin-top: 30px;
+  //padding-top: 30px;
 }
 
 .userProfile .userInfo span{
@@ -505,4 +506,40 @@
 }
 .userProfile .userInfo mat-icon{
   cursor: pointer;
+}
+#changeProfilePicture{
+  opacity: 0.6;
+  margin-left: 22%;
+  border-radius: 50%;
+  margin-top: 30px;
+  width: 152px;
+  height: 151px;  
+  background: #474747;
+  position: absolute;
+  z-index: 1;
+  color: #FFFFFF;    
+}
+.userProfile .image-container{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.userProfile #changeProfileLabel{
+  margin-left: 25%;
+  margin-top: 50px;
+  width: 150px;
+  color: white;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  z-index: 2;  
+}
+.userProfile #imageInfoContainer{
+  opacity: 0;
+  transition: .2s all;
+  cursor: pointer;
+}
+.image-container:hover > #imageInfoContainer{
+  opacity: 1;
 }
