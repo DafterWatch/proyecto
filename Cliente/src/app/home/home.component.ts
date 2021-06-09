@@ -195,6 +195,14 @@ export class HomeComponent implements OnInit {
         this.componentRef.instance.updateFormAnswers(data);
       }
     });
+    this.socket.listen('group-picture-change').subscribe((data:any)=>{
+      console.log(data);
+      
+      if(data.group == this.currentGroupId){
+        this.currentGroupProfileP = data.newProfile;
+        this.componentRef.instance.currentGroupProfileP = data.newProfile;
+      }
+    });
   } 
 
   sendMensaje(message:any){         
@@ -572,14 +580,22 @@ esAñadirMiembrosAGrupoNuevo=false;
     input.onchange = async ()=>{
       formData.append('groupPicture',input.files[0]);
       formData.append('groupId',this.currentGroupId);
-      
+      let newProfileDirection:string;
       await this.http.post('http://localhost:3000/changeGroupImage',formData,{responseType:'text'}).toPromise().then(
         (res)=>{
-          this.currentGroupProfileP = res;          
+          console.log(res);          
+          newProfileDirection = res;          
         },
         (err)=> (err)?console.log(err):''       
       );
-      //Emitir evento de socket y enviar a los demás usuarios la dirección de la nueva foto de perfil + idGrupo
+      //Emitir evento de socket y enviar a los demás usuarios la dirección de la nueva foto de perfil + idGrupo      
+      
+      let data = {
+        groupid: this.currentGroupId,
+        newProfileDir : newProfileDirection,
+        integrantesG :  this.currentGroupItems
+      }
+      this.socket.emit('group-picture-change',data);
     };
     input.click();
   }

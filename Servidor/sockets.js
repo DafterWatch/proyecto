@@ -221,6 +221,19 @@ module.exports = function (io){
             io.sockets.emit('nuevo-form',data.formulario);
         });
 
+        socket.on('group-picture-change', async data=>{
+            let groupId = data.groupid;
+            let integrantesG = data.integrantesG; //Si no se puede enviar desde el cliente hacemos un query aquí
+            let newProfileDir = data.newProfileDir;
+            for(let index = 0;index<integrantesG.length;index++){
+                let integrante = integrantesG[index];
+                if(integrante in usuarios){
+                    usuarios[integrante].emit('group-picture-change',{newProfile:newProfileDir,group:groupId});
+                }
+            }
+            
+        });
+
         socket.on('respuesta-form', async data =>{                   
             let userId = data.userId;
             let formId = data.idForm;
@@ -306,6 +319,7 @@ module.exports = function (io){
                     console.log(err.message);   
                 }
             });
+
             return data.formInfo.valores;
         }
 
