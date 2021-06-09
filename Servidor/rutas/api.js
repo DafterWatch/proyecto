@@ -308,6 +308,13 @@ module.exports = function(router){
         res.send('http://localhost:3000/'+req.file.path);
     });
 
+    router.post('/changeGroupImage',upload.single('groupPicture'), async (req,res)=>{
+        await Grupo.updateOne({"id":req.body.groupId},{$set:{'informacion.foto':req.file.path}}).exec(err=>{
+            if(err) console.log(err);
+        });
+        res.send('http://localhost:3000/'+req.file.path);
+    });
+
     return router;
 }
 

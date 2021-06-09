@@ -109,6 +109,7 @@ export class ChatGroupComponent implements OnInit {
   @Input() currentGroup: String;
   @Input() currentGroupId : number;  
   @Input() currentUser : any;
+  @Input() currentGroupProfileP:string;
   
   tamano: number = 10;  
  

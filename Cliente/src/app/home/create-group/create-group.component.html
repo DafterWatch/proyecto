@@ -51,8 +51,9 @@
 
         <!--ImagenDeGrupo--> 
 
-                <div id="imageDiv">
-                    <img id="imageCreateGroup" name="groupImage" src="" >
+                <div id="imageDiv" (click)="seleccionarImagen()">
+                    <img id="imageCreateGroup" name="groupImage" [src]="groupImage" height="400" width="400">
+                    <input type="file" name="groupImage" id="groupImageInput" style="display: none;">
                 </div>
             </div>
 

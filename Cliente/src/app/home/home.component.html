@@ -30,9 +30,19 @@
     <span id="text-header-menu">Información</span>
   </div>
   <div id="icon-name-group" fxflex="20" style="flex: 1 1 100%; box-sizing: border-box; max-height: 20%;">
-    <img  mat-card-image src="assets/images/chayan.png" style="border-radius: 50%; display: block; margin-left: auto; margin-right: auto; padding-top: 10px; width: 20%;">
-    <!--Botón para cambiar la foto de perfil-->
-    <!--no-->
+    <div>
+      <div class="groupImage-container">
+        <div class="changeGroupImage" *ngIf="this.si" (click)="changeGroupPicture()">
+          <div class="GroupImageLabels">
+              <mat-icon style="margin-left: 40%;">camera_alt</mat-icon> 
+              <span style="color: white; text-align: center;  margin-left: -0px; font-size: small;">CAMBIAR FOTO DEL GRUPO</span> 
+          </div>
+          <div id="changeGroupPMask"></div>
+          <input type="file" id="btnDiscretFileGroup" style="display: none;" name="profileImage">
+        </div>
+        <img  [src]="currentGroupProfileP || 'assets/images/chayan.png'" style="border-radius: 50%; display: block; margin-left: auto; margin-right: auto; padding-top: 10px; width: 20%;" width="100" height="100">
+      </div>  
+    </div> 
     <div style="display: flex;" id="groupNameElementsContainer">
       <h1  style="padding-top: 4%; padding-left: 2%; color: white; font-size: 30px;" id="label-nombreGrupo">
           <!--Recibe el nombre del grupo-->

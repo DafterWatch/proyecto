@@ -1,6 +1,6 @@
 <div class="colored-box" id="chatContainer"> 
     <div id="header-chat">
-        <img mat-card-image id="img-title-group" src="assets/images/chayan.png" style="float: left;">         
+        <img mat-card-image id="img-title-group" [src]="currentGroupProfileP||'assets/images/chayan.png'" style="float: left;" width="100" height="100">         
         <button mat-raised-button id="text-title-group" (click)="_toggleOpened()">
             {{currentGroup}}
         </button>            

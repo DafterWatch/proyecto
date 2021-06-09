@@ -10,6 +10,7 @@ export class AddMemberComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    this.userData.fotoPerfil = (this.userData.fotoPerfil)? 'http://localhost:3000/'+this.userData.fotoPerfil: '';
   }
 
   @Output() myEvent= new EventEmitter<string>();
@@ -17,11 +18,7 @@ export class AddMemberComponent implements OnInit {
     this.myEvent.emit(message);
   }
 
-  @Input() userData ={
-    name: "",
-    id: "",
-    description : "",
-    profile_picture : ""
+  @Input() userData : any ={   
   }
 
   @Output() buscarMiembroEvento= new EventEmitter<string>();

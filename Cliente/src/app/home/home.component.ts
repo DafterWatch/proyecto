@@ -44,7 +44,8 @@ export class HomeComponent implements OnInit {
   currentDescription="Desc:";
   router;
   currentGroupId:any =0;
-  componentRef= null;    
+  componentRef= null;  
+  currentGroupProfileP : string;  
 
   constructor(private socket: WebSocketService, private http:HttpClient, private route:Router,public dialog: MatDialog,  private resolver: ComponentFactoryResolver) {
 
@@ -221,6 +222,7 @@ export class HomeComponent implements OnInit {
       this.componentRef.instance.currentGroupId = this.currentGroupId;
       this.componentRef.instance.currentUser = this.currentUser;
       this.componentRef.instance.currentGroup = this.currentGroup;
+      this.componentRef.instance.currentGroupProfileP = this.currentGroupProfileP;
       this.componentRef.instance.openDialogEvent.subscribe(() => {
         this.openDialog();
       });
@@ -344,16 +346,19 @@ export class HomeComponent implements OnInit {
  
     
   }
-  addUser(){  
-    console.log(this.esAñadirMiembrosAGrupoNuevo);
+  async addUser(){  
+    console.log('User data', this.userData);
+    
+    const userdata2 = await this.copy(this.userData);   
+    console.log('User data copy',userdata2);
+    
     if(this.esAñadirMiembrosAGrupoNuevo){
-      const userdata2 = this.copy(this.userData);    
+       
       var checkBoxAdmin:any =this.componentRef.instance.getCheckAdmin(); 
       this.componentRef.instance.enableCheckAdmin(); 
       if(checkBoxAdmin.checked){        
         this.NewGroupAdmins.push(userdata2.id);
-      }
-      console.log(this.miembros);
+      }  
       var userAlreadyRegistered=false;
       for(let element of this.miembros){
         if(userdata2.id==element.id){
@@ -372,8 +377,7 @@ export class HomeComponent implements OnInit {
         this.createComponent(3);  
       }
     }
-    else{
-      const userdata2 = this.copy(this.userData);
+    else{      
       let checkBoxAdmin:any = this.componentRef.instance.getCheckAdmin(); 
         
       let newMemberAdmin = checkBoxAdmin.checked;
@@ -409,12 +413,12 @@ esAñadirMiembrosAGrupoNuevo=false;
       this.userData.id = id;
       this.http.post(`http://localhost:3000/usuarios/${id}`,{}).subscribe(data =>{
       let userData = JSON.stringify(data);
-      let userData_ = JSON.parse(userData);
-      console.log(id);  
-      console.log(userData);  
-      console.log(userData_);  
+      let userData_ = JSON.parse(userData);            
+      
       this.userData.name = userData_.nombre;      
       this.userData.description = userData_.descripcion;
+      this.userData.fotoPerfil = userData_.fotoPerfil;
+      this.userData.email = userData_.email;
       this.createComponent(3);
       
     });    
@@ -474,6 +478,7 @@ esAñadirMiembrosAGrupoNuevo=false;
     this.currentDescription=groupInformation.informacion.descripcion;
     this.currentGroupId=groupInformation.id;
     this.currentGroupItems=groupInformation.miembrosDelGrupo.integrantes; 
+    this.currentGroupProfileP = 'http://localhost:3000/'+ groupInformation.informacion.foto;
     //--------------------------------------------------------------------------REVISAR -------------------------------------------------------------------------------------------------------------------------
     this.currentGroupItems.forEach(element => {
         this.http.post(`http://localhost:3000/usuarios/${element}`,{}).subscribe(data =>{
@@ -560,6 +565,24 @@ esAñadirMiembrosAGrupoNuevo=false;
 
 
   }
+  changeGroupPicture(){
+    let input : any = document.getElementById('btnDiscretFileGroup');
+    const formData : FormData = new FormData();
+
+    input.onchange = async ()=>{
+      formData.append('groupPicture',input.files[0]);
+      formData.append('groupId',this.currentGroupId);
+      
+      await this.http.post('http://localhost:3000/changeGroupImage',formData,{responseType:'text'}).toPromise().then(
+        (res)=>{
+          this.currentGroupProfileP = res;          
+        },
+        (err)=> (err)?console.log(err):''       
+      );
+      //Emitir evento de socket y enviar a los demás usuarios la dirección de la nueva foto de perfil + idGrupo
+    };
+    input.click();
+  }
   
   replaceItemProfileInfo(itemId:string,actionButton:string,info:string){
     let originalNameElement : HTMLElement = document.getElementById(itemId);    
@@ -600,7 +623,6 @@ esAñadirMiembrosAGrupoNuevo=false;
     }
   }
   
-  // ------------------------------------------------------------------------Menu Grupo -----------------------------------------------------------------------------
   // -------------------De aqui para abajo son funciones del menu de grupos ----------------------------------------
   public items = [];
   public _opened: boolean = false;

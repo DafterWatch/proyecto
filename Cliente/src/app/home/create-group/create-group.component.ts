@@ -1,4 +1,5 @@
 import { Component, OnInit,Output,EventEmitter,Input  } from '@angular/core';
+import { FormGroup,FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-create-group',
@@ -7,11 +8,18 @@ import { Component, OnInit,Output,EventEmitter,Input  } from '@angular/core';
 })
 export class CreateGroupComponent implements OnInit {
 
-  constructor() { }
+  form : FormGroup;
+  constructor(private fb: FormBuilder) { 
+    this.form = this.fb.group({
+      img: [null],
+      filename: ['']
+    })
+  }
 
   ngOnInit(): void {
   }
-
+  groupImage = "assets/images/GroupDefaultImage.png";
+  imageFile : any;
   @Output() myEvent= new EventEmitter<string>();
   executeEvent(message){
     this.myEvent.emit(message);
@@ -36,6 +44,23 @@ export class CreateGroupComponent implements OnInit {
   getDescripcionDeGrupo():HTMLInputElement{
     let groupDescription =<HTMLInputElement> document.getElementById('idDescripcionDeGrupo'); 
     return groupDescription;
+  }
+  seleccionarImagen() : void{
+    let inputButton : any = document.getElementById('groupImageInput');
+    
+    inputButton.onchange = ()=>{
+      this.imageFile = inputButton.files[0];
+      
+      this.form.patchValue({img:this.imageFile});
+      this.form.get('img').updateValueAndValidity();
+
+      const reader : FileReader = new FileReader();
+      reader.onload = ()=>{
+        this.groupImage = reader.result as string;
+      }
+      reader.readAsDataURL(this.imageFile);
+    };
+    inputButton.click();
   }
   
 }

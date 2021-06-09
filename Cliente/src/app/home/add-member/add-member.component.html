@@ -30,12 +30,12 @@
             <h3 name="userName" >Nombre: {{userData.name}}</h3>
         
             <!--CampoIdDeUsuario--> 
-            <h3 name="userId">{{userData.id}}</h3>
+            <h3 name="userId">Correo: {{userData.email}}</h3>
         </div>
         <div id="fieldToSeeUserInformation2">
             <!--CampoImagenDePerfil--> 
 
-            <img name="userImage">
+            <img name="userImage" [src]="userData.fotoPerfil" height="300" width="300">
         </div>
         <div id="fieldUserDescription" >
         
