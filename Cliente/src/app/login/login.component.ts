@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WebSocketService } from '../web-socket.service';
 import { Router } from '@angular/router';
+import { LoaderService } from '../loader.service';
 
 
 @Component({
@@ -10,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private socket:WebSocketService, private router:Router) { }
+  constructor(private socket:WebSocketService, private router:Router, public loaderService:LoaderService) { }
 
   ngOnInit(): void {
   }

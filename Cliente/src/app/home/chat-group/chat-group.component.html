@@ -15,8 +15,28 @@
         </div> 
     </div>
     <div class="options" fxflex="80" id="chatContainerDiv">
+        <div class="mensajePinneado" *ngIf="currentPinMessage!=''">
+            <div style="text-align: center; margin-left: 5px; cursor: pointer;" (click)="removePin()">
+                <mat-icon>clear</mat-icon><br>
+                <span>Quitar</span>
+            </div>
+        <mat-expansion-panel hideToggle >            
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Mensaje Fijado
+              </mat-panel-title>
+              <mat-panel-description>
+                expandir
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>{{currentPinMessage}} </p>
+          </mat-expansion-panel>          
+        </div>
+        <!--<div class="mensajePinneado" id="pinMessage">
+            <b style="margin: 20px;">Mensaje fijado:</b> <br> <span style="margin: 7px 7px 15px 7px">{{this.currentPinMessage}}</span>
+        </div>-->
     <!--Mensajes-->
-        <div *ngFor="let mensaje of eventosChat"  >
+        <div *ngFor="let mensaje of eventosChat; let i = index"  >
             <!--DIV PARA EL MENSAJE-->
             <div *ngIf="mensaje.type === 1; else formDiv" class="mensajeDiv" style="overflow: visible;"
             [ngStyle]="{
@@ -25,14 +45,14 @@
                 'text-align':mensaje.user === this.currentUser.id ? 'right' : 'left'
             }">
             <h3 *ngIf="mensaje.user !== this.currentUser.id; else showH" class="messageName"><strong>{{mensaje.name}} </strong> &nbsp; <span style="float: right;">{{mensaje.time.getHours().toString() +':'+ mensaje.time.getMinutes().toString()}}</span> </h3>
-                {{mensaje.message}} 
+                <span #i>{{mensaje.message}} </span>
             <ng-template #showH> <h4> {{mensaje.time.getHours().toString() +':'+ mensaje.time.getMinutes().toString()}} </h4> </ng-template>
             <button mat-icon-button class="messageOptions" [matMenuTriggerFor] = "menu" [ngStyle]="{'background-color':mensaje.user === this.currentUser.id ? '#3B65A5' : '#E9E9E9'}">
                 <mat-icon>arrow_downward</mat-icon>
             </button>
                 <mat-menu  #menu="matMenu" >
                     <span> <!--<span  *ngIf="this.si">-->
-                    <button mat-menu-item >Pinnear Mensaje</button>                  
+                    <button mat-menu-item (click)="pinMessage(i.innerHTML)">Pinnear Mensaje</button>                  
                     </span>
                 </mat-menu>
             </div> <br>

@@ -13,7 +13,8 @@ const grupoSchema = new Schema ({
         foto:String,
         nombre:String,
         descripcion:String
-    }
+    },
+    mensajeFijado:String
 });
 
 module.exports = mongoose.model('grupo',grupoSchema,'grupos');

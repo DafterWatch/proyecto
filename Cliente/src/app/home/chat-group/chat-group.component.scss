@@ -488,4 +488,12 @@
   width: 100%; 
   height: auto;
   margin: 5px;
+  margin-bottom: 12%;
+}
+.mensajePinneado{  
+  display: flex;
+  flex-direction: row-reverse;
+  position: absolute;  
+  z-index: 1 ;
+  max-width: 60%;
 }

@@ -117,7 +117,12 @@
   </div>
 </div>  
 </ng-sidebar>
-<div ng-sidebar-content style="height: 100%; width: 100%;" id="mainbody" >
+
+<div ng-sidebar-content style="height: 100%; width: 100%;" id="mainbody" >  
+  <!--BARRA DE CARGA-->
+  <div class="loader-container" *ngIf="loaderService.isLoading | async">    
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
   <!--PERFIL DE USUARIO-->
   <div class="userProfile" id="userProfileContainer" #userP>
     <div class="userProfileHeader">

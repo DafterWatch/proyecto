@@ -12,7 +12,7 @@ export class ChatGroupComponent implements OnInit {
   @ViewChild('div') div: ElementRef;
   constructor(private renderer: Renderer2) { 
         
-  }
+  }  
   //valuesForm : any = {}
 
   ngOnInit(): void {          
@@ -110,6 +110,7 @@ export class ChatGroupComponent implements OnInit {
   @Input() currentGroupId : number;  
   @Input() currentUser : any;
   @Input() currentGroupProfileP:string;
+  @Input() currentPinMessage : string = "";
   
   tamano: number = 10;  
  
@@ -134,7 +135,15 @@ export class ChatGroupComponent implements OnInit {
     this.myEventSendMessage.emit(new_msg);
     
   }
-
+  @Output() myEventPinMessage = new EventEmitter<any>();
+  pinMessage(message:string){    
+    this.currentPinMessage = message;
+    this.myEventPinMessage.emit(message);
+  }
+  @Output() myEventRemovePin = new EventEmitter<any>();
+  removePin(){
+    this.myEventRemovePin.emit();
+  }
   addMessageToList(message:any){
     message.time = new Date(message.time);
     this.eventosChat.push(message);
@@ -168,4 +177,5 @@ export class ChatGroupComponent implements OnInit {
     }
     this.renderer.appendChild(this.div.nativeElement, container);
     }
+  
 }

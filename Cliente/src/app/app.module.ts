@@ -51,7 +51,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 
 //HTPP
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { ChatGroupComponent } from './home/chat-group/chat-group.component';
 import { CreateGroupComponent } from './home/create-group/create-group.component';
 import { AddMemberComponent } from './home/add-member/add-member.component';
@@ -75,6 +75,8 @@ import {MatDialogModule, MatDialogRef,MAT_DIALOG_DATA} from '@angular/material/d
 import { FormularioComponent } from './formulario/formulario.component';
 import { DynamicModule } from 'ng-dynamic-component';
 import { NavegacionComponent } from './navegacion/navegacion.component';
+import { InterceptorService } from './interceptor.service';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -144,10 +146,11 @@ import { NavegacionComponent } from './navegacion/navegacion.component';
     MatProgressBarModule,
     MatRadioModule,
     MatSliderModule,
-    DynamicModule
+    DynamicModule,
+    MatExpansionModule
   ],
   bootstrap: [AppComponent],
-  providers: [ErrorStateMatcher,{provide:MAT_DIALOG_DATA,useValue: {}},{provide:MatDialogRef,useValue: {}}],
+  providers: [ErrorStateMatcher,{provide:MAT_DIALOG_DATA,useValue: {}},{provide:MatDialogRef,useValue: {}}, {provide:HTTP_INTERCEPTORS,useClass:InterceptorService,multi:true}],
   entryComponents: [ChatGroupComponent,CreateGroupComponent,AddMemberComponent]
 
 })

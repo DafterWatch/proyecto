@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { WebSocketService } from '../web-socket.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { LoaderService } from '../loader.service';
 
 interface Question {
   value: string;
@@ -14,7 +15,7 @@ interface Question {
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(private http:HttpClient, private router:Router, private socket:WebSocketService) {
+  constructor(private http:HttpClient, private router:Router, private socket:WebSocketService, public loaderService:LoaderService) {
 
   }
 

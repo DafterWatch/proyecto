@@ -21,6 +21,7 @@ import { AddMemberComponent } from './add-member/add-member.component';
 import { ListaTareas1Component } from '../lista-tareas1/lista-tareas1.component';
 import { ListaTareas2Component } from '../lista-tareas2/lista-tareas2.component';
 import { Observable } from 'rxjs';
+import { LoaderService } from '../loader.service';
 
 @Component({
   selector: 'app-home',
@@ -46,8 +47,9 @@ export class HomeComponent implements OnInit {
   currentGroupId:any =0;
   componentRef= null;  
   currentGroupProfileP : string;  
+  currentGroupPinnedMessage : string;
 
-  constructor(private socket: WebSocketService, private http:HttpClient, private route:Router,public dialog: MatDialog,  private resolver: ComponentFactoryResolver) {
+  constructor(private socket: WebSocketService, private http:HttpClient, private route:Router,public dialog: MatDialog,  private resolver: ComponentFactoryResolver, public loaderService:LoaderService) {
 
     this.currentUserId = sessionStorage.getItem('currentUser');        
     this.generateUserData();
@@ -201,6 +203,17 @@ export class HomeComponent implements OnInit {
       if(data.group == this.currentGroupId){
         this.currentGroupProfileP = data.newProfile;
         this.componentRef.instance.currentGroupProfileP = data.newProfile;
+        //Posible error ???
+      }
+    });
+    this.socket.listen('message-pinned').subscribe((data:any)=>{
+      if(data.groupId== this.currentGroupId){
+        this.componentRef.instance.currentPinMessage = data.message;
+      }
+    });
+    this.socket.listen('remove-pin').subscribe((data:any)=>{
+      if(data.groupId== this.currentGroupId){
+        this.componentRef.instance.currentPinMessage='';
       }
     });
   } 
@@ -231,6 +244,7 @@ export class HomeComponent implements OnInit {
       this.componentRef.instance.currentUser = this.currentUser;
       this.componentRef.instance.currentGroup = this.currentGroup;
       this.componentRef.instance.currentGroupProfileP = this.currentGroupProfileP;
+      this.componentRef.instance.currentPinMessage = this.currentGroupPinnedMessage;
       this.componentRef.instance.openDialogEvent.subscribe(() => {
         this.openDialog();
       });
@@ -240,6 +254,12 @@ export class HomeComponent implements OnInit {
       this.componentRef.instance.myEventSendMessage.subscribe(($event) => {
         this.sendMensaje($event);
       });
+      this.componentRef.instance.myEventPinMessage.subscribe(($event)=>{
+        this.pinMessage($event);
+      });
+      this.componentRef.instance.myEventRemovePin.subscribe(()=>{
+        this.removePin();
+      }),
       this.NewGroupAdmins = [];      
       this.hclick = false;
     }
@@ -277,6 +297,17 @@ export class HomeComponent implements OnInit {
       this.cleanAddMemberFields();
 
     }
+  }
+  pinMessage(message:string){
+    let data = {
+      message,
+      idGroup: this.currentGroupId,
+      groupIntegrants : this.currentGroupItems
+    }
+    this.socket.emit('message-pinned',data);
+  }  
+  removePin(){
+    this.socket.emit('remove-pin',{groupId:this.currentGroupId,members:this.currentGroupItems});
   }
 
   async createGroup(){
@@ -487,6 +518,7 @@ esAñadirMiembrosAGrupoNuevo=false;
     this.currentGroupId=groupInformation.id;
     this.currentGroupItems=groupInformation.miembrosDelGrupo.integrantes; 
     this.currentGroupProfileP = 'http://localhost:3000/'+ groupInformation.informacion.foto;
+    this.currentGroupPinnedMessage = groupInformation.mensajeFijado;
     //--------------------------------------------------------------------------REVISAR -------------------------------------------------------------------------------------------------------------------------
     this.currentGroupItems.forEach(element => {
         this.http.post(`http://localhost:3000/usuarios/${element}`,{}).subscribe(data =>{
@@ -587,8 +619,7 @@ esAñadirMiembrosAGrupoNuevo=false;
           newProfileDirection = res;          
         },
         (err)=> (err)?console.log(err):''       
-      );
-      //Emitir evento de socket y enviar a los demás usuarios la dirección de la nueva foto de perfil + idGrupo      
+      );         
       
       let data = {
         groupid: this.currentGroupId,

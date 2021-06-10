@@ -322,6 +322,33 @@ module.exports = function (io){
 
             return data.formInfo.valores;
         }
-
+        socket.on('message-pinned',data=>{
+            let message = data.message;
+            let groupId = data.idGroup;
+            let members = data.groupIntegrants;
+            console.log(data);
+            Grupo.updateOne({"id":groupId},{$set:{"mensajeFijado":message}}).exec(err=>{
+                if(err) console.log(err);
+            });
+            for (let index = 0; index < members.length; index++) {
+                const group_user = members[index];                
+                if(group_user in usuarios){
+                    usuarios[group_user].emit('message-pinned',{groupId, message});
+                }
+            }
+        });
+        socket.on('remove-pin',data=>{
+            let groupId = data.groupId;
+            let members = data.members;
+            Grupo.updateOne({"id":groupId},{$set:{"mensajeFijado":""}}).exec(err=>{
+                if(err) console.log(err);
+            });
+            for (let index = 0; index < members.length; index++) {
+                const group_user = members[index];                
+                if(group_user in usuarios){
+                    usuarios[group_user].emit('remove-pin',{groupId});
+                }
+            }
+        });
     });
 };
