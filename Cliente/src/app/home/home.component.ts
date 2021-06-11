@@ -294,7 +294,8 @@ export class HomeComponent implements OnInit {
         this.createComponent($event);
       });
       this.componentRef.instance.enableCheckAdmin();
-      this.cleanAddMemberFields();
+      //---------------------------------------------
+      //this.cleanAddMemberFields();
 
     }
   }
