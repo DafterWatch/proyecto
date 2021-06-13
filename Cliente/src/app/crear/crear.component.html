@@ -1,7 +1,7 @@
 <mat-toolbar class="navbar-calender">
     <span>Nueva Tarea / Recordatorio</span>
     <span class="example-spacer"></span>
-    <button mat-icon-button routerLink="/homework1">
+    <button mat-icon-button (click)="cerrarCTarea()">
       <mat-icon>close</mat-icon>
     </button>
   </mat-toolbar>
@@ -13,31 +13,28 @@
     <div class="container">
     <h1>Titulo</h1>
     <mat-form-field style="width: 50%; margin-top: 5px;">
-        <input matInput placeholder="Ingrese un titulo" value="">
+        <input id="titulo" matInput placeholder="Ingrese un titulo" value="">
       </mat-form-field><br><br><br><br>
       <h1>Instrucciones</h1>
       <mat-form-field style="width: 50%; margin-top: 5px;">
-        <input matInput placeholder="Ingrese las instrucciones" value="">
+        <input id="instrucciones" matInput placeholder="Ingrese las instrucciones" value="">
       </mat-form-field><br><br><br><br>
       <h1>Puntos</h1>
       <mat-form-field style="width: 50%; margin-top: 5px;">
-        <input matInput placeholder="Ingrese los puntos maximos" value="">
+        <input id="puntosMax" matInput placeholder="Ingrese los puntos maximos" value="">
       </mat-form-field><br><br><br><br>
-    <mat-form-field appearance="fill">
-        <mat-label>Fecha de inicio y fin de la tarea</mat-label>
-        <mat-date-range-input [rangePicker]="picker" >
-          <input matStartDate placeholder="Start date">
-          <input matEndDate placeholder="End date">
-        </mat-date-range-input>
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-date-range-picker #picker></mat-date-range-picker>
-      </mat-form-field><br>
+
+      <input id="startDate" type="date" value="01/01/2020"  placeholder="Start date">
+      <input id="endDate" type="date" value="02/01/2020"  placeholder="End date">
+
       <h1>Hora de vencimiento</h1>
       <mat-form-field style="width: 50%; margin-top: 5px;">
-        <input matInput placeholder="00:00" value="">
+        <input id="horaVencimiento" matInput placeholder="00:00" value="">
       </mat-form-field><br><br>
-      <mat-slide-toggle>¿Recordatorio?</mat-slide-toggle><br><br>
-      <button class="button-list-homeworks" routerLink="/create">Asignar Nueva Tarea</button>
+     
+      <input id="esRecordatorio" type="checkbox">
+
+      <button class="button-list-homeworks" (click)="AsignarTarea()">Asignar Nueva Tarea</button>
     </div>
 </div>
 <div fxflex="" style="flex: 1 1 0%; box-sizing: border-box;  background-color: #f6f6f6;"> 

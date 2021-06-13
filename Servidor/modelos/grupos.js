@@ -14,7 +14,9 @@ const grupoSchema = new Schema ({
         nombre:String,
         descripcion:String
     },
-    mensajeFijado:String
+    mensajeFijado:String,
+    tareas:Array
+
 });
 
 module.exports = mongoose.model('grupo',grupoSchema,'grupos');

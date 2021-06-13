@@ -1,5 +1,11 @@
+import { Input } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
-
+import {HttpClient} from '@angular/common/http';
+import { saveAs } from 'file-saver';
+import {HttpHeaders} from "@angular/common/http";
+import { HttpParams } from '@angular/common/http';
+import { Output } from '@angular/core';
+import { EventEmitter } from '@angular/core';
 @Component({
   selector: 'app-calificar-tarea',
   templateUrl: './calificar-tarea.component.html',
@@ -7,14 +13,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CalificarTareaComponent implements OnInit {
 
-  constructor() { }
+  constructor(private http:HttpClient) { }
 
   ngOnInit(): void {
+ 
+    this.data=this.tareaSeleccionada.tareasEntregadasUsuarios;
+    this.tarea=this.tareaSeleccionada.titulo;
+
+   
+
   }
   tarea="Tarea 1";
   noentregados = 2;
   entregados = 10;
-   data = [
+  data = [
     {nombre:"Estudiante 1", estado: 'Entregado', puntaje: 100},
     {nombre:"Estudiante 2", estado: 'Entregado', puntaje: 80},
     {nombre:"Estudiante 3", estado: 'No Entregado', puntaje: 0},
@@ -29,4 +41,50 @@ export class CalificarTareaComponent implements OnInit {
     {nombre:"Estudiante 12", estado: 'Entregado', puntaje: 100},
   ];
   displayedColumns = ['Nombre', 'Estado', 'Puntaje'];
+
+  @Input() tareaSeleccionada;
+  @Input() idGrupo;
+
+  @Input() Usuario;
+  @Input() NoEntregadasTareas;
+
+  puntajeActual="";
+  onBlur(value) {
+    this.puntajeActual=value;
+  }
+
+  @Output() abrirListaTareas = new EventEmitter();
+  abrirLista(){
+    this.abrirListaTareas.emit();
+  }
+  
+  
+calificarTarea(tareaEstudiante){
+  var inputCalificacion:any=document.getElementById("puntajeInput");
+  console.log(this.tareaSeleccionada);
+  console.log(tareaEstudiante);
+  this.http.post('http://localhost:3000/calificarTarea',{responseType: 'text',params:{"tareaSeleccionada":this.tareaSeleccionada.idTarea,"idEstudiante":tareaEstudiante.idEstudiante,"calificacion":this.puntajeActual,"idGrupo":this.idGrupo}}).subscribe(
+        (res)=>{
+          console.log(res);          
+        },
+        (err)=>console.log(err)
+      );
+alert("Tarea calificada con exito");
+
+}
+ 
+descargarTarea(idArchivoTarea){
+
+  this.http.get('http://localhost:3000/getInformacionArchivo',{responseType:"json",params:{"idTareaNube":idArchivoTarea.idTareaNube}}).subscribe(
+    (res)=>{
+      this.http.get('http://localhost:3000/descargarTarea',{responseType:"blob",params:{"idTareaNube":idArchivoTarea.idTareaNube}}).toPromise()
+      .then(blob => {
+          saveAs(blob, res); 
+      })         
+    },
+    (err)=>console.log(err)
+  );
+
+  
+}
 }

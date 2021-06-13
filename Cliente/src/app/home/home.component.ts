@@ -22,6 +22,9 @@ import { ListaTareas1Component } from '../lista-tareas1/lista-tareas1.component'
 import { ListaTareas2Component } from '../lista-tareas2/lista-tareas2.component';
 import { Observable } from 'rxjs';
 import { LoaderService } from '../loader.service';
+import { CrearComponent } from '../crear/crear.component';
+import { EntregarComponent } from '../entregar/entregar.component';
+import { CalificarTareaComponent } from '../calificar-tarea/calificar-tarea.component';
 
 @Component({
   selector: 'app-home',
@@ -116,18 +119,154 @@ export class HomeComponent implements OnInit {
   hclick = false;
   si = true;
 
-  isAdmin(){    
-    this.http.post(`http://localhost:3000/isAdmin/${this.currentUserId}/${this.currentGroupId}`,{}).subscribe(data =>{
+  async isAdmin(){   
+    
+    await this.http.post(`http://localhost:3000/obtenerGrupo/${this.currentGroupId}`,{}).toPromise().then(tareas =>{
+      console.log(tareas);
+      this.http.post(`http://localhost:3000/isAdmin/${this.currentUserId}/${this.currentGroupId}`,{}).subscribe(data =>{
+        if(data){
+          this.entry.clear();
+          const factory = this.resolver.resolveComponentFactory(ListaTareas1Component);
+          this.componentRef = this.entry.createComponent(factory);
+          this.componentRef.instance.tareas = tareas;
+
+          this.componentRef.instance.crearTarea.subscribe(() => {
+            this.crearTarea();
+          });
+          this.componentRef.instance.verTarea.subscribe((id) => {
+            this.verTarea(id);
+          });
+          this.componentRef.instance.cerrarVentana.subscribe(() => {
+            this.cerrarListaDeTareas();
+          });
+  
+        } else {      
+          this.entry.clear();
+          const factory = this.resolver.resolveComponentFactory(ListaTareas2Component);
+          this.componentRef = this.entry.createComponent(factory);
+          this.componentRef.instance.tareas = tareas;
+          console.log(tareas);
+          this.componentRef.instance.verTarea.subscribe((id) => {
+            this.verTarea(id);
+          });
+          this.componentRef.instance.cerrarVentana.subscribe(() => {
+            this.cerrarListaDeTareas();
+          });
+        }
+      });
+      
+    });   
+
+
+  }
+
+  cerrarListaDeTareas(){
+    this.entry.clear();
+    const factory = this.resolver.resolveComponentFactory(ChatGroupComponent);
+    this.componentRef = this.entry.createComponent(factory);
+    this._toggleOpened();
+    this.showGroup(this.actualGroupInformation);
+
+  }
+  async verTarea(id){
+
+
+    this.http.post(`http://localhost:3000/isAdmin/${this.currentUserId}/${this.currentGroupId}`,{}).subscribe(async data =>{
       if(data){
+
+        await this.http.post(`http://localhost:3000/obtenerGrupo/${this.currentGroupId}`,{}).toPromise().then(tareas =>{
+          var listaTareas=tareas[0].tareas
+          var tareaSeleccionada=[];
+          listaTareas.forEach(element => {
+            if(element.idTarea==id){
+              tareaSeleccionada.push(element);
+              
+            }                                                        
+          });
+    
         this.entry.clear();
-        const factory = this.resolver.resolveComponentFactory(ListaTareas1Component);
+        const factory = this.resolver.resolveComponentFactory(CalificarTareaComponent); 
         this.componentRef = this.entry.createComponent(factory);
+        this.componentRef.instance.tareaSeleccionada = tareaSeleccionada[0];
+        this.componentRef.instance.idGrupo = this.currentGroupId;
+        this.componentRef.instance.Usuario = this.currentUser;
+        this.componentRef.instance.NoEntregadasTareas = tareas[0].miembrosDelGrupo.integrantes.length;
+
+        this.componentRef.instance.abrirListaTareas.subscribe(()=>{
+          this.isAdmin();
+        });
+
+        
+        });  
+
       } else {      
+        await this.http.post(`http://localhost:3000/obtenerGrupo/${this.currentGroupId}`,{}).toPromise().then(tareas =>{
+          var listaTareas=tareas[0].tareas
+          var tareaSeleccionada=[];
+          listaTareas.forEach(element => {
+            if(element.idTarea==id){
+              tareaSeleccionada.push(element);
+              
+            }                                                        
+          });
+    
         this.entry.clear();
-        const factory = this.resolver.resolveComponentFactory(ListaTareas2Component);
+        const factory = this.resolver.resolveComponentFactory(EntregarComponent);
         this.componentRef = this.entry.createComponent(factory);
+        this.componentRef.instance.tareaSeleccionada = tareaSeleccionada[0];
+        this.componentRef.instance.grupo = this.currentGroupId;
+        this.componentRef.instance.usuario = this.currentUserId;
+
+        this.componentRef.instance.abrirListaTareas.subscribe(()=>{
+          this.isAdmin();
+        });
+        
+        });  
       }
     });
+
+
+
+   
+  }
+
+
+  crearTarea(){
+
+    this.entry.clear();
+    const factory = this.resolver.resolveComponentFactory(CrearComponent);
+    this.componentRef = this.entry.createComponent(factory);
+    this.componentRef.instance.asignarTarea.subscribe((informacionTarea) => {
+      this.asignarTarea(informacionTarea);
+    });
+    this.componentRef.instance.cerrarCrearTarea.subscribe(() => {
+      this.isAdmin();
+    });
+
+  }
+  async asignarTarea(informacionTarea){
+    
+    var titulo:any=informacionTarea.titulo;
+    var instrucciones:any=informacionTarea.instrucciones;
+    var puntos:any=informacionTarea.puntos;
+    var startDate:any=informacionTarea.startDate;
+    var endDate:any=informacionTarea.endDate;
+    var horaVencimiento:any=informacionTarea.horaVencimiento;
+    var esRecordatorio:any=informacionTarea.esRecordatorio;
+    await this.http.post(`http://localhost:3000/crearTarea/
+    ${this.currentGroupId}/
+    ${this.currentGroup}/
+    ${titulo}/
+    ${instrucciones}/
+    ${puntos}/
+    ${startDate}/
+    ${endDate}/
+    ${horaVencimiento}/
+    ${esRecordatorio}`,{}).toPromise().then((data:any) => {
+      
+    });    
+    
+    this.isAdmin();
   }
 
   ngOnInit(): void {
@@ -294,7 +433,7 @@ export class HomeComponent implements OnInit {
         this.createComponent($event);
       });
       this.componentRef.instance.enableCheckAdmin();
-      this.cleanAddMemberFields();
+      
 
     }
   }
@@ -458,6 +597,7 @@ esAñadirMiembrosAGrupoNuevo=false;
       this.userData.description = userData_.descripcion;
       this.userData.fotoPerfil = userData_.fotoPerfil;
       this.userData.email = userData_.email;
+    
       this.createComponent(3);
       
     });    
@@ -509,8 +649,9 @@ esAñadirMiembrosAGrupoNuevo=false;
     return false;
   }
 
+  actualGroupInformation:any;
   async showGroup(groupInformation:any){    
-    
+    this.actualGroupInformation=groupInformation;
     this.currentMembers=[]; 
 
     this.currentGroup=groupInformation.informacion.nombre;   
@@ -584,6 +725,7 @@ esAñadirMiembrosAGrupoNuevo=false;
       
     }
   }
+
   changeProfilePicture(){
     let inputEl : any = document.getElementById('btnDiscretFile');    
     

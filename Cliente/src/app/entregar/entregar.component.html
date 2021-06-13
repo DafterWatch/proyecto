@@ -1,7 +1,7 @@
 <mat-toolbar class="navbar-calender">
     <span>Entregar Tarea</span>
     <span class="example-spacer"></span>
-    <button mat-icon-button routerLink="/homework2">
+    <button mat-icon-button (click)="abrirLista()">
       <mat-icon>close</mat-icon>
     </button>
   </mat-toolbar>
@@ -11,13 +11,14 @@
     </div>
 <div fxflex="60" style="flex: 1 1 100%; box-sizing: border-box; max-width: 60%;">
     <div class="container">
-        <button class="button-list-homeworks" routerLink="/homework2">Entregar Tarea</button>
+        <button class="button-list-homeworks" (click)="changeProfilePicture1()">Entregar Tarea</button>
     <p>Tarea {{numeroTarea}}</p>
     <p>Vence el {{fechaVencimiento}} {{horaVencimiento}}</p>
     <p>Instrucciones</p>
     <p>{{instruccionesTexto}}</p>
     <p>Mi Trabajo</p>
-    <button>Subir mi trabajo</button>
+
+    <input type="file" id="btnDiscretFile1" name="upladFile">
     
     </div>
 </div>

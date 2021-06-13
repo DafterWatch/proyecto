@@ -4,6 +4,93 @@ const emailExistence = require('email-existence');
 const nodemailer = require('nodemailer');
 const multer = require('multer');
 const fs = require('fs');
+const path = require ('path');
+
+const cors = require('cors');
+const bodyParser = require('body-parser');
+
+////////////////////////GOOGLE
+const { google } = require('googleapis');
+const { file } = require('googleapis/build/src/apis/file');
+
+const PATH = './uploadsFiles';
+
+const CLIENT_ID='501838622458-4iltecautpppitda0phlomq7r8nhthmq.apps.googleusercontent.com';
+const CLIENT_SECRET='5tsp4Wv4TLYSMXLPqUjglxF0';
+const REDIRECT_URI='https://developers.google.com/oauthplayground';
+const REFRESH_TOKEN='1//04M_7xP_JYIobCgYIARAAGAQSNwF-L9IrBBFIXvgUAqor_zfTYGbnM4c336r8noLUQjIo6Hkcw4D97irqGs6gzyNtCiCxZipPHT0';
+
+
+const oauth2Client = new google.auth.OAuth2(
+  CLIENT_ID,
+  CLIENT_SECRET,
+  REDIRECT_URI
+);
+
+oauth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+
+const drive = google.drive({
+  version: 'v3',
+  auth: oauth2Client,
+});
+////////////////////////////
+
+async function createFolder(idGroup,idTarea){
+    try {
+
+         
+        var pageToken = null;
+        // Using the NPM module 'async'
+   
+        drive.files.list({
+            q: "mimeType='application/vnd.google-apps.folder'and name='"+idGroup+"'",
+            fields: 'nextPageToken, files(id, name)',
+            spaces: 'drive',
+            pageToken: pageToken
+        }, function (err, res) {
+            if (err) {
+            // Handle error
+            console.error(err);
+        
+            } else {
+            pageToken = res.nextPageToken;
+           
+            var parent=res.data.files[0].id;
+       
+            var fileMetadata = {
+                'name': idTarea,
+                'mimeType': 'application/vnd.google-apps.folder',
+                'parents':[parent]
+              };
+
+              drive.files.create({
+                resource: fileMetadata,
+                fields: 'id'
+              }, function (err, file) {
+                if (err) {
+                  // Handle error
+                  console.error(err);
+                  return err;
+                } else {
+               
+                  return file;
+                }
+              });
+        
+            }
+        });
+    } catch (error) {
+      console.log(error.message);
+      return error;
+    }
+  }
+
+ 
+//////////////////////////////////////TAREAS
+
+
+
+//////////////////////////////////////////////
 
 const fileFilter = (req,file,cb)=>{
     if(['image/jpeg','image/png','image/jpg'].includes(file.mimetype)){
@@ -40,12 +127,295 @@ var transporter = nodemailer.createTransport({
 
 module.exports = function(router){
 
+     /*Modelos */
+     const Usuario = require('../modelos/usuario');
+     const Grupo = require('../modelos/grupos');
+ 
+     id_grupo = 2;
 
-    /*Modelos */
-    const Usuario = require('../modelos/usuario');
-    const Grupo = require('../modelos/grupos');
 
-    id_grupo = 2;
+     let storage1 = multer.diskStorage({
+        destination: (req, file, cb) => {
+          cb(null, PATH);
+        },
+        filename: (req, file, cb) => {
+          cb(null, file.originalname)
+        }
+      });
+    
+      let upload1 = multer({
+        storage: storage1
+      });
+    
+      
+      var subirArchivos= async function uploadFile(reqFile,changedName) {
+        try {
+          var __dirname="./uploadsFiles";
+          const filePath = path.join(__dirname, changedName);
+          const response = await drive.files.create({
+            requestBody: {
+              name: changedName, 
+              mimeType: reqFile.file.mimetype,
+            },
+            media: {
+              mimeType:  reqFile.file.mimetype,
+              body: fs.createReadStream(filePath),
+            },
+          });
+      
+            return (response.data);
+            }   catch (error) {
+            return (error.message);
+            }
+        }
+   
+        router.post('/upload', upload1.single('upladFile'), function (req, res) {
+     
+            var numeroTarea= req.body.numeroTarea;
+            var fechaVencimiento= req.body.fechaVencimiento;
+            var idGrupo1= req.body.grupo;
+            var idUsuario= req.body.usuario;
+            var idTarea1=req.body.idTarea;        
+            if (!req.file) {
+            console.log("No file is available!");
+            return res.send({
+                success: false
+            });
+            } 
+            else 
+            {
+
+            
+            Grupo.find({id:idGrupo1}).exec((err,grupos)=>{
+                    if(err){
+                        console.log('Error con los grupos');
+                        return;
+                    }
+                    else{
+                        console.log("-------------------------------------");
+                        var tareaDelUsuario;
+                        grupos[0].tareas.forEach(element => {
+                            if(element.idTarea==idTarea1){
+                                tareaDelUsuario=element;
+                            }                                
+                        })
+                        var tareaEntregadaDeUsuario;
+                        tareaDelUsuario.tareasEntregadasUsuarios.forEach(element => {
+                            if(element.idEstudiante==idUsuario){
+                                tareaEntregadaDeUsuario=element;
+                            }
+                        });
+                        console.log(tareaEntregadaDeUsuario);
+                        if(tareaEntregadaDeUsuario==null){
+
+                            //No hay tarea entregada
+
+                            var fileNameString= req.file.originalname;
+
+                            var changedName= idUsuario+"_"+new Date().getFullYear()+"_"+new Date().getMonth()+"_"+new Date().getDate()+"_"+new Date().getHours()+"_"+new Date().getMinutes()+"_"+new Date().getMilliseconds()+"_"+fileNameString.substring(fileNameString.length-5,fileNameString.length)
+                            fs.renameSync(path.resolve("./uploadsFiles/" +req.file.originalname),path.resolve("./uploadsFiles/" +changedName));  
+
+                            subirArchivos(req,changedName).then(val =>{
+                                var idGrupo=parseInt(idGrupo1);
+                                var idTarea=parseInt(idTarea1);
+                                Grupo.updateOne({ id:idGrupo,"tareas.idTarea":idTarea},{ $push:{"tareas.$.tareasEntregadasUsuarios":{idEstudiante:idUsuario,idTareaNube:val.id,fechaYHoraEntrega:new Date()}}}).exec((err,grupo)=>{     
+                                    if(err){
+                                        console.log('Error con los grupos');
+                                        res.json(err);
+                                        return;
+                                    }           
+                                    else{
+                                        res.json(grupo);
+                                        return;
+                                    }
+                                });
+                            })
+
+                        }
+                        else{
+                               //Hay tarea entregada
+
+                            var fileNameString= req.file.originalname;
+                            var changedName= idUsuario+"_"+new Date().getFullYear()+"_"+new Date().getMonth()+"_"+new Date().getDate()+"_"+new Date().getHours()+"_"+new Date().getMinutes()+"_"+new Date().getMilliseconds()+"_"+fileNameString.substring(fileNameString.length-5,fileNameString.length)
+                            fs.renameSync(path.resolve("./uploadsFiles/" +req.file.originalname),path.resolve("./uploadsFiles/" +changedName));  
+
+
+                            subirArchivos(req,changedName).then(val =>{
+                                var idGrupo=parseInt(idGrupo1);
+                                var idTarea=parseInt(idTarea1);
+
+                                Grupo.updateOne({id:idGrupo}, {$set: {"tareas.$[i].tareasEntregadasUsuarios.$[j].idTareaNube":val.id}},{arrayFilters: [{"i.idTarea":idTarea},{"j.idEstudiante":idUsuario}]}).exec((err,grupo)=>{
+                                    if(err){
+                                        console.log('Error con los grupos');
+                                        res.json(err);
+                                        return;
+                                    }           
+                                    else{
+                                        console.log(grupo);
+                                        res.json(grupo);
+                                        return;
+                                    }
+                                    
+                                });
+                                
+                            })
+
+                            
+
+                        }
+
+                    }
+                    
+                });
+
+
+
+
+       
+
+            
+        }
+        
+      });
+      router.get('/descargarTarea',(req,res1)=>{   
+                    
+
+        var idDescargaTarea=req.query.idTareaNube;
+
+        drive.files.get({ fileId: idDescargaTarea }, (er, re) => {
+            if (er) {
+                console.log(er);
+                return;
+            }
+            var dest = fs.createWriteStream("./downloadFiles" + '/' + re.data.name); 
+            drive.files.get(
+                { fileId: idDescargaTarea, alt: "media" },
+                { responseType: "stream" },
+                function(err, res) {
+                res.data
+                    .on("end", () => { 
+                    console.log("done");
+                    return res1.download(path.resolve("./downloadFiles" + '/' + re.data.name),re.data.name);
+                    })
+                    .on("error", err => {
+                    console.log("Error", err);
+                    return res1.send({
+                        success: false
+                    });
+                    })
+                    .pipe(dest);
+                }
+            );
+            });
+        
+    });
+
+    router.get('/getInformacionArchivo',(req,res1)=>{   
+                    
+
+        var idDescargaTarea=req.query.idTareaNube;
+
+        drive.files.get({ fileId: idDescargaTarea }, (er, re) => {
+            if (er) {
+                console.log(er);
+                return;
+            }
+            else{
+                res1.json(re.data.name);
+            }
+            
+            });
+        
+    });
+
+
+////////////////////////////
+    router.post('/crearTarea/:idGrupo/:nombreGrupo/:titulo/:instrucciones/:puntos/:startDate/:endDate/:horaVencimiento/:esRecordatorio',(req,res)=>{    
+        let idGrupo = req.params.idGrupo; 
+        let nombreGrupo = req.params.nombreGrupo; 
+        let titulo = req.params.titulo; 
+        let instrucciones = req.params.instrucciones; 
+        let puntos = req.params.puntos; 
+        let startDate = req.params.startDate; 
+        let endDate = req.params.endDate; 
+        let horaVencimiento = req.params.horaVencimiento; 
+        let esRecordatorio = req.params.esRecordatorio; 
+        let tareasEntregadasUsuarios=[];
+        let tarea = {
+            titulo:titulo,
+            instrucciones:instrucciones,
+            puntos:puntos,
+            startDate:startDate,
+            endDate:endDate,
+            horaVencimiento:horaVencimiento,
+            esRecordatorio:esRecordatorio,
+            tareasEntregadasUsuarios:tareasEntregadasUsuarios,
+        }
+        Grupo.findOne({ id: idGrupo }).exec((err,grupo)=>{
+            tarea.idTarea=grupo.tareas.length;
+            createFolder(idGrupo,grupo.tareas.length);
+            Grupo.updateOne({id: idGrupo}, {$push: {tareas:[tarea]}}).exec((err,grupos)=>{
+                if(err){
+                    console.log(err);
+                    return;
+                }
+                else{
+                    
+                }                    
+                res.json(grupos);
+            });
+        });
+        
+    });
+
+    router.post('/calificarTarea',jsonParser,(req,res)=>{
+
+        var idGrupo=req.body.params.idGrupo;
+        var idTareas=req.body.params.tareaSeleccionada;
+        var idEstudiante=req.body.params.idEstudiante;
+        var calificacion=req.body.params.calificacion;
+
+        idGrupo=parseInt(idGrupo);
+        idTareas=parseInt(idTareas);
+
+        Grupo.updateOne({id:idGrupo}, {$set: {"tareas.$[i].tareasEntregadasUsuarios.$[j].calificacion":calificacion}},{arrayFilters: [{"i.idTarea":idTareas},{"j.idEstudiante":idEstudiante}]}).exec((err,grupo)=>{
+                    if(err){
+                        console.log('Error con los usuarios');
+                        res.json(err);
+                        return;
+                    }           
+                    else{
+                        console.log(grupo);
+                        res.json(grupo);
+                        return;
+                    }
+                    
+                });
+        
+    });
+
+
+
+    router.post('/obtenerGrupo/:idGrupo',(req,res)=>{
+        Grupo.find({id:req.params.idGrupo},{}).exec((err,tareas)=>{
+            if(err){
+                console.log('Error con los usuarios');
+                return;
+            }
+                        
+            res.json(tareas);
+        });
+    });
+
+    router.post('/subirTarea',upload.single('upladFile'),async (req,res)=>{   
+                
+        
+        res.send('http://localhost:3000/'+req.file.path);
+       
+    });
+//////////////////////////////
+
+   
    
     /*Moví el método a los sockets */     
 
@@ -292,7 +662,7 @@ module.exports = function(router){
     });
 
     router.post('/changeImage',upload.single('profileImage'),async (req,res)=>{   
-                
+        
         let previousImage = './'+req.body.previousImage.substring(22);
         try{
             if(!previousImage === './uploads\\default.png')

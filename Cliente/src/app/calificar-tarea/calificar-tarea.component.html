@@ -1,39 +1,44 @@
 <mat-toolbar class="navbar-calender">
     <span>Calificar Tareas</span>
     <span class="example-spacer"></span>
-    <button mat-icon-button routerLink="/homework1">
+    <button mat-icon-button (click)="abrirLista()">
       <mat-icon>close</mat-icon>
     </button>
   </mat-toolbar>
 <div class="text-assign">
     <h1>{{tarea}}</h1>
-    <h1>Entregados {{entregados}} &nbsp;|&nbsp; No Entregados {{noentregados}}</h1>
+    <h1>Entregados {{tareaSeleccionada.tareasEntregadasUsuarios.length}} &nbsp;|&nbsp; No Entregados {{noentregados}}</h1>
 </div>
 <div class="example-container mat-elevation-z8">
   <table mat-table [dataSource]="data" class="mat-elevation-z8">
     <ng-container matColumnDef="Nombre">
       <th mat-header-cell *matHeaderCellDef> Nombre </th>
-      <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+      <td mat-cell *matCellDef="let element"> {{Usuario.nombre}} </td>
     </ng-container>
 
     <ng-container matColumnDef="Estado">
       <th mat-header-cell *matHeaderCellDef> Estado </th>
-      <td mat-cell *matCellDef="let element"> {{element.estado}} </td>
+      <td mat-cell *matCellDef="let element"> Entregado </td>
     </ng-container>
   
     <ng-container matColumnDef="Puntaje">
       <th mat-header-cell *matHeaderCellDef> Puntaje /100 </th>
       <td mat-cell *matCellDef="let element"> <!--{{element.puntaje}}-->
         <mat-form-field style="width: 10%; margin-top: 5px; float: left;">
-            <input matInput placeholder="/100" value="{{element.puntaje}}">
+            <input id="puntajeInput" matInput placeholder="/100"  #valueInput value="{{element.calificacion}}" (blur)="onBlur(valueInput.value)">
           </mat-form-field>
+          <div>
+            <button style="float: left;" mat-mini-fab color="danger"  (click)="calificarTarea(element)">
+              <mat-icon>check_circle_outline</mat-icon>
+            </button>
+          </div>
           
           <div class="button-download">
-            <button mat-mini-fab color="primary">
+            <button mat-mini-fab color="primary"  (click)="descargarTarea(element)">
               <mat-icon>cloud_download</mat-icon>
             </button>
           </div>
-          <span style="float: right; margin-top: 20px;">Descargar Tarea</span>
+          <span style="float: right; margin-top: 20px;" >Descargar Tarea</span>
       </td>
     </ng-container>
   

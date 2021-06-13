@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule,CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -78,7 +78,10 @@ import { NavegacionComponent } from './navegacion/navegacion.component';
 import { InterceptorService } from './interceptor.service';
 import { MatExpansionModule } from '@angular/material/expansion';
 
+
+
 @NgModule({
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
     AppComponent,
     DemoComponent,
@@ -102,6 +105,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     CrearFormularioComponent,
     FormularioComponent,
     NavegacionComponent,
+
+    
     
   ],
   imports: [
@@ -147,7 +152,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatRadioModule,
     MatSliderModule,
     DynamicModule,
-    MatExpansionModule
+    MatExpansionModule,
+    
+
   ],
   bootstrap: [AppComponent],
   providers: [ErrorStateMatcher,{provide:MAT_DIALOG_DATA,useValue: {}},{provide:MatDialogRef,useValue: {}}, {provide:HTTP_INTERCEPTORS,useClass:InterceptorService,multi:true}],

@@ -1,7 +1,7 @@
 <mat-toolbar class="navbar-calender">
     <span>Lista Tareas</span>
     <span class="example-spacer"></span>
-    <button mat-icon-button routerLink="/home">
+    <button mat-icon-button (click)="cerrar()">
       <mat-icon>close</mat-icon>
     </button>
   </mat-toolbar>
@@ -9,8 +9,8 @@
     <cdk-virtual-scroll-viewport itemSize="50" class="list-homeworks">
         <div *ngFor="let item of items" class="member-item">
           <button mat-button style="height: 100%; width: 100%; 
-          text-align: left;" routerLink="/send">
-            {{item}}
+          text-align: left;"(click)="verTareaMetodo(item.idTarea)" >
+            {{item.titulo}}
           </button>         
         </div>   
     </cdk-virtual-scroll-viewport>
