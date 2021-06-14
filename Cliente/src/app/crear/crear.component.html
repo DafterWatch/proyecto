@@ -6,34 +6,49 @@
     </button>
   </mat-toolbar>
 
-<div class="colored-box" style="flex-direction: row; box-sizing: border-box; display: flex;">
+<div class="colored-box" style="flex-direction: row; box-sizing: border-box; display: flex; background-color: white;">
 <div style="flex: 1 1 100%; box-sizing: border-box; max-width: 20%; background-color: #f6f6f6;"> 
     </div>
 <div fxflex="60" style="flex: 1 1 100%; box-sizing: border-box; max-width: 60%;">
     <div class="container">
     <h1>Titulo</h1>
-    <mat-form-field style="width: 50%; margin-top: 5px;">
+    <mat-form-field style="width: 50%;">
         <input id="titulo" matInput placeholder="Ingrese un titulo" value="">
-      </mat-form-field><br><br><br><br>
+      </mat-form-field>
       <h1>Instrucciones</h1>
-      <mat-form-field style="width: 50%; margin-top: 5px;">
+      <mat-form-field style="width: 50%;">
         <input id="instrucciones" matInput placeholder="Ingrese las instrucciones" value="">
-      </mat-form-field><br><br><br><br>
+      </mat-form-field>
       <h1>Puntos</h1>
-      <mat-form-field style="width: 50%; margin-top: 5px;">
-        <input id="puntosMax" matInput placeholder="Ingrese los puntos maximos" value="">
-      </mat-form-field><br><br><br><br>
+      <mat-form-field style="width: 50%;">
+        <input type="number" id="puntosMax" matInput placeholder="Ingrese los puntos maximos" value="">
+      </mat-form-field>
 
-      <input id="startDate" type="date" value="01/01/2020"  placeholder="Start date">
-      <input id="endDate" type="date" value="02/01/2020"  placeholder="End date">
-
-      <h1>Hora de vencimiento</h1>
-      <mat-form-field style="width: 50%; margin-top: 5px;">
-        <input id="horaVencimiento" matInput placeholder="00:00" value="">
-      </mat-form-field><br><br>
+      <h1 style="clear: both;">Fecha de vencimiento</h1>
+      <div style="width: 100%;">
+        <div style="float: left; padding-left: 15%;">
+          <h3>Fecha de vencimiento inicial</h3>
+          <input id="startDate" type="date" value="01/01/2020"  placeholder="Start date"  >
+        </div>
+        <div style="float: left; padding-left: 15%;">
+          <h3>Fecha de vencimiento final</h3>
+          <input id="endDate" type="date" value="02/01/2020"  placeholder="End date">
+        </div>
+      </div>
+  
+      <div style="clear: both;margin-top: 15vh;">
+        <h1 >Hora de vencimiento</h1>
+        <mat-form-field style="width: 50%;">
+          <input type="time" id="horaVencimiento" matInput placeholder="00:00" value="">
+        </mat-form-field>
+      </div>
+      <div>
+        <div>¿Es recordatorio?</div>
      
-      <input id="esRecordatorio" type="checkbox">
-
+          <input id="esRecordatorio" type="checkbox">
+    
+      </div>
+    
       <button class="button-list-homeworks" (click)="AsignarTarea()">Asignar Nueva Tarea</button>
     </div>
 </div>

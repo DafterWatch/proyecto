@@ -10,8 +10,7 @@ export class ListaTareas2Component implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.tareas);
-    
+    console.log(this.tareas[0]);
     this.items=this.tareas[0].tareas;
   }
   items = Array.from({length: 100}).map((_, i) => `Tarea ${i}`);

@@ -45,14 +45,14 @@
       </div>  
     </div> 
     <div style="display: flex;" id="groupNameElementsContainer">
-      <h1  style="padding-top: 4%; padding-left: 2%; color: white; font-size: 30px;" id="label-nombreGrupo">
+      <h1  style="padding-left: 2%; color: white; font-size: 30px;" id="label-nombreGrupo">
           <!--Recibe el nombre del grupo-->
           {{currentGroup}}
       </h1>
       <!--Botón para cambiar el nombre del grupo-->
       <button *ngIf="this.si" mat-icon-button
               id = "changeNameButton"                 
-              style="padding-top: 2%;"
+
               (click)="replaceItem('label-nombreGrupo','changeNameButton','nombre')">
               <mat-icon>update</mat-icon>
       </button>
@@ -73,7 +73,6 @@
   <div id="assign-homework-group" fxflex="5" style="flex: 1 1 100%; box-sizing: border-box; max-height: 5%;">
     <button mat-raised-button 
     style="width: 100%; 
-    height: 50%; 
     background-color: 
     white;"
     (click)="_toggleOpened()" 
@@ -84,7 +83,6 @@
   <div id="assign-homework-group" fxflex="5" style="flex: 1 1 100%; box-sizing: border-box; max-height: 5%;">
     <button mat-raised-button 
     style="width: 100%; 
-    height: 50%;
     background-color: white;" 
     (click)="_toggleOpened()"
     (click)="isAdmin()"    
@@ -112,8 +110,8 @@
   </div>  
 
   <div id="buttons-group" fxflex="10" style="flex: 1 1 1e-09px; box-sizing: border-box; max-height: 10%;">
-    <button mat-raised-button (click)="_toggleOpened()">Salir del grupo</button><br>
-    <button mat-raised-button style="margin-top: 10px;" (click)="_toggleOpened()">Reportar grupo</button>
+    <button style="height: auto;" mat-raised-button (click)="_toggleOpened()">Salir del grupo</button><br>
+    <button style="height: auto; margin-top: 0.9%;" mat-raised-button (click)="_toggleOpened()">Reportar grupo</button>
   </div>
 </div>  
 </ng-sidebar>
@@ -195,7 +193,7 @@
             </div>
             
           </div>
-        <div id="PaginaDeModulos" style="width: 100%; height: 100%;">
+        <div id="PaginaDeModulos" style="width: 100%; height: 100%; background-image:url('../../assets/images/fondo.jpg');">
 
           <div  style="width: 100%; height: 100%; display: block;" id="idComponents">
             <template #template1 [ngComponentOutlet]="currentComponent"
@@ -228,7 +226,7 @@
           </div>   
         
           <!---------------------------VISTAS DE GRUPOS--------------------------------->
-            <div  style=" width:80%;float: right ;flex: 1 1 0%; box-sizing: border-box; height: 100%;" class="chat" id="principalContainer" >
+            <div  style=" width:80%;float: right ;flex: 1 1 0%; box-sizing: border-box; height: 100%; background-image:url('../../assets/images/fondo.jpg'); " class="chat" id="principalContainer" >
             
               <!--VISTAS DE GRUPOS--> 
               <ng-template #groupContainer></ng-template>

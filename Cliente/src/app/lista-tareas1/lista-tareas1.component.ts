@@ -10,6 +10,8 @@ export class ListaTareas1Component implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+
+    console.log(this.tareas[0]);
    
     this.items=this.tareas[0].tareas;
 
@@ -38,7 +40,16 @@ export class ListaTareas1Component implements OnInit {
 
   @Output() verTarea= new EventEmitter<any>();
 
-  verTareaMetodo(x){
-    this.verTarea.emit(x);
+  verTareaMetodo(x,itme){
+
+
+  
+    if(itme.esRecordatorio.trim()=="false"){
+      this.verTarea.emit(x);
+    }
+   
+
+   
   }
+  
 }

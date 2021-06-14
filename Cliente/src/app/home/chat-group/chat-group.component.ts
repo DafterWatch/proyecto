@@ -112,7 +112,7 @@ export class ChatGroupComponent implements OnInit {
   @Input() currentUser : any;
   @Input() currentGroupProfileP:string;
   @Input() currentPinMessage : string = "";
-  
+  @Input() isAdmin:Boolean;
   tamano: number = 10;  
  
   eventosChat : ChatEvent[] = [];

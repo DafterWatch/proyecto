@@ -26,6 +26,7 @@ import { CrearComponent } from '../crear/crear.component';
 import { EntregarComponent } from '../entregar/entregar.component';
 import { CalificarTareaComponent } from '../calificar-tarea/calificar-tarea.component';
 
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -75,7 +76,12 @@ export class HomeComponent implements OnInit {
   outputs = {
     onSomething: type => alert(type),
   };
+  cleanGropsPage(){
+    document.getElementById("submenu1").style.display="none";
+    document.getElementById("idComponents").style.display="none";
+  }
   openGroups(){
+
     document.getElementById("submenu1").style.display="block";
     document.getElementById("idComponents").style.display="none";
   }
@@ -174,6 +180,7 @@ export class HomeComponent implements OnInit {
     this.entry.clear();
     const factory = this.resolver.resolveComponentFactory(ChatGroupComponent);
     this.componentRef = this.entry.createComponent(factory);
+    this.componentRef.instance.isAdmin = this.si;
     this._toggleOpened();
     this.showGroup(this.actualGroupInformation);
 
@@ -395,6 +402,8 @@ export class HomeComponent implements OnInit {
       this.componentRef.instance.currentGroup = this.currentGroup;
       this.componentRef.instance.currentGroupProfileP = this.currentGroupProfileP;
       this.componentRef.instance.currentPinMessage = this.currentGroupPinnedMessage;
+      this.componentRef.instance.isAdmin = this.si;
+
       this.componentRef.instance.openDialogEvent.subscribe(() => {
         this.openDialog();
       });
@@ -528,10 +537,11 @@ export class HomeComponent implements OnInit {
         console.log(cb.error);        
       }
     });
-    this.createComponent(1);
-    
-    
+    this.router.navigate(['/home']);
+    window.location.reload();
+    //this.cleanGropsPage();    
   }
+  
   copy (obj) {
     let result;
     if (typeof obj === 'object') {
@@ -676,6 +686,7 @@ esAñadirMiembrosAGrupoNuevo=false;
   actualGroupInformation:any;
   async showGroup(groupInformation:any){    
     
+  
     this.actualGroupInformation=groupInformation;
     this.currentMembers=[]; 
 

@@ -1,19 +1,20 @@
-<mat-toolbar class="navbar-calender">
-    <span>Lista Tareas</span>
+<mat-toolbar class="navbar-calender" style="  background-color: #143058;">
+    <span >Lista de tareas: {{tareas[0].informacion.nombre}}</span>
     <span class="example-spacer"></span>
     <button mat-icon-button (click)="cerrar()">
       <mat-icon>close</mat-icon>
     </button>
   </mat-toolbar>
-<div class="list">
-    <cdk-virtual-scroll-viewport itemSize="50" class="list-homeworks">
-        <div *ngFor="let item of items" class="member-item">
-          <button mat-button style="height: 100%; width: 100%; text-align: left;" name=item.id (click)="verTareaMetodo(item.idTarea)" >
+<div class="list" style="background-color:   #f6f6f6;">
+    <cdk-virtual-scroll-viewport itemSize="50" class="list-homeworks" style="background-color: white;">
+        <div *ngFor="let item of items" class="member-item" >
+          <button mat-button style="height: 100%; width: 100%; text-align: left;" name=item.id (click)="verTareaMetodo(item.idTarea,item)" >
             {{item.titulo}}            
             <mat-icon style="float: right; padding-top: 5px;">keyboard_arrow_right</mat-icon>
+            
             <span style="float: right;">{{item.tareasEntregadasUsuarios.length}}/{{cantidadIntegrantes}} entregaron</span>
           </button>         
         </div>   
     </cdk-virtual-scroll-viewport><br>
-    <button class="button-list-homeworks" (click)="emitirCrearTarea()">Crear Nueva Tarea123</button>
+    <button class="button-list-homeworks" (click)="emitirCrearTarea()">Crear nueva tarea</button>
 </div>

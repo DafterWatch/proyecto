@@ -17,12 +17,16 @@ export class CalificarTareaComponent implements OnInit {
 
   ngOnInit(): void {
  
+
+    
     this.data=this.tareaSeleccionada.tareasEntregadasUsuarios;
     this.tarea=this.tareaSeleccionada.titulo;
 
-   
+    this.puntaje=this.tareaSeleccionada.puntos;
+
 
   }
+  puntaje;
   tarea="Tarea 1";
   noentregados = 2;
   entregados = 10;
@@ -69,7 +73,7 @@ calificarTarea(tareaEstudiante){
         },
         (err)=>console.log(err)
       );
-alert("Tarea calificada con exito");
+
 
 }
  

@@ -43,7 +43,7 @@ export class CrearComponent implements OnInit {
       esRecordatorio:esRecordatorioDom.checked,
     }
 
-    alert("Tarea asignada con exito");
+
     this.asignarTarea.emit(informacionTarea);
   }
 }

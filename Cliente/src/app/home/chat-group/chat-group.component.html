@@ -10,7 +10,7 @@
             </button>                   
             <mat-menu #menu="matMenu">
             <button mat-menu-item (click)="_toggleOpened()">Informacion del grupo</button>
-            <button mat-menu-item (click)="abrirDialog()">Crear Formulario</button>
+            <button *ngIf="isAdmin" mat-menu-item (click)="abrirDialog()">Crear Formulario</button>
             </mat-menu>
         </div> 
     </div>

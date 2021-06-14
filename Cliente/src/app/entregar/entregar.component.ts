@@ -21,18 +21,67 @@ export class EntregarComponent implements OnInit {
   imageFile : any;
 
   ngOnInit(): void {
+    this.fechaYHoraDeVencimiento= new Date(this.tareaSeleccionada.endDate+" "+this.tareaSeleccionada.horaVencimiento);
+
+   
+
+    this.estadoDeLaTarea="No entregado";
+
+
+    this.tareaSeleccionada.tareasEntregadasUsuarios.forEach(element => {
+      if(element.idEstudiante==this.usuario){
+        this.estadoDeLaTarea="Entregado";
+      }
+    });
+
+  
+    console.log(this.tareaSeleccionada.esRecordatorio.trim());
+    if(this.tareaSeleccionada.esRecordatorio.trim()=="true"){
+
+    
+      var botonEntregarTarea:any =document.getElementById("botonEntregarTarea");
+      botonEntregarTarea.style.display="none";
+      var botonEntregarTareaArchivo:any =document.getElementById("btnDiscretFile1");
+      botonEntregarTareaArchivo.style.display="none";
+      this.mensajeEntregarTareaTitulo="Información del recordatorio";
+      var miTrabajoTitle:any =document.getElementById("miTrabajoTitle");
+      miTrabajoTitle.style.display="none";
+      this.mensajefechaEntregarTarea="Fecha y hora de vencimiento"
+    }
+    else{
+
+      this.mensajeEntregarTareaTitulo="Informacion de la tarea";
+      this.mensajefechaEntregarTarea="Fecha y hora de evento"
+
+      if(this.fechaYHoraDeVencimiento<Date.now()){
+        var botonEntregarTarea:any =document.getElementById("botonEntregarTarea");
+        botonEntregarTarea.style.backgroundColor="red"
+        botonEntregarTarea.disabled=true;
+      }
+
+    }
+
+
     this.numeroTarea=this.tareaSeleccionada.titulo;
     this.fechaVencimiento=this.tareaSeleccionada.endDate;
     this.horaVencimiento=this.tareaSeleccionada.horaVencimiento;
     this.instruccionesTexto=this.tareaSeleccionada.instrucciones;
-    console.log(this.grupo);
-    console.log(this.usuario);
-    console.log(this.tareaSeleccionada);
+   
+
+  
   }
+
+  estadoDeLaTarea="";
+
+  
+  mensajeEntregarTareaTitulo="";
+  mensajefechaEntregarTarea="";
   numeroTarea = 1;
   fechaVencimiento = "5/28/2021";
   horaVencimiento = "15:00";
   instruccionesTexto = "Enviar en español";
+
+  fechaYHoraDeVencimiento;
 
   @Input() tareaSeleccionada;
   @Input() grupo;
@@ -46,6 +95,7 @@ export class EntregarComponent implements OnInit {
   changeProfilePicture1(){
     let inputEl : any = document.getElementById('btnDiscretFile1');    
     const formData : FormData = new FormData;   
+    this.estadoDeLaTarea="Entregado";
     
     formData.append('upladFile',inputEl.files[0]);
       formData.append('tituloTarea',this.numeroTarea+""); 
@@ -61,6 +111,5 @@ export class EntregarComponent implements OnInit {
         (err)=>console.log(err)
       );
 
-      alert("Tarea entregada con exito");
   }
 }

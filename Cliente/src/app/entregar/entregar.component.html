@@ -6,20 +6,31 @@
     </button>
   </mat-toolbar>
 
-<div class="colored-box" style="flex-direction: row; box-sizing: border-box; display: flex;">
+<div class="colored-box" style="flex-direction: row; box-sizing: border-box; display: flex; background-color:white">
 <div style="flex: 1 1 100%; box-sizing: border-box; max-width: 20%; background-color: #f6f6f6;"> 
     </div>
 <div fxflex="60" style="flex: 1 1 100%; box-sizing: border-box; max-width: 60%;">
     <div class="container">
-        <button class="button-list-homeworks" (click)="changeProfilePicture1()">Entregar Tarea</button>
-    <p>Tarea {{numeroTarea}}</p>
-    <p>Vence el {{fechaVencimiento}} {{horaVencimiento}}</p>
-    <p>Instrucciones</p>
-    <p>{{instruccionesTexto}}</p>
-    <p>Mi Trabajo</p>
 
-    <input type="file" id="btnDiscretFile1" name="upladFile">
-    
+    <h1 style="width: 100%; align-content: center; align-content: center; text-align: center;">
+            <b>{{mensajeEntregarTareaTitulo}}</b>
+    </h1>
+    <h1>
+        <b>Titulo: </b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{numeroTarea}}
+    </h1>
+    <h1>
+        <b>Fecha y hora de vencimiento: </b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{fechaVencimiento}} {{horaVencimiento}}
+    </h1>
+    <h1>
+        <b>Instrucciones: </b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{instruccionesTexto}}
+    </h1>
+    <h1 style="color: blue;">
+        <b>Estado de la tarea: </b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{estadoDeLaTarea}}
+    </h1>
+    <h1 id="miTrabajoTitle"><b> Mi Trabajo </b></h1>
+
+    <input type="file" id="btnDiscretFile1" name="upladFile" style="display: block;">
+    <button id="botonEntregarTarea" class="button-list-homeworks" style="float:inline-end;display: block;" (click)="changeProfilePicture1()">Entregar Tarea</button>
     </div>
 </div>
 <div fxflex="" style="flex: 1 1 0%; box-sizing: border-box;  background-color: #f6f6f6;"> 

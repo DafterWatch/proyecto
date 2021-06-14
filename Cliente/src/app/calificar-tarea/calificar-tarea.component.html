@@ -1,16 +1,20 @@
-<mat-toolbar class="navbar-calender">
+<div style="width:auto;height:auto; background-color: #f6f6f6;">
+
+
+  <mat-toolbar class="navbar-calender">
     <span>Calificar Tareas</span>
     <span class="example-spacer"></span>
     <button mat-icon-button (click)="abrirLista()">
       <mat-icon>close</mat-icon>
     </button>
   </mat-toolbar>
-<div class="text-assign">
-    <h1>{{tarea}}</h1>
-    <h1>Entregados {{tareaSeleccionada.tareasEntregadasUsuarios.length}} &nbsp;|&nbsp; No Entregados {{noentregados}}</h1>
+
+  <div class="text-assign" style="background-color: white;">
+    <h1><b>Grupo: </b> {{tarea}}</h1>
+    <h1><b>Entregados: </b> {{tareaSeleccionada.tareasEntregadasUsuarios.length}} &nbsp;|&nbsp; No Entregados {{noentregados}}</h1>
 </div>
-<div class="example-container mat-elevation-z8">
-  <table mat-table [dataSource]="data" class="mat-elevation-z8">
+<div class="example-container mat-elevation-z8" style="background-color: #f6f6f6;">
+  <table mat-table [dataSource]="data" class="mat-elevation-z8" style="background-color: white;">
     <ng-container matColumnDef="Nombre">
       <th mat-header-cell *matHeaderCellDef> Nombre </th>
       <td mat-cell *matCellDef="let element"> {{Usuario.nombre}} </td>
@@ -22,10 +26,10 @@
     </ng-container>
   
     <ng-container matColumnDef="Puntaje">
-      <th mat-header-cell *matHeaderCellDef> Puntaje /100 </th>
+      <th mat-header-cell *matHeaderCellDef> Puntaje /{{puntaje}} </th>
       <td mat-cell *matCellDef="let element"> <!--{{element.puntaje}}-->
         <mat-form-field style="width: 10%; margin-top: 5px; float: left;">
-            <input id="puntajeInput" matInput placeholder="/100"  #valueInput value="{{element.calificacion}}" (blur)="onBlur(valueInput.value)">
+            <input id="puntajeInput" matInput placeholder="/{{puntaje}}" max="{{puntaje}}"  #valueInput value="{{element.calificacion}}" (blur)="onBlur(valueInput.value)">
           </mat-form-field>
           <div>
             <button style="float: left;" mat-mini-fab color="danger"  (click)="calificarTarea(element)">
@@ -46,3 +50,9 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 </div>
+
+
+</div>
+
+
+
