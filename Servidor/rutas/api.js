@@ -685,6 +685,10 @@ module.exports = function(router){
         res.send('http://localhost:3000/'+req.file.path);
     });
 
+    router.post('/prepareGroupProfile',upload.single('groupPicture'), async(req,res)=>{
+        res.send(req.file.path);
+    });
+
     return router;
 }
 

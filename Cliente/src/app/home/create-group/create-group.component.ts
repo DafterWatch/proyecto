@@ -19,6 +19,7 @@ export class CreateGroupComponent implements OnInit {
   ngOnInit(): void {
   }
   groupImage = "assets/images/GroupDefaultImage.png";
+  public sendImage : any;
   imageFile : any;
   @Output() myEvent= new EventEmitter<string>();
   executeEvent(message){
@@ -29,7 +30,7 @@ export class CreateGroupComponent implements OnInit {
 
   @Output() myEvent2= new EventEmitter();
   createGroup(){
-    this.myEvent2.emit();
+    this.myEvent2.emit();        
   }
   cleangroupNameAndDescripction(){
     var groupName:any =document.getElementById('idInputNombreDegrupo');
@@ -50,6 +51,7 @@ export class CreateGroupComponent implements OnInit {
     
     inputButton.onchange = ()=>{
       this.imageFile = inputButton.files[0];
+      this.sendImage = inputButton.files[0];
       
       this.form.patchValue({img:this.imageFile});
       this.form.get('img').updateValueAndValidity();
@@ -61,6 +63,5 @@ export class CreateGroupComponent implements OnInit {
       reader.readAsDataURL(this.imageFile);
     };
     inputButton.click();
-  }
-  
+  }  
 }

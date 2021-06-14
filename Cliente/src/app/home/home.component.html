@@ -146,22 +146,23 @@
           <img  [src]="currentUser?.fotoPerfil || 'assets/images/chayan.png'"  id="profile-image" height="150" width="150"/>
         </div>            
       </div>
-      <span>Tú nombre</span>
+      <span  style="color: whitesmoke;">Tú nombre</span>
       <div id="nameContainer">
-        <span id="lblCurrentUserName">{{currentUser?.nombre }}</span><mat-icon style="float: right;" (click)="replaceItemProfileInfo('lblCurrentUserName','btnNameEdit','nombre')" id="btnNameEdit">edit</mat-icon>
+        <span id="lblCurrentUserName" style="color: rgba(245, 245, 245, 0.863);">{{currentUser?.nombre }}</span><mat-icon style="float: right;" (click)="replaceItemProfileInfo('lblCurrentUserName','btnNameEdit','nombre')" id="btnNameEdit">edit</mat-icon>
       </div>
       <hr style="width: 99%; border: 1px solid black;">
-      <span>Descripción</span>
+      <span style="color: whitesmoke;">Descripción</span>
       <div id="userDescription">
-        <span id="lblCurrentDesc">{{currentUser?.descripcion}}</span><mat-icon style="float: right;" id="btnDescEdit" (click)="replaceItemProfileInfo('lblCurrentDesc','btnDescEdit','descripcion')">edit</mat-icon>
+        <span id="lblCurrentDesc" style="color: rgba(245, 245, 245, 0.863);">{{currentUser?.descripcion}}</span><mat-icon style="float: right;" id="btnDescEdit" (click)="replaceItemProfileInfo('lblCurrentDesc','btnDescEdit','descripcion')">edit</mat-icon>
       </div>
       <hr style="width: 99%; border: 1px solid black;">
-      <span>Correo</span>
+      <span style="color: whitesmoke;">Correo</span>
       <div id="userMail">
-        <span>{{currentUser?.email}}</span>
+        <span style="color: rgba(245, 245, 245, 0.863);">{{currentUser?.email}}</span>
       </div>
       <b><p id="userId">ID: {{currentUserId}} </p></b>
     </div>
+    <button mat-raised-button style="float: right; margin-right: 10px;" (click)="closeSession()">Cerrar sesión</button>
   </div>
   <!--PERFIL DE USUARIO-->
 
@@ -170,7 +171,7 @@
       <!-------------------------------------------------------BARRA DE NAVEGACIÓN-------------------------------------------------------------------->
           <div style="flex: 1 1 100%; box-sizing: border-box; max-width: 5%; " class="menu">
             <div class="logo">
-                <img src="assets/images/logo.png" height="90px" width="90px">
+                <img src="assets/images/logo.png" height="80px" width="80px">
             </div>
             <div class="button-container" style="display: flex; justify-content: center;" >              
                 <button mat-fab color="primary" (click)="openCalendar()">

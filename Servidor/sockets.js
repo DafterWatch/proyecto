@@ -205,12 +205,26 @@ module.exports = function (io){
             data.formulario["valores"] = Array(data.formulario.cuestions.length).fill(0);
             
             let idForm = -1;
-            await Grupo.findOne({"id":groupId}).exec().then((grupo)=>{
+            /*await Grupo.findOne({"id":groupId}).exec().then((grupo)=>{
                 let count = 0;
                 for(let i = 0;i<grupo.mensajes.length;i++){
                     let item = grupo.mensajes[i];
                     if(item.type === 2){
                         count++;
+                    }
+                }
+                idForm=count;
+            });*/
+
+            await Grupo.find({}).exec().then(grupos=>{
+                let count = 0;
+                for(let i=0;i<grupos.length;i++){
+                    let grupo = grupos[i];
+                    for(let j=0;j<grupo.mensajes.length;j++){
+                        let mensaje = grupo.mensajes[j];
+                        if(mensaje.type===2){
+                            count++;
+                        }
                     }
                 }
                 idForm=count;
@@ -349,6 +363,10 @@ module.exports = function (io){
                     usuarios[group_user].emit('remove-pin',{groupId});
                 }
             }
+        });
+        socket.on('cerrar-sesion', id=>{
+            console.log('sesión cerrada');
+            delete usuarios[id];
         });
     });
 };

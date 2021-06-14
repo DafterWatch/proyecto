@@ -331,7 +331,7 @@ export class HomeComponent implements OnInit {
     });
 
     this.socket.listen('quitar-admin').subscribe((data:any)=>{
-      alert('Te han quitado privilegios de administrador');
+      //alert('Te han quitado privilegios de administrador');
     });
     this.socket.listen('usuario-nuevo').subscribe((data:any)=>{      
       this.grupos.push(data);
@@ -343,12 +343,12 @@ export class HomeComponent implements OnInit {
     });
     this.socket.listen('respuesta-form').subscribe((data:any)=>{
       if(true){      
-        console.log(data);
+        //console.log(data);
         this.componentRef.instance.updateFormAnswers(data);
       }
     });
     this.socket.listen('group-picture-change').subscribe((data:any)=>{
-      console.log(data);
+      //console.log(data);
       
       if(data.group == this.currentGroupId){
         this.currentGroupProfileP = data.newProfile;
@@ -465,11 +465,23 @@ export class HomeComponent implements OnInit {
 
     let groupName =this.componentRef.instance.getNombreDeGrupo();
     let groupDescription =this.componentRef.instance.getDescripcionDeGrupo(); 
+    let profilePicture = this.componentRef.instance.sendImage;
 
+    const formData : FormData = new FormData;
+    formData.append('groupPicture',profilePicture);
     if(this.miembros && Object.keys(this.miembros).length===0 && this.miembros.constructor===Object){
       alert('No se han seleccionado miembros')
       return;
     } 
+
+    let profileData : string;
+
+    await this.http.post('http://localhost:3000/prepareGroupProfile',formData,{responseType:'text'}).toPromise().then(
+      (res)=>{
+        profileData = res;
+      },
+      (err)=> (err)?console.log(err):''  
+    );
 
     let integrantesGrupo=[];
     for (let miembro of this.miembros) {
@@ -480,7 +492,7 @@ export class HomeComponent implements OnInit {
     let informacionDelGrupo1={
       nombre: groupName.value,
       descripcion:groupDescription.value,
-      foto:""
+      foto:profileData      
     }
 
     let mensaje:{
@@ -505,7 +517,7 @@ export class HomeComponent implements OnInit {
       return;
     }
     
-    let grupo_n = {id:idGroup, miembrosDelGrupo:miembrosDelGrupo,informacion:informacionDelGrupo1,mensaje:mensaje}    
+    let grupo_n = {id:idGroup, miembrosDelGrupo:miembrosDelGrupo,informacion:informacionDelGrupo1,mensaje:mensaje,mensajeFijado:''}    
     let data = {
       ids: integrantesGrupo,
       infoGrupo:grupo_n
@@ -824,6 +836,11 @@ esAñadirMiembrosAGrupoNuevo=false;
       confirmButton.parentElement.replaceChild(button,confirmButton);
       
     }
+  }
+
+  closeSession(){
+    this.router.navigate(['/','inicio']);
+    this.socket.emit('cerrar-sesion',this.currentUserId);
   }
   
   // -------------------De aqui para abajo son funciones del menu de grupos ----------------------------------------
