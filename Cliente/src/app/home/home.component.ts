@@ -117,12 +117,20 @@ export class HomeComponent implements OnInit {
   }
 
   hclick = false;
-  si = true;
+  si = false;
+
+  async isCurrentUsesAdmin(){
+
+    await this.http.post(`http://localhost:3000/isAdmin/${this.currentUserId}/${this.currentGroupId}`,{}).toPromise().then((es:boolean) =>{
+      this.si = es;
+    });
+    
+  }
 
   async isAdmin(){   
     
     await this.http.post(`http://localhost:3000/obtenerGrupo/${this.currentGroupId}`,{}).toPromise().then(tareas =>{
-      console.log(tareas);
+      
       this.http.post(`http://localhost:3000/isAdmin/${this.currentUserId}/${this.currentGroupId}`,{}).subscribe(data =>{
         if(data){
           this.entry.clear();
@@ -139,6 +147,7 @@ export class HomeComponent implements OnInit {
           this.componentRef.instance.cerrarVentana.subscribe(() => {
             this.cerrarListaDeTareas();
           });
+          
   
         } else {      
           this.entry.clear();
@@ -152,6 +161,7 @@ export class HomeComponent implements OnInit {
           this.componentRef.instance.cerrarVentana.subscribe(() => {
             this.cerrarListaDeTareas();
           });
+          
         }
       });
       
@@ -300,6 +310,7 @@ export class HomeComponent implements OnInit {
         //TODO: Recuperar las etiquetas y cambiar la información
         if(data.campo === "nombre"){
           this.currentGroup = data.nuevoCampo;
+          this.componentRef.instance.currentGroup=data.nuevoCampo;
 
         }else if(data.campo === "descripcion"){
           this.currentDescription = data.nuevoCampo;
@@ -652,6 +663,7 @@ esAñadirMiembrosAGrupoNuevo=false;
 
   actualGroupInformation:any;
   async showGroup(groupInformation:any){    
+    
     this.actualGroupInformation=groupInformation;
     this.currentMembers=[]; 
 
@@ -678,7 +690,7 @@ esAñadirMiembrosAGrupoNuevo=false;
       });
       this.createComponent(1);  
       this.componentRef.instance.updateGroupMessages({idGrupo:this.currentGroupId,mensajes:mensaje});
-    
+      this.isCurrentUsesAdmin();
     //this.chatGroupComponent.metodoCualquiera();
 
       
@@ -710,7 +722,7 @@ esAñadirMiembrosAGrupoNuevo=false;
     confirmButton.onclick = ()=>{
       let newName = newNameInput.value;      
       if(actualGroupName.trim() === newName.trim() || actualGroupName === newName){
-        alert('Sin cambios');        
+        //alert('Sin cambios');        
       }else{
         let data = {
           idGroup : this.currentGroupId.toString(),
@@ -719,6 +731,7 @@ esAñadirMiembrosAGrupoNuevo=false;
         }
         this.socket.emit('group-info-change',data);
         originalNameElement.innerHTML = newName;
+        this.componentRef.instance.currentGroup = newName;
       }
       
       newNameInput.parentElement.replaceChild(originalNameElement,newNameInput);

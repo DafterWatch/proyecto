@@ -353,7 +353,7 @@ module.exports = function(router){
         }
         Grupo.findOne({ id: idGrupo }).exec((err,grupo)=>{
             tarea.idTarea=grupo.tareas.length;
-            createFolder(idGrupo,grupo.tareas.length);
+            
             Grupo.updateOne({id: idGrupo}, {$push: {tareas:[tarea]}}).exec((err,grupos)=>{
                 if(err){
                     console.log(err);
