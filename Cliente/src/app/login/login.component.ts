@@ -16,6 +16,9 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
   
+  emailCompleted:boolean = true;
+  passwordCompleted:boolean = true;
+
   async login(id:string, password:string):Promise<any>{    
     let callbackData;
 

@@ -172,21 +172,24 @@
             <div class="logo">
                 <img src="assets/images/logo.png" height="90px" width="90px">
             </div>
-            <div class="button-container">
+            <div class="button-container" style="display: flex; justify-content: center;" >              
                 <button mat-fab color="primary" (click)="openCalendar()">
-                <mat-icon>calendar_today</mat-icon>
+                <mat-icon >calendar_today</mat-icon><br><br>
+                <span style="margin-left: -7px;">Calendario</span>
                 </button>
             </div>
-            <div class="button-container">
+            <div class="button-container" style="display: flex; justify-content: center;">
               <button mat-fab color="primary" (click)="openGroups()">
-              <mat-icon>groups</mat-icon>
+              <mat-icon>groups</mat-icon><br><br>
+              <span style="margin-left: -7px;">Grupos</span>
               </button>
           </div>
-            <div class="button-container" id="button-usuario">
+            <div class="button-container" id="button-usuario" style="display: flex; justify-content: center;">
                 <button mat-fab 
                 color="primary"
                 (click)="openProfile()">
-                <mat-icon>person</mat-icon>
+                <mat-icon>person</mat-icon><br><br>
+                <span style="margin-left: -7px;">Perfil</span>
                 </button>
             </div>
             

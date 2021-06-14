@@ -14,7 +14,7 @@
             </mat-menu>
         </div> 
     </div>
-    <div class="options" fxflex="80" id="chatContainerDiv">
+    <div #scroll class="options" fxflex="80" id="chatContainerDiv" [scrollTop]="scroll.scrollHeight">
         <div class="mensajePinneado" *ngIf="currentPinMessage!=''">
             <div style="text-align: center; margin-left: 5px; cursor: pointer;" (click)="removePin()">
                 <mat-icon>clear</mat-icon><br>
@@ -36,7 +36,7 @@
             <b style="margin: 20px;">Mensaje fijado:</b> <br> <span style="margin: 7px 7px 15px 7px">{{this.currentPinMessage}}</span>
         </div>-->
     <!--Mensajes-->
-        <div *ngFor="let mensaje of eventosChat; let i = index"  >
+        <div *ngFor="let mensaje of eventosChat; let i = index" id="messages-container">
             <!--DIV PARA EL MENSAJE-->
             <div *ngIf="mensaje.type === 1; else formDiv" class="mensajeDiv" style="overflow: visible;"
             [ngStyle]="{
@@ -65,7 +65,7 @@
             </ng-template>
         </div>        
     </div>
-    <div id="text-area-chat" fxflex="10">
+    <div id="text-area-chat" fxflex="10" style="margin-top: 10px;">
         <button mat-fab color="primary">
             <mat-icon >attachment</mat-icon>
             </button>
@@ -75,8 +75,8 @@
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
-        <div id="send-button" (click)='sendMensaje(txtMensaje.value)'>
-            <button mat-fab color="primary" >
+        <div id="send-button">
+            <button mat-fab color="primary" [disabled]="txtMensaje.value===''" (click)='sendMensaje(txtMensaje.value); txtMensaje.value=""'>
             <mat-icon>send</mat-icon>
             </button>
         </div>

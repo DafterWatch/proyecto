@@ -11,9 +11,11 @@
             <p>Por favor complete los campos vacios para registrarse.</p>
             <hr>
             <label><b>Nombre(s)</b></label>
-            <input type="text" placeholder="Ingrese su nombre(s)" id="txtNombre"><br>
+            <input type="text" placeholder="Ingrese su nombre(s)" id="txtNombre">
+            <span style="color: red;" *ngIf="validadores['name']"> <mat-icon style="font-size: small;">info</mat-icon> Debe colocar su nombre </span><br>
             <label for="email"><b>Correo</b></label>
-            <input type="text" placeholder="Ingrese su correo" name="email" id="email" required><br>
+            <input type="text" placeholder="Ingrese su correo" name="email" id="email" required (keyup)="typeEmail($event.target.value)">
+            <span style="color: red;" *ngIf="validadores['email']"> <mat-icon style="font-size: small;">info</mat-icon> No es un valor valido para una dirección de correo </span><br>
             <!---->
             <label><b>Pregunta de seguridad</b></label><br>
             <mat-form-field appearance="fill">
@@ -25,12 +27,15 @@
               </mat-form-field><br>
             <label><b>Respuesta</b></label>
             <input type="text" placeholder="Ingrese su respuesta" id="txtSecurityAns">
+            <span style="color: red;" *ngIf="validadores['securityAns']"> <mat-icon style="font-size: small;">info</mat-icon> Debe escribir una respuesta </span><br>
             <!---->
             <label for="psw"><b>Contraseña</b></label>
-            <input type="password" placeholder="Ingrese su contraseña" name="psw" id="psw" required>
+            <input type="password" placeholder="Ingrese su contraseña" name="psw" id="psw">    
+            <span style="color: red;" *ngIf="validadores['password']"> <mat-icon style="font-size: small;">info</mat-icon> Debe escribir una contraseña </span><br>                    
         
             <label for="psw-repeat"><b>Repite su contraseña</b></label>
             <input type="password" placeholder="Repita su contraseña" name="psw-repeat" id="psw-repeat" required>
+            <span style="color: red;" *ngIf="validadores['confirm']"> <mat-icon style="font-size: small;">info</mat-icon> Las contraseñas no coinciden </span><br>                    
             <hr>
             <button class="registerbtn" (click)="register()">Registrarse</button>            
         </div>

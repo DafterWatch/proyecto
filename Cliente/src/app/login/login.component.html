@@ -12,15 +12,15 @@
           </div>        
           <div class="container">
             <label for="uname"><b>Correo electrónico</b></label>
-            <input type="text" placeholder="Ingresar usuario" name="uname" required #txtName>
+            <input type="text" placeholder="Ingresar usuario" name="uname" required #txtName (change)="emailCompleted=false">
         
             <label for="psw"><b>Contraseña</b></label>
-            <input type="password" placeholder="Ingresar contraseña" name="psw" required #txtPassword> 
+            <input type="password" placeholder="Ingresar contraseña" name="psw" required #txtPassword (keyup)="passwordCompleted=false"> 
 
-            <button (click)="login(txtName.value, txtPassword.value)">Iniciar sesión</button>
-            <label>
+            <button  mat-raised-button [disabled]="emailCompleted || passwordCompleted" (click)="login(txtName.value, txtPassword.value)" >Iniciar sesión</button>
+            <!--<label>
               <input type="checkbox" name="remember"> Recuerdame
-            </label>
+            </label>-->
           </div>
         
           <div class="container">

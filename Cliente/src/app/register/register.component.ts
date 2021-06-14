@@ -18,6 +18,14 @@ export class RegisterComponent implements OnInit {
   constructor(private http:HttpClient, private router:Router, private socket:WebSocketService, public loaderService:LoaderService) {
 
   }
+  incorrectEmail = false;
+  validadores:object ={
+    "name":false,
+    "email":false,
+    "securityAns":false,
+    "password":false,
+    "confirm":false    
+  }
 
   ngOnInit(): void {
   }
@@ -28,7 +36,7 @@ export class RegisterComponent implements OnInit {
   ];
 
   registerFields : any = {};
-
+  
   async register(){
     let nameField : any = document.getElementById('txtNombre');
     let emailField : any = document.getElementById('email');
@@ -43,19 +51,28 @@ export class RegisterComponent implements OnInit {
       securityQuestion : this.questions.filter(x => x.value=== securityField.value)[0].viewValue,
       securityAns : securityAns.value,
       password : passwordField.value
-    }
+    }    
 
     if(this.registerFields.password !== passwordConfirm.value){
-      alert('Las contraseñas no coinciden');
-      return;
+      this.validadores['confirm']=true;      
+    }else{
+      this.validadores['confirm']=false;      
     }
 
     for(let field in this.registerFields){
-      if(this.registerFields[field]===""){
-        alert('Tiene que completar los campos');
-        return;
+      if(this.registerFields[field]==="" ){
+        this.validadores[field]=true;        
+      }else if(field !='email'){        
+        this.validadores[field]=false;        
       }
     }
+
+    let errores = Object.values(this.validadores).includes(true);
+    if(errores){
+      return;
+    }
+    
+    
     let newUser;
     await this.http.post('http://localhost:3000/crearUser',this.registerFields).toPromise().then((res:any)=>{
       if(res.error){
@@ -72,7 +89,15 @@ export class RegisterComponent implements OnInit {
     let userDataSave = JSON.stringify(newUser);
     sessionStorage.setItem('currentUserData',userDataSave);
     this.router.navigate(['/','home']);
-  }  
+  }
 
-  
+  typeEmail(value : string){
+    if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value)){      
+      this.validadores['email']=false;
+      
+    }else{      
+      this.validadores['email']=true;      
+    }
+  }
+
 }

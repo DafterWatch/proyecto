@@ -16,6 +16,7 @@ export class ChatGroupComponent implements OnInit {
   //valuesForm : any = {}
 
   ngOnInit(): void {          
+  
   }
   @Output() openDialogEvent= new EventEmitter();
   abrirDialog(){         
@@ -133,6 +134,9 @@ export class ChatGroupComponent implements OnInit {
     }    
 
     this.myEventSendMessage.emit(new_msg);
+
+    /*let chat_window = document.getElementById('chatContainerDiv');
+    chat_window.scrollTop = chat_window.scrollHeight;*/
     
   }
   @Output() myEventPinMessage = new EventEmitter<any>();
