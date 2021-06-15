@@ -315,6 +315,7 @@ export class HomeComponent implements OnInit {
       let idg = parseInt(data.idGroup)
       if(idg === this.currentGroupId){
         //TODO: Recuperar las etiquetas y cambiar la información
+        console.log('Datos desc',data);
         if(data.campo === "nombre"){
           this.currentGroup = data.nuevoCampo;
           this.componentRef.instance.currentGroup=data.nuevoCampo;
@@ -754,7 +755,8 @@ esAñadirMiembrosAGrupoNuevo=false;
         }
         this.socket.emit('group-info-change',data);
         originalNameElement.innerHTML = newName;
-        this.componentRef.instance.currentGroup = newName;
+        if(info==='nombre')
+          this.componentRef.instance.currentGroup = newName;
       }
       
       newNameInput.parentElement.replaceChild(originalNameElement,newNameInput);

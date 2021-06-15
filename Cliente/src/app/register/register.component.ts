@@ -76,10 +76,10 @@ export class RegisterComponent implements OnInit {
     let newUser;
     await this.http.post('http://localhost:3000/crearUser',this.registerFields).toPromise().then((res:any)=>{
       if(res.error){
-        alert(res.mensaje);
+        //alert(res.mensaje);
         return;
       }else{
-        alert('Registrado!');                   
+        //alert('Registrado!');                   
         newUser = res.user;
       }      
     });                

@@ -366,7 +366,7 @@ module.exports = function (io){
         });
         socket.on('cerrar-sesion', id=>{
             console.log('sesión cerrada');
-            delete usuarios[id];
+            //delete usuarios[id];
         });
     });
 };

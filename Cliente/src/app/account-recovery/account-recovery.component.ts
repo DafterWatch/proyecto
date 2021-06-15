@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router'
+import { LoaderService } from '../loader.service';
 
 interface Question {
   value: string;
@@ -13,7 +14,7 @@ interface Question {
 })
 export class AccountRecoveryComponent implements OnInit {
 
-  constructor(private http:HttpClient, private router:Router) { }
+  constructor(private http:HttpClient, private router:Router, public loaderService:LoaderService) { }
   recuperationFields : any;
   confirmEnabled : boolean = false;
   currentEmail : string;
