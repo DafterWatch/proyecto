@@ -9,7 +9,13 @@
       </mat-toolbar>
     
     <div class="calender" style="overflow:visible">
-      <full-calendar [options]="calendarOptions"></full-calendar>
+      <full-calendar
+      #calendar
+      defaultView="dayGridMonth"
+      [weekends]="calendarWeekends"
+      [events]="calendarEvents"
+      (dateClick)="handleDateClick($event)"
+    ></full-calendar>
     </div>
   </div>
   
