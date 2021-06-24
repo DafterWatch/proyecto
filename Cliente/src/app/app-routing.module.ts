@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AccountRecoveryComponent } from './account-recovery/account-recovery.component';
+import { AdministradorComponent } from './administrador/administrador.component';
 import { CalenderComponent } from './calender/calender.component';
 import { CalificarTareaComponent } from './calificar-tarea/calificar-tarea.component';
 import { CrearFormularioComponent } from './crear-formulario/crear-formulario.component';
@@ -38,6 +39,7 @@ const routes: Routes = [
   { path: 'form', component: CrearFormularioComponent },
   { path: 'formulario', component: FormularioComponent },
   { path: 'navegacion', component: NavegacionComponent },
+  {path: 'administrador', component: AdministradorComponent},
   //componente de pruebas - Jose
   //{ path: 'demo', component: DemoComponent },
   //{ path: 'group-menu', component: GroupMenuComponent },

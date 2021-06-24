@@ -1,0 +1,52 @@
+<div class="fondo">
+
+    <mat-card class="card">
+        <mat-card-header>
+            <mat-card-title>Administrador</mat-card-title>
+            <mat-card-subtitle>Bienvenido, administrador</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+        <hr/>
+        <p>
+            {{descripcion}}
+        </p>
+
+            <div name="menuReportesUsuarios" *ngIf="menuDeAdmin['reporteUsuario']">                       
+                <button mat-flat-button (click)="cambiarMenu('principal')" style="float: right;" > <mat-icon>keyboard_return</mat-icon> </button>
+                <mat-action-list *ngFor="let reporteUsuario of reportesUsuarios">
+                    <button mat-list-item (click)="abrirReporteUsuario('Le gustan las galletas')" > {{reporteUsuario}} </button>
+                </mat-action-list>
+            </div>
+
+            <div name="menuReporteGrupos" *ngIf="menuDeAdmin['reporteGrupo']" >
+                <button mat-flat-button (click)="cambiarMenu('principal')" style="float: right;" > <mat-icon>keyboard_return</mat-icon> </button>
+                <mat-action-list *ngFor="let reporteGrupo of reportesGrupos">
+                    <button mat-list-item > {{reporteGrupo}} </button>
+                </mat-action-list>
+            </div>
+
+            <div name="menuListaUsuarios" *ngIf="menuDeAdmin['usuariosBloqueados']" >
+                <button mat-flat-button (click)="cambiarMenu('principal')" style="float: right;" > <mat-icon>keyboard_return</mat-icon> </button>
+                <mat-action-list *ngFor="let usuarioBloqueado of usuariosBloqueados">
+                    <button mat-list-item > {{usuarioBloqueado}} </button>
+                </mat-action-list>
+            </div>
+
+            <div name="menuListaGrupos" *ngIf="menuDeAdmin['gruposBloqueados']" >
+                <button mat-flat-button (click)="cambiarMenu('principal')" style="float: right;" > <mat-icon>keyboard_return</mat-icon> </button>
+                <mat-action-list *ngFor="let gruposBloqueado of gruposBloqueados">
+                    <button mat-list-item > {{gruposBloqueado}} </button>
+                </mat-action-list>
+            </div>
+
+            <div name="menuPrincipal" *ngIf="menuDeAdmin['principal']">
+                <mat-action-list>                
+                    <button mat-list-item (click)="cambiarMenu('reporteUsuario')"> Reportes de usuarios  <mat-icon matListIcon>folder</mat-icon> </button>
+                    <button mat-list-item (click)="cambiarMenu('reporteGrupo')" > Reportes de grupos <mat-icon matListIcon>folder</mat-icon> </button>
+                    <button mat-list-item (click)="cambiarMenu('usuariosBloqueados')" > Usuarios bloqueados <mat-icon matListIcon>folder</mat-icon> </button>
+                    <button mat-list-item (click)="cambiarMenu('gruposBloqueados')"> Grupos bloqueados <mat-icon matListIcon>folder</mat-icon> </button>
+                </mat-action-list>
+            </div>
+        </mat-card-content>        
+    </mat-card>    
+</div>

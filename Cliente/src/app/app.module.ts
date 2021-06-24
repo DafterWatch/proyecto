@@ -77,6 +77,8 @@ import { DynamicModule } from 'ng-dynamic-component';
 import { NavegacionComponent } from './navegacion/navegacion.component';
 import { InterceptorService } from './interceptor.service';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { AdministradorComponent } from './administrador/administrador.component';
+import { UsuarioReportadoComponent } from './modalesAdmin/usuario-reportado/usuario-reportado.component';
 
 
 
@@ -105,6 +107,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     CrearFormularioComponent,
     FormularioComponent,
     NavegacionComponent,
+    AdministradorComponent,
+    UsuarioReportadoComponent,
 
     
     

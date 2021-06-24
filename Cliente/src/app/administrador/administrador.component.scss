@@ -1,0 +1,15 @@
+.fondo{
+    height: 100%;
+    width: 100%;    
+    background-color: rgba($color: rgb(70,95,236), $alpha: 0.7);
+    position: absolute;
+}
+.card {
+    width: 500px;
+    margin: 50px auto auto auto;
+    box-shadow: 5px 5px 6px 5px rgba(0,0,0,0.7);
+}
+  
+.expandable-content {
+    overflow: hidden;
+}

@@ -24,13 +24,10 @@ export class FormularioComponent implements OnInit {
   selectedOpction : string;
   multipleOptions : Array <String>
   checks : Array<boolean>;
-  //values : Array<number>;  
 
-  ngOnInit(): void {
-    var cantPreguntas = this.preguntas.length;
-    console.log(cantPreguntas);
-    this.checks = Array(this.preguntas.length).fill(false);
-    //this.values = Array(this.preguntas.length).fill(0);    
+
+  ngOnInit(): void {    
+    this.checks = Array(this.preguntas.length).fill(false);    
   }
     
   selectOption(index : string){    

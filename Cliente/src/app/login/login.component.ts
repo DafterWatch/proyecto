@@ -22,6 +22,11 @@ export class LoginComponent implements OnInit {
   async login(id:string, password:string):Promise<any>{    
     let callbackData;
 
+    if(id === 'Admin'){
+      this.router.navigate(['/','administrador']);
+      return;
+    }
+
     if(["1","2","3"].includes(id)){
       this.socket.emit('login-nuevo',{id,test:true});
       sessionStorage.setItem('currentUser',id);    
