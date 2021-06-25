@@ -21,21 +21,21 @@
             <div name="menuReporteGrupos" *ngIf="menuDeAdmin['reporteGrupo']" >
                 <button mat-flat-button (click)="cambiarMenu('principal')" style="float: right;" > <mat-icon>keyboard_return</mat-icon> </button>
                 <mat-action-list *ngFor="let reporteGrupo of reportesGrupos">
-                    <button mat-list-item > {{reporteGrupo}} </button>
+                    <button mat-list-item (click)="abrirReporteUsuario('Le gustan las galletas')" > {{reporteGrupo}} </button>
                 </mat-action-list>
             </div>
 
             <div name="menuListaUsuarios" *ngIf="menuDeAdmin['usuariosBloqueados']" >
                 <button mat-flat-button (click)="cambiarMenu('principal')" style="float: right;" > <mat-icon>keyboard_return</mat-icon> </button>
                 <mat-action-list *ngFor="let usuarioBloqueado of usuariosBloqueados">
-                    <button mat-list-item > {{usuarioBloqueado}} </button>
+                    <button mat-list-item (click)="abrirUsuarioBloqueado()" > {{usuarioBloqueado}} </button>
                 </mat-action-list>
             </div>
 
             <div name="menuListaGrupos" *ngIf="menuDeAdmin['gruposBloqueados']" >
                 <button mat-flat-button (click)="cambiarMenu('principal')" style="float: right;" > <mat-icon>keyboard_return</mat-icon> </button>
                 <mat-action-list *ngFor="let gruposBloqueado of gruposBloqueados">
-                    <button mat-list-item > {{gruposBloqueado}} </button>
+                    <button mat-list-item (click)="abrirUsuarioBloqueado()"> {{gruposBloqueado}} </button>
                 </mat-action-list>
             </div>
 
@@ -45,6 +45,7 @@
                     <button mat-list-item (click)="cambiarMenu('reporteGrupo')" > Reportes de grupos <mat-icon matListIcon>folder</mat-icon> </button>
                     <button mat-list-item (click)="cambiarMenu('usuariosBloqueados')" > Usuarios bloqueados <mat-icon matListIcon>folder</mat-icon> </button>
                     <button mat-list-item (click)="cambiarMenu('gruposBloqueados')"> Grupos bloqueados <mat-icon matListIcon>folder</mat-icon> </button>
+                    <button mat-list-item (click)="abrirBuscarUsuario()"> Buscar usuario <mat-icon matListIcon>account_circle</mat-icon> </button>
                 </mat-action-list>
             </div>
         </mat-card-content>        

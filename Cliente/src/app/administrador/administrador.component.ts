@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import {MatDialog} from '@angular/material/dialog';
-import { UsuarioReportadoComponent } from '../modalesAdmin/usuario-reportado/usuario-reportado.component'
+import { UsuarioReportadoComponent } from '../modalesAdmin/usuario-reportado/usuario-reportado.component';
+import { InformeReporteComponent } from '../modalesAdmin/informe-reporte/informe-reporte.component';
+import { BuscarUsuarioComponent } from '../buscar-usuario/buscar-usuario.component';
 
 @Component({
   selector: 'app-administrador',
@@ -10,9 +12,7 @@ import { UsuarioReportadoComponent } from '../modalesAdmin/usuario-reportado/usu
 })
 export class AdministradorComponent implements OnInit {
 
-  constructor(public dialog: MatDialog) { }
-
-  dialogRef : any = null;
+  constructor(public dialog: MatDialog) { } 
 
   reportesUsuarios : Array<string> = ['Usuario 1','Usuario 2', 'Usuario 3', 'Usuario 4'];
   reportesGrupos : Array<string> = ['Grupo 1','Grupo 2', 'Grupo 3', 'Grupo 4'];
@@ -50,11 +50,27 @@ export class AdministradorComponent implements OnInit {
     this.descripcion = this.descripciones[nuevoMenu];
     this.menuDeAdmin[nuevoMenu] = true;
   }
-  abrirReporteUsuario(infoUsuario : string){
-    this.dialogRef = this.dialog.open(UsuarioReportadoComponent, {
-      width: '50%',
+  abrirReporteUsuario(infoUsuario : string) : void{
+    this.dialog.open(UsuarioReportadoComponent, {
+      width: '25%',
       data: {user: infoUsuario}
     });    
+  }
+  abrirReporteGrupo(infoGrupo : string) : void{
+    this.dialog.open(UsuarioReportadoComponent, {
+      width: '25%',
+      data: {user: infoGrupo}
+    });    
+  }
+  abrirUsuarioBloqueado() : void {
+    this.dialog.open(InformeReporteComponent,{
+      width:'25%'
+    });
+  }
+  abrirBuscarUsuario() :void {
+    this.dialog.open(BuscarUsuarioComponent,{
+      width:'25%'
+    });
   }
 
 }

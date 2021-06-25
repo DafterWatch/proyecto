@@ -1,6 +1,6 @@
-import { Component, OnInit,Inject } from '@angular/core';
+import { Component, OnInit,Inject, Output } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 @Component({
   selector: 'app-usuario-reportado',
   templateUrl: './usuario-reportado.component.html',
@@ -16,13 +16,27 @@ import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 })
 export class UsuarioReportadoComponent implements OnInit {
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: {user: string}) { }
+  constructor(public dialogRef: MatDialogRef<UsuarioReportadoComponent>, @Inject(MAT_DIALOG_DATA) public data: {user: string}) { }
+
+  listaMensajes : Array< {[key:string] : string | Date} > = [];
 
   ngOnInit(): void {
-  }
-  state = 'collapsed';
+    for(let i=0;i<50;i++){
+      this.listaMensajes.push(
+        {mensaje:i.toString()+' Palabras random', fecha : new Date(Date.now())}
+      )
+    }    
+  }  
 
-  toggle(): void {
-    this.state = this.state === 'collapsed' ? 'expanded' : 'collapsed';
+  validarFecha( fecha : Date ) : string {
+    if(fecha.toDateString() === new Date(Date.now()).toDateString() ){
+      return fecha.getHours() + ":" + fecha.getMinutes();
+    }
+    return fecha.toDateString();
   }
+  
+  closeModal(){
+    this.dialogRef.close();
+  }
+
 }

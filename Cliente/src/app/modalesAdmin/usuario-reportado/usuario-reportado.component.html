@@ -1,24 +1,40 @@
 <mat-card class="card">
-    <mat-card-header>
-    <mat-card-title>Administrador</mat-card-title>
-    <mat-card-subtitle>Bienvenido, administrador</mat-card-subtitle>
+    <mat-card-header>        
+        <div id="imgReportado" >
+            <img src="../../../assets/images/chayan.png" height="250px" width="250px"/>
+        </div>
+        <button mat-icon-button color="primary" (click)="closeModal()">
+            <mat-icon>keyboard_return</mat-icon>
+          </button>
     </mat-card-header>
-    <mat-card-content>
-    <p>
-        Desde está cuenta podrá revisar reportes hechos hacía grupos e usuarios, más tener acceso a los mensajes
-        de los usuarios. Podra decidir si bloquear al usuario, grupo o desbloquear. Está cuenta solo puede ser
-        usada por usuarios con nivel de acceso superior al sistema. 
-    </p>
+        <mat-card-content>
+            <h1>Acá viene el nombre del reportado</h1>
+            <p>
+                Acá viene la info del reportado
+            </p>    
+            <mat-divider></mat-divider>
+        </mat-card-content>
+        <mat-card-content>
+            <h2>Lista de mensajes</h2>
+            <cdk-virtual-scroll-viewport itemSize="50" class="content">                              
+                <mat-list >
+                    <mat-list-item *cdkVirtualFor="let item of listaMensajes">
+                    
+                    <h3 matLine> {{ validarFecha(item.fecha) }} </h3>
+                    <p matLine>
+                        <span> {{item.mensaje}} </span>
+                    </p>
+                    
+                    <mat-divider></mat-divider>
+                    </mat-list-item>
+                </mat-list>
+            </cdk-virtual-scroll-viewport>
 
-    <p [@bodyExpansion]="state" class="expandable-content">
-        {{data.user}}
-    </p>
-    <mat-divider>
-    </mat-divider>
-    </mat-card-content>
-
+            <mat-divider></mat-divider>
+        </mat-card-content>    
     <mat-card-actions>
-    <button mat-button (click)="toggle()" color="primary">EXPAND</button>
+    <button mat-raised-button color="warn">Bloquear</button>
+    <button mat-raised-button color="primary">Descartar</button>
     </mat-card-actions>
 
 </mat-card>

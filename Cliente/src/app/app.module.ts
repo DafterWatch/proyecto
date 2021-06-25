@@ -79,6 +79,8 @@ import { InterceptorService } from './interceptor.service';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { AdministradorComponent } from './administrador/administrador.component';
 import { UsuarioReportadoComponent } from './modalesAdmin/usuario-reportado/usuario-reportado.component';
+import { InformeReporteComponent } from './modalesAdmin/informe-reporte/informe-reporte.component';
+import { BuscarUsuarioComponent } from './buscar-usuario/buscar-usuario.component';
 
 
 
@@ -109,6 +111,8 @@ import { UsuarioReportadoComponent } from './modalesAdmin/usuario-reportado/usua
     NavegacionComponent,
     AdministradorComponent,
     UsuarioReportadoComponent,
+    InformeReporteComponent,
+    BuscarUsuarioComponent,
 
     
     
