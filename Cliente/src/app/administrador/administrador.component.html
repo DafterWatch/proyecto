@@ -11,35 +11,35 @@
             {{descripcion}}
         </p>
 
-            <div name="menuReportesUsuarios" *ngIf="menuDeAdmin['reporteUsuario']">                       
+            <div name="menuReportesUsuarios" *ngIf="menuDeAdmin['reporteUsuario'].value">                       
                 <button mat-flat-button (click)="cambiarMenu('principal')" style="float: right;" > <mat-icon>keyboard_return</mat-icon> </button>
-                <mat-action-list *ngFor="let reporteUsuario of reportesUsuarios">
-                    <button mat-list-item (click)="abrirReporteUsuario('Le gustan las galletas')" > {{reporteUsuario}} </button>
+                <mat-action-list *ngFor="let reporteUsuario of reportesUsuarios; index as i">
+                    <button mat-list-item (click)="abrirReporteUsuario({index : i, tipo : reporteUsuario.type})" > {{'Reporte N°: '+ (i+1)}} </button>
                 </mat-action-list>
             </div>
 
-            <div name="menuReporteGrupos" *ngIf="menuDeAdmin['reporteGrupo']" >
+            <div name="menuReporteGrupos" *ngIf="menuDeAdmin['reporteGrupo'].value" >
                 <button mat-flat-button (click)="cambiarMenu('principal')" style="float: right;" > <mat-icon>keyboard_return</mat-icon> </button>
-                <mat-action-list *ngFor="let reporteGrupo of reportesGrupos">
-                    <button mat-list-item (click)="abrirReporteUsuario('Le gustan las galletas')" > {{reporteGrupo}} </button>
+                <mat-action-list *ngFor="let reporteGrupo of reportesGrupos; index as i">
+                    <button mat-list-item (click)="abrirReporteUsuario({index : i, tipo : reporteGrupo.type})" > {{'Reporte N°: '+ (i+1)}} </button>
                 </mat-action-list>
             </div>
 
-            <div name="menuListaUsuarios" *ngIf="menuDeAdmin['usuariosBloqueados']" >
+            <div name="menuListaUsuarios" *ngIf="menuDeAdmin['usuariosBloqueados'].value" >
                 <button mat-flat-button (click)="cambiarMenu('principal')" style="float: right;" > <mat-icon>keyboard_return</mat-icon> </button>
-                <mat-action-list *ngFor="let usuarioBloqueado of usuariosBloqueados">
-                    <button mat-list-item (click)="abrirUsuarioBloqueado()" > {{usuarioBloqueado}} </button>
+                <mat-action-list *ngFor="let usuarioBloqueado of usuariosBloqueados; index as i">
+                    <button mat-list-item (click)="abrirUsuarioBloqueado({index : i, tipo : usuarioBloqueado.type})" > {{'Bloqueo N° '+(i+1)}} </button>
                 </mat-action-list>
             </div>
 
-            <div name="menuListaGrupos" *ngIf="menuDeAdmin['gruposBloqueados']" >
+            <div name="menuListaGrupos" *ngIf="menuDeAdmin['gruposBloqueados'].value" >
                 <button mat-flat-button (click)="cambiarMenu('principal')" style="float: right;" > <mat-icon>keyboard_return</mat-icon> </button>
-                <mat-action-list *ngFor="let gruposBloqueado of gruposBloqueados">
-                    <button mat-list-item (click)="abrirUsuarioBloqueado()"> {{gruposBloqueado}} </button>
+                <mat-action-list *ngFor="let grupoBloqueado of gruposBloqueados; index as i">
+                    <button mat-list-item (click)="abrirUsuarioBloqueado({index : i, tipo : grupoBloqueado.type})"> {{'Bloqueo N° '+(i+1)}} </button>
                 </mat-action-list>
             </div>
 
-            <div name="menuPrincipal" *ngIf="menuDeAdmin['principal']">
+            <div name="menuPrincipal" *ngIf="menuDeAdmin['principal'].value">
                 <mat-action-list>                
                     <button mat-list-item (click)="cambiarMenu('reporteUsuario')"> Reportes de usuarios  <mat-icon matListIcon>folder</mat-icon> </button>
                     <button mat-list-item (click)="cambiarMenu('reporteGrupo')" > Reportes de grupos <mat-icon matListIcon>folder</mat-icon> </button>

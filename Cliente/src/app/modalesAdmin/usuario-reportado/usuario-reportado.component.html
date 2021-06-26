@@ -1,18 +1,29 @@
 <mat-card class="card">
     <mat-card-header>        
         <div id="imgReportado" >
-            <img src="../../../assets/images/chayan.png" height="250px" width="250px"/>
+            <img [src]="fotoPerfil" height="250px" width="250px"/>
         </div>
         <button mat-icon-button color="primary" (click)="closeModal()">
             <mat-icon>keyboard_return</mat-icon>
           </button>
     </mat-card-header>
         <mat-card-content>
-            <h1>Acá viene el nombre del reportado</h1>
-            <p>
-                Acá viene la info del reportado
-            </p>    
+            <div *ngIf="type===1; else informacionGrupo">
+                <h1>{{usuario?.nombre}}</h1>
+                <p>
+                    {{usuario?.descripcion}}
+                </p> 
+            </div>   
+            <ng-template #informacionGrupo>
+                <h1>{{usuario?.informacion.nombre}} </h1>
+                <p>
+                    {{usuario?.informacion.descripcion}}
+                </p>
+            </ng-template>
             <mat-divider></mat-divider>
+        </mat-card-content>
+        <mat-card-content>
+            <h4> {{reporte}} : <b> Reporte Enviado por ID: {{idReportador}} </b> </h4>
         </mat-card-content>
         <mat-card-content>
             <h2>Lista de mensajes</h2>
@@ -21,6 +32,9 @@
                     <mat-list-item *cdkVirtualFor="let item of listaMensajes">
                     
                     <h3 matLine> {{ validarFecha(item.fecha) }} </h3>
+                    <sub *ngIf="type===2" >
+                        {{item.sender}}
+                    </sub>
                     <p matLine>
                         <span> {{item.mensaje}} </span>
                     </p>
@@ -34,7 +48,7 @@
         </mat-card-content>    
     <mat-card-actions>
     <button mat-raised-button color="warn">Bloquear</button>
-    <button mat-raised-button color="primary">Descartar</button>
+    <button mat-raised-button color="primary" [mat-dialog-close]="lista" (click)="descartarReporte()">Descartar</button>
     </mat-card-actions>
 
 </mat-card>

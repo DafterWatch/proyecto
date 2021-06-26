@@ -7,19 +7,19 @@
     </mat-card-header>
     <mat-card-content>
         <i class="icon"> <mat-icon style="cursor: default ;">search</mat-icon> </i>
-        <input type="text" #idUsuario  class="input-field" placeholder="ID De usuario" (keyup.enter)="buscarUsuario($event.target.value)">
+        <input type="text" #idUsuario  class="input-field" placeholder="ID De usuario" (keyup.enter)="$event.target.value==''?'':buscarUsuario($event.target.value)">
         <button mat-icon-button color="black" (click)="buscarUsuario(idUsuario.value)" >
             <mat-icon>search</mat-icon>
         </button>  <br/><br/> 
         <div style="display: flex; justify-content: center; height: auto; width: 100%;">
-            <img src="../../assets/images/chayan.png" width="300px" height="300px"/>
+            <img [src]="foto || '../../assets/images/chayan.png'" width="300px" height="300px"/>
         </div>
         <mat-divider></mat-divider>
     </mat-card-content>
     <mat-card-content>
-        <h3>Nombre :</h3>
-        <h3>Descripción:  </h3>
-        <h4>ID: </h4>        
+        <h3>Nombre : {{ usuario?.nombre }}</h3>
+        <h3>Descripción: {{usuario?.descripcion}}  </h3>
+        <h4>ID: {{usuario?.id}} </h4>        
     </mat-card-content>
     <mat-card-actions>
         <button mat-raised-button color="warn">Bloquear</button>        

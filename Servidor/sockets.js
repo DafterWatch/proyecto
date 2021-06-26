@@ -363,10 +363,13 @@ module.exports = function (io){
                     usuarios[group_user].emit('remove-pin',{groupId});
                 }
             }
-        });
+        });        
         socket.on('cerrar-sesion', id=>{
             console.log('sesión cerrada');
-            //delete usuarios[id];
+            delete usuarios[id];
+        });
+        socket.on('disconnect', ()=>{
+            //delete usuarios[0];
         });
     });
 };

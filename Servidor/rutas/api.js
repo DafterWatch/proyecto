@@ -130,6 +130,7 @@ module.exports = function(router){
      /*Modelos */
      const Usuario = require('../modelos/usuario');
      const Grupo = require('../modelos/grupos');
+     const Reportes = require('../modelos/reportes');
  
      id_grupo = 2;
 
@@ -191,8 +192,7 @@ module.exports = function(router){
                         console.log('Error con los grupos');
                         return;
                     }
-                    else{
-                        console.log("-------------------------------------");
+                    else{         
                         var tareaDelUsuario;
                         grupos[0].tareas.forEach(element => {
                             if(element.idTarea==idTarea1){
@@ -266,14 +266,7 @@ module.exports = function(router){
 
                     }
                     
-                });
-
-
-
-
-       
-
-            
+                });  
         }
         
       });
@@ -394,12 +387,10 @@ module.exports = function(router){
         
     });
 
-
-
     router.post('/obtenerGrupo/:idGrupo',(req,res)=>{
         Grupo.find({id:req.params.idGrupo},{}).exec((err,tareas)=>{
             if(err){
-                console.log('Error con los usuarios');
+                console.log('Error con los grupos');
                 return;
             }
                         
@@ -413,11 +404,7 @@ module.exports = function(router){
         res.send('http://localhost:3000/'+req.file.path);
        
     });
-//////////////////////////////
-
-   
-   
-    /*Moví el método a los sockets */     
+//////////////////////////////      
 
     router.post('/addfromGroup/:id/:idGroup/:isAdmin',(req,res)=>{
         let id = req.params.id;  
@@ -687,6 +674,32 @@ module.exports = function(router){
 
     router.post('/prepareGroupProfile',upload.single('groupPicture'), async(req,res)=>{
         res.send(req.file.path);
+    });
+
+    router.post('/getReportesUsuario',async (req,res)=>{
+        let dataReportes;
+        await Reportes.find({}).exec().then(reportes =>{
+            dataReportes = reportes;
+        });
+        res.send(dataReportes);
+    });
+
+    router.post('/mostrarMensajes/:idUsuario', async (req,res)=>{
+        let mensajes = [];
+        let idUsuario = req.params.idUsuario;
+        await Grupo.find({}).exec().then(grupos_ =>{            
+            for(let g of grupos_){
+                for(let mensaje of g.mensajes){
+                    if(mensaje.type == 1 && mensaje.user == idUsuario){
+                        mensajes.push(mensaje);
+                    }
+                }
+            }
+        });
+        res.send(mensajes);
+    });    
+    router.post('/borrarReporte/:idReporte',(req,res)=>{
+        Reportes.deleteOne({"id_reportado":req.params.idReporte}).exec();        
     });
 
     return router;

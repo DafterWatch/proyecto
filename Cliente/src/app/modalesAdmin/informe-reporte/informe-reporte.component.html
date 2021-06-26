@@ -1,20 +1,30 @@
 <mat-card class="card">
     <div class = "vertical"></div>
     <mat-card-header>
-        <h1>Usuario actualmente bloqueado</h1>
+        <h1>{{type===3?'Usuario':'Grupo'}} actualmente bloqueado</h1>
         <button mat-icon-button color="primary" (click)="closeModal()">
             <mat-icon>keyboard_return</mat-icon>
         </button>        
     </mat-card-header>
     <mat-card-content>
-        <h1>Acá viene el nombre del bloqueado</h1>
-        <p>
-            Acá viene la info del bloqueado
-        </p>    
+        <div *ngIf="type===3; else grupoBloqueado">
+            <h1>{{bloqueado?.nombre}}</h1>
+            <p>
+                {{bloqueado?.descripcion}}
+            </p>    
+            <h2> ID: {{bloqueado?.id}} </h2>            
+        </div>
+        <ng-template #grupoBloqueado>
+            <h1>{{ bloqueado?.informacion.nombre }}</h1>
+            <p>
+                {{bloqueado?.informacion.descripcion}}
+            </p>
+            <h2> ID: {{bloqueado?.id}} </h2>
+        </ng-template>
         <mat-divider></mat-divider>
     </mat-card-content>
     <mat-card-content>
-        <p>Razón por la cual fue bloqueado</p>
+        <p> <strong> Razón del reporte: </strong> {{reporte}}</p>
     </mat-card-content>
     <mat-card-actions>
         <button mat-raised-button color="warn">Desbloquear</button>        
