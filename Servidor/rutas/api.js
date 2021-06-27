@@ -698,8 +698,55 @@ module.exports = function(router){
         });
         res.send(mensajes);
     });    
-    router.post('/borrarReporte/:idReporte',(req,res)=>{
-        Reportes.deleteOne({"id_reportado":req.params.idReporte}).exec();        
+    router.post('/borrarReporte/:idReporte', async (req,res)=>{
+        await Reportes.deleteOne({"id_reportado":req.params.idReporte}).exec();        
+        res.send(true);
+    });
+
+    router.post('/bloquearUsuario',jsonParser,async (req,res)=>{       
+        let id = req.body.idUsuario;        
+        let type = req.body.type; 
+        await Reportes.updateOne({"id_reportado":id}, { $set:{"type":type} }).exec();
+        res.send(true);
+    });
+
+    router.post('/desbloquear/:idBloqueo', async (req,res)=>{                        
+        Reportes.deleteOne({"id_bloqueado":req.params.idBloqueo}).exec((err,data) =>{
+            if(err) console.log(err.message);            
+        });
+
+        res.send(true);
+    });
+
+    router.post('/bloquearUsuarioDirecto',jsonParser,async (req,res)=>{
+        let existe=false;
+        let id_bloqueado = req.body.idUsuario;
+        await Reportes.find({"id_bloqueado":id_bloqueado}).exec().toPromise(data =>{
+            if(data) existe = true;
+        });
+        if(existe){
+            res.json({error: true,mensaje:'El usuario ya está bloqueado'});        
+            return;
+        }
+        let type = 3;        
+        let reporte = 'Bloqueado por administrador';
+
+        let reporte = new reporte({type,id_bloqueado,reporte});
+        reporte.save((err)=>{
+            if(err){
+                console.log(err.message);
+                res.json({error:true,mensaje:err.message});
+            }
+        });
+        res.json({error:false});        
+    });
+
+    router.post('/estaBloqueado/:idUsuario', async (req, res)=>{
+        let bloqueado = false;
+        await Reportes.findOne({"id_bloqeuado":bloqueado}).exec().toPromise(data =>{
+            if(data) bloqueado=true;
+        });
+        res.send(bloqueado);
     });
 
     return router;

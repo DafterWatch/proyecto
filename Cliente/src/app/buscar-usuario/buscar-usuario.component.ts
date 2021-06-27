@@ -24,4 +24,14 @@ export class BuscarUsuarioComponent implements OnInit {
   closeModal(){
     this.dialogRef.close();
   }
+
+  async bloquearUsuario(){
+    if(this.usuario){      
+       await this.http.post(this.DIRECCION_SERVER+'/bloquearUsuarioDirecto',{idUsuario: this.usuario.id}).toPromise().then((data:any) =>{
+         if(data.error){
+           console.log(data.mensaje);
+         }
+       });
+    }
+  }
 }

@@ -77,7 +77,17 @@ export class UsuarioReportadoComponent implements OnInit {
 
   
   async descartarReporte(){    
-    await this.http.post(this.DIRECCION_SERVER+`/borrarReporte/${this.usuario.id}`,{}).subscribe();    
+    await this.http.post(this.DIRECCION_SERVER+`/borrarReporte/${this.usuario.id}`,{}).subscribe();   
+  }
+
+  async bloquearUsuario(){
+
+    let data = {
+      idUsuario : this.usuario.id,
+      type : this.type === 1? 3 : 4
+    }
+
+    await this.http.post(this.DIRECCION_SERVER+'/bloquearUsuario',data).subscribe();
   }
   
   closeModal(){

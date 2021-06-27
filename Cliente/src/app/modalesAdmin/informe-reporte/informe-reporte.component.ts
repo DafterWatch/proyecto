@@ -13,6 +13,7 @@ export class InformeReporteComponent implements OnInit {
   type : number;
   bloqueado : any;
   reporte : string;
+  lista : string;
 
   DIRECCION_SERVER : string = 'http://localhost:3000';
 
@@ -29,15 +30,21 @@ export class InformeReporteComponent implements OnInit {
       await this.http.post(this.DIRECCION_SERVER+`/usuarios/${idBloqueo}`,{}).toPromise().then(usuario_ =>{        
         this.bloqueado = usuario_;                
       });
+      this.lista = 'usuariosBloqueados';
     }else if(this.type === 4){
       await this.http.post(this.DIRECCION_SERVER+`/obtenerGrupo/${idBloqueo}`,{}).toPromise().then(grupo_ =>{
         this.bloqueado = grupo_[0];                
       });
+      this.lista = 'gruposBloqueados';
     }
   }
 
   closeModal() : void{
     this.dialogRef.close();
+  }
+
+  desBloquear(){          
+    this.http.post(this.DIRECCION_SERVER+`/desbloquear/${this.bloqueado.id}`,{}).subscribe();
   }
 
 }

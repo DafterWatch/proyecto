@@ -27,6 +27,6 @@
         <p> <strong> Razón del reporte: </strong> {{reporte}}</p>
     </mat-card-content>
     <mat-card-actions>
-        <button mat-raised-button color="warn">Desbloquear</button>        
+        <button mat-raised-button color="warn" [mat-dialog-close]="lista" (click)="desBloquear()">Desbloquear</button>        
     </mat-card-actions>
 </mat-card>

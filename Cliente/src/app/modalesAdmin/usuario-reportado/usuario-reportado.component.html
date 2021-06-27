@@ -47,7 +47,7 @@
             <mat-divider></mat-divider>
         </mat-card-content>    
     <mat-card-actions>
-    <button mat-raised-button color="warn">Bloquear</button>
+    <button mat-raised-button color="warn" [mat-dialog-close]="lista" (click)="bloquearUsuario()" >Bloquear</button>
     <button mat-raised-button color="primary" [mat-dialog-close]="lista" (click)="descartarReporte()">Descartar</button>
     </mat-card-actions>
 

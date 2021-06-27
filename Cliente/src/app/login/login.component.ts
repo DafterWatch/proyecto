@@ -38,13 +38,19 @@ export class LoginComponent implements OnInit {
       callbackData = data;
     });
     if(!callbackData.error){
+
+      let id = callbackData.user.id;
+
+      
+
       sessionStorage.setItem('currentUser',callbackData.user.id);  
       let userDataSave = JSON.stringify(callbackData.user);
       sessionStorage.setItem('currentUserData',userDataSave);
       console.log(callbackData.user);      
       this.router.navigate(['/','home']);
     }else{
-      alert(callbackData.mensaje);
+      //alert(callbackData.mensaje);
+      //TODO: Encontrar una forma de mostrar el mensaje
     }
   }
   async getLoginData(id:string, password:string){
