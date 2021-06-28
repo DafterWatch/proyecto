@@ -502,7 +502,8 @@ export class HomeComponent implements OnInit {
     let informacionDelGrupo1={
       nombre: groupName.value,
       descripcion:groupDescription.value,
-      foto:profileData      
+      foto:profileData,
+      estado:false      
     }
 
     let mensaje:{

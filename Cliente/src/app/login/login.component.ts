@@ -41,7 +41,11 @@ export class LoginComponent implements OnInit {
 
       let id = callbackData.user.id;
 
-      
+      if(callbackData.user.estado){
+        //TODO: Cambiar por otro mensaje emergente
+        alert('Usted está bloqueado');
+        return;
+      }
 
       sessionStorage.setItem('currentUser',callbackData.user.id);  
       let userDataSave = JSON.stringify(callbackData.user);
@@ -49,7 +53,7 @@ export class LoginComponent implements OnInit {
       console.log(callbackData.user);      
       this.router.navigate(['/','home']);
     }else{
-      //alert(callbackData.mensaje);
+      alert(callbackData.mensaje);
       //TODO: Encontrar una forma de mostrar el mensaje
     }
   }

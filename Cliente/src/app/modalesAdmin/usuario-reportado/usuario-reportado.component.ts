@@ -84,7 +84,8 @@ export class UsuarioReportadoComponent implements OnInit {
 
     let data = {
       idUsuario : this.usuario.id,
-      type : this.type === 1? 3 : 4
+      type : this.type === 1? 3 : 4,
+      grupo : this.type === 1?false:true
     }
 
     await this.http.post(this.DIRECCION_SERVER+'/bloquearUsuario',data).subscribe();

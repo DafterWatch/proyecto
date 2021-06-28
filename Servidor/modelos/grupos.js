@@ -12,7 +12,8 @@ const grupoSchema = new Schema ({
     informacion:{
         foto:String,
         nombre:String,
-        descripcion:String
+        descripcion:String,
+        estado : Boolean
     },
     mensajeFijado:String,
     tareas:Array

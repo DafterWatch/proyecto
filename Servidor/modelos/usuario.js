@@ -11,7 +11,8 @@ const usuarioSchema = new Schema ({
     contraseña : String,
     preguntaSeguridad : String,
     respuesta : String,
-    fotoPerfil : String
+    fotoPerfil : String,
+    estado : Boolean
 });
 
 module.exports = mongoose.model('usuario',usuarioSchema,'usuarios');

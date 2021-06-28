@@ -21,7 +21,7 @@ export class InformeReporteComponent implements OnInit {
     this.type = this.data.informacionBloqueo.type;
     this.reporte = this.data.informacionBloqueo.reporte;    
     
-    this.getBloqueado(this.data.informacionBloqueo.id_bloqueado);
+    this.getBloqueado(this.data.informacionBloqueo.id_reportado);
   }
 
   async getBloqueado(idBloqueo : number){    
@@ -44,7 +44,8 @@ export class InformeReporteComponent implements OnInit {
   }
 
   desBloquear(){          
-    this.http.post(this.DIRECCION_SERVER+`/desbloquear/${this.bloqueado.id}`,{}).subscribe();
+    let grupo : boolean = this.type===3?false:true;
+    this.http.post(this.DIRECCION_SERVER+`/desbloquear/${this.bloqueado.id}/${grupo}`,{}).subscribe();
   }
 
 }

@@ -22,6 +22,6 @@
         <h4>ID: {{usuario?.id}} </h4>        
     </mat-card-content>
     <mat-card-actions>
-        <button mat-raised-button color="warn">Bloquear</button>        
+        <button mat-raised-button color="warn" [mat-dialog-close] (click)="bloquearUsuario()">Bloquear</button>        
     </mat-card-actions>
 </mat-card>
