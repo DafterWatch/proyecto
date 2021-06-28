@@ -29,8 +29,24 @@ export class CalenderComponent implements OnInit,ClaseMensaje {
   calendarWeekends = true;
 
   calendarEvents: EventInput[] = [
-    { title: 'Event Now', date: new Date() }
+    
   ];
+
+  calendarOptions: CalendarOptions = {
+    initialView: 'dayGridMonth',
+    dateClick: this.handleDateClick.bind(this), // bind is important!
+    events: [
+     
+    ],
+    eventClick: function(info) {
+    alert(info.event.title);
+    }
+  };
+  handleDateClick(arg) {
+    console.log('date click! ' + arg.jsEvent)
+
+  }
+
 
   ngOnInit(): void {
     
@@ -44,34 +60,33 @@ export class CalenderComponent implements OnInit,ClaseMensaje {
       let userData = JSON.stringify(data);
       this.grupos = JSON.parse(userData);
 
-      var tareasGrupos:any[]=[];
+  
 
       this.grupos.forEach(element => {
-        element.tareas.forEach(element1 => {
-          tareasGrupos.push(element1);
-          });
+      
+          element.tareas.forEach(element1 => {
+            
+           console.log(element1);
+            var mydate = new Date(element1.endDate.trim());
+            var taskName= " Titulo: "+element1.titulo.trim()+"\n Grupo: "+element.informacion.nombre+ "\n Fecha de inicio: "+element1.startDate.trim()+"\n Fecha de cierre: "+new Date(mydate).getFullYear()+"-"+new Date(mydate).getMonth()+"-"+new Date(mydate).getDay();
+            this.calendarEvents = this.calendarEvents.concat({ 
+              title: taskName,
+              start: mydate
+              })
+            });
+       
         });
 
  
-      tareasGrupos.forEach(element => {
-        var mydate = new Date(element.endDate.trim());
-
-        var taskName= element.titulo;
-        var date1 = (mydate.getFullYear()+"-"+mydate.getMonth()+"-"+mydate.getDay());
-        this.calendarEvents = this.calendarEvents.concat({ 
-          title: taskName,
-          start: date1
-        })
-      });
+      
+  
+        this.calendarOptions.events=this.calendarEvents;
       });
     });  
   }
  
   grupos:any;
 
-  handleDateClick(arg) {
-
-  }
 
 
   @Input()

@@ -1,5 +1,5 @@
-<div style="height: 100px !important;" style=" background-color: #f6f6f6;">
-  <div style="height:50%" >
+<div style="height:100%; background-color: #f7f7f7;">
+  <div >
       <mat-toolbar class="navbar-calender" >
         <span>Calendario Estudiantil</span>
         <span class="example-spacer"></span>
@@ -8,14 +8,9 @@
         </button>
       </mat-toolbar>
     
-    <div class="calender" style="overflow:visible">
-      <full-calendar
-      #calendar
-      defaultView="dayGridMonth"
-      [weekends]="calendarWeekends"
-      [events]="calendarEvents"
-      (dateClick)="handleDateClick($event)"
-    ></full-calendar>
+    <div style="width:50%;height: 100%;
+    justify-content: center;margin-left: 25%;">
+      <full-calendar [options]="calendarOptions"></full-calendar>
     </div>
   </div>
   
