@@ -1,0 +1,39 @@
+<mat-card>
+    <mat-card-header>
+        <div class="cabecera">
+            <div class="buscar" *ngIf="true">
+                <input type="text" #idUsuario  class="input-field" placeholder="ID De usuario a reportar" (keyup.enter)="$event.target.value==''?'':''">
+                <!--buscarUsuario($event.target.value) || buscarUsuario(idUsuario.value)-->
+                <button mat-icon-button color="black">
+                    <mat-icon>search</mat-icon>
+                </button> 
+            </div>
+            <img src="../../../assets/images/chayan.png" style="border-radius: 50%;" width="100px" height="100px">
+            <div>
+                <h1 style="font-size: xx-large;">Reportar Usuario</h1>
+                <h4>&nbsp; Nombre de usuario</h4>
+            </div>
+            <!--Cambiar por two way binding-->
+        </div>                
+    </mat-card-header>
+    <mat-card-subtitle>
+        <br/>
+        <p>Por favor selecciona cual de las siguientes opciones se apega más al comportamiento del usuario a reportar</p>
+        <mat-divider></mat-divider>
+    </mat-card-subtitle>
+    <mat-card-content>
+        <mat-radio-group>
+            <div *ngFor="let contenido of radioContent; let index">
+            <mat-radio-button [value]="index">
+                <div class="radioContent_">
+                    <div class="radioTitle"> <h2>{{contenido.titulo }} </h2></div>
+                    <div class="radioSubTitle"><h4>{{contenido.subtitulo}} </h4></div>
+                </div>
+            </mat-radio-button>            
+            </div>            
+        </mat-radio-group>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-flat-button color="warn">Reportar</button>
+    </mat-card-actions>
+</mat-card>

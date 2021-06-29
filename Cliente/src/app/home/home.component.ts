@@ -25,7 +25,7 @@ import { LoaderService } from '../loader.service';
 import { CrearComponent } from '../crear/crear.component';
 import { EntregarComponent } from '../entregar/entregar.component';
 import { CalificarTareaComponent } from '../calificar-tarea/calificar-tarea.component';
-
+import { ReportesClienteComponent } from '../modalesAdmin/reportes-cliente/reportes-cliente.component';
 
 @Component({
   selector: 'app-home',
@@ -848,6 +848,13 @@ esAñadirMiembrosAGrupoNuevo=false;
       
       newNameInput.parentElement.replaceChild(originalNameElement,newNameInput);
       confirmButton.parentElement.replaceChild(button,confirmButton);
+      
+    }
+  }
+  abrirReporte(tipo : number){
+    if(tipo===1){
+      this.dialog.open(ReportesClienteComponent);
+    }else{
       
     }
   }

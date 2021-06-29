@@ -81,6 +81,7 @@ import { AdministradorComponent } from './administrador/administrador.component'
 import { UsuarioReportadoComponent } from './modalesAdmin/usuario-reportado/usuario-reportado.component';
 import { InformeReporteComponent } from './modalesAdmin/informe-reporte/informe-reporte.component';
 import { BuscarUsuarioComponent } from './buscar-usuario/buscar-usuario.component';
+import { ReportesClienteComponent } from './modalesAdmin/reportes-cliente/reportes-cliente.component';
 
 
 
@@ -113,6 +114,7 @@ import { BuscarUsuarioComponent } from './buscar-usuario/buscar-usuario.componen
     UsuarioReportadoComponent,
     InformeReporteComponent,
     BuscarUsuarioComponent,
+    ReportesClienteComponent,
 
     
     
