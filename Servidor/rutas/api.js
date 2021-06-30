@@ -723,24 +723,24 @@ module.exports = function(router){
         res.send(true);
     });
 
-    router.post('/desbloquear/:idBloqueo/:grupo', async (req,res)=>{     
+    router.post('/desbloquear/:idBloqueo/:grupo', (req,res)=>{     
         let grupo = req.params.grupo;  
         let id = req.params.idBloqueo;                         
-        Reportes.deleteOne({"id_reportado":id}).exec((err,data) =>{
+        /*Reportes.deleteOne({"id_reportado":id}).exec((err,data) =>{
             if(err) console.log('Error borrando reporte \x1b[36m%s\x1b[0m', '/desbloquear', err.message);          
-        });        
-        
-        if(grupo===true){
-            
-            await Grupo.updateOne({"id":id},{$set:{"informacion.estado":false}}).exec((err,data) =>{
+        });   */     
+        console.log(grupo);
+        if(grupo==1){
+            console.log('desbloqueando grupo');
+            Grupo.updateOne({"id":id},{$set:{"informacion.estado":false}}).exec((err,data) =>{
                 if(err){
                     console.log('Error desbloqueando grupo \x1b[36m%s\x1b[0m', '/desbloquear', err.message);   
                 }                
             });
             
-        }else{
-            console.log('Llega');
-            await Usuario.updateOne({"id":id},{$set:{"estado":false}}).exec((err,data)=>{
+        }else{      
+            console.log('desbloqueando usuario');      
+            Usuario.updateOne({"id":id},{$set:{"estado":false}}).exec((err,data)=>{
                 if(err){
                     console.log('Error desbloqueando usuario \x1b[36m%s\x1b[0m', '/desbloquear', err.message);   
                 }                
@@ -774,6 +774,15 @@ module.exports = function(router){
         });
         await Usuario.updateOne({"id":id_bloqueado},{$set:{"estado":true}}).exec();
         res.json({error:false});        
+    });
+    router.post('/generarReporte',jsonParser,(req,res)=>{
+        let newReporte = new Reportes(req.body);
+        newReporte.save(err=>{
+            if(err){
+                console.log('Error creando reporte \x1b[36m%s\x1b[0m', '/bloquearUsuarioDirecto', err.message);   
+            }
+        });
+        res.send(true);
     });
 
     return router;

@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+
+type DatosReporte = { type : Number, usuario : any, currentId : number }
 
 @Component({
   selector: 'app-reportes-cliente',
@@ -7,7 +11,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReportesClienteComponent implements OnInit {
 
-  constructor() { }
+  constructor(private http : HttpClient, @Inject(MAT_DIALOG_DATA) public data: DatosReporte) { }
+
+  SERVER_DIR : string = 'http://localhost:3000';
+
+  usuario : any;
+  foto : string;
+  grupo : boolean=true;
+  reporte : any;
 
   radioContent  = [
     { titulo : 'Mensajes de odio', subtitulo : 'Racismo, sexismo, xenofobia, etc.' },
@@ -17,6 +28,36 @@ export class ReportesClienteComponent implements OnInit {
   ]
 
   ngOnInit(): void {
+    //type === 2 grupo
+    //type === 1 usuario     
+    
+    if(this.data.type===2){
+      this.grupo = false;
+      this.usuario = this.data.usuario;
+      this.foto = this.SERVER_DIR +'/'+ this.usuario.informacion.foto;
+    }   
+  }
+
+  async buscarUsuario(idUsuario : string) :Promise<void> {
+    await this.http.post(this.SERVER_DIR+`/usuarios/${idUsuario}`,{}).toPromise().then((usuario:any) =>{
+      this.usuario = usuario;
+    });    
+    this.foto = this.SERVER_DIR+'/'+this.usuario.fotoPerfil;
+  }
+  generarReporte(){            
+    
+    if(this.reporte===''){
+      return;
+    }
+
+    let reporte = {
+      type : this.data.type === 1?1:2,
+      id_reportado : this.usuario.id,
+      reporte: this.reporte.titulo,
+      id_reportador : parseInt(this.data.currentId.toString())
+    };
+        
+    this.http.post(this.SERVER_DIR+`/generarReporte`,reporte).subscribe();
   }
 
 }

@@ -82,7 +82,7 @@ import { UsuarioReportadoComponent } from './modalesAdmin/usuario-reportado/usua
 import { InformeReporteComponent } from './modalesAdmin/informe-reporte/informe-reporte.component';
 import { BuscarUsuarioComponent } from './buscar-usuario/buscar-usuario.component';
 import { ReportesClienteComponent } from './modalesAdmin/reportes-cliente/reportes-cliente.component';
-
+import { MatBadgeModule } from '@angular/material/badge'
 
 
 @NgModule({
@@ -163,7 +163,7 @@ import { ReportesClienteComponent } from './modalesAdmin/reportes-cliente/report
     MatSliderModule,
     DynamicModule,
     MatExpansionModule,
-    
+    MatBadgeModule
 
   ],
   bootstrap: [AppComponent],

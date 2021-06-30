@@ -27,6 +27,11 @@ import { EntregarComponent } from '../entregar/entregar.component';
 import { CalificarTareaComponent } from '../calificar-tarea/calificar-tarea.component';
 import { ReportesClienteComponent } from '../modalesAdmin/reportes-cliente/reportes-cliente.component';
 
+
+type MensajesNuevos = {
+  [key:string]:number
+}
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -52,6 +57,7 @@ export class HomeComponent implements OnInit {
   componentRef= null;  
   currentGroupProfileP : string;  
   currentGroupPinnedMessage : string;
+  mensajesSinLeer : MensajesNuevos;
 
   constructor(private socket: WebSocketService, private http:HttpClient, private route:Router,public dialog: MatDialog,  private resolver: ComponentFactoryResolver, public loaderService:LoaderService) {
 
@@ -113,11 +119,13 @@ export class HomeComponent implements OnInit {
         let aux = JSON.stringify(data);         
         this.currentUser = JSON.parse(aux);
     });    
-    this.currentUser.fotoPerfil = `http://localhost:3000/${this.currentUser.fotoPerfil}`;
+    this.currentUser.fotoPerfil = `http://localhost:3000/${this.currentUser.fotoPerfil}`;        
+    this.mensajesSinLeer = this.currentUser.nuevosMensajes;
 
+    console.log(this.mensajesSinLeer["2"]);  
     this.http.post('http://localhost:3000/gruposId/',this.currentUser.grupos).subscribe(data =>{      
           let userData = JSON.stringify(data);          
-          this.grupos = JSON.parse(userData);                                                                     
+          this.grupos = JSON.parse(userData);                                                                               
     });
     
   }
@@ -288,8 +296,12 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.socket.listen('nuevoMensaje').subscribe((data:any)=>{
-      if(true){      
-        this.componentRef.instance.addMessageToList(data);
+      //TODO: GUARDAR EN BASE DE DATOS AL SALIR 
+      if(data.idGrupo === this.currentGroupId){      
+        this.componentRef.instance.addMessageToList(data.mensaje);
+      }else{
+        if(data.idGrupo in this.mensajesSinLeer)
+          this.mensajesSinLeer[data.idGrupo]++;          
       }
     });
     this.socket.listen('nuevoGrupo').subscribe((data:any)=>{            
@@ -314,8 +326,7 @@ export class HomeComponent implements OnInit {
       //campo,nuevoCampo, idGroup  
       let idg = parseInt(data.idGroup)
       if(idg === this.currentGroupId){
-        //TODO: Recuperar las etiquetas y cambiar la información
-        console.log('Datos desc',data);
+        //TODO: Recuperar las etiquetas y cambiar la información        
         if(data.campo === "nombre"){
           this.currentGroup = data.nuevoCampo;
           this.componentRef.instance.currentGroup=data.nuevoCampo;
@@ -345,11 +356,13 @@ export class HomeComponent implements OnInit {
       this.grupos.push(data);
     });
     this.socket.listen('nuevo-form').subscribe((data:any)=>{
+      //realizar lo mismo que en nuevo mensaje      
       if(true){      
         this.componentRef.instance.addMessageToList(data);
       }
     });
     this.socket.listen('respuesta-form').subscribe((data:any)=>{
+      //realizar lo mismo que en nuevo mensaje
       if(true){      
         //console.log(data);
         this.componentRef.instance.updateFormAnswers(data);
@@ -377,7 +390,7 @@ export class HomeComponent implements OnInit {
   } 
 
   sendMensaje(message:any){         
-    this.socket.emit('nuevoMensaje',{idGrupo:this.currentGroupId, mensaje:message});    
+    this.socket.emit('nuevoMensaje',{idGrupo:this.currentGroupId, mensaje:message,integrantes: this.currentGroupItems});    
   } 
 
   cleanCreateGroupFields(){
@@ -713,6 +726,7 @@ esAñadirMiembrosAGrupoNuevo=false;
       await this.http.post('http://localhost:3000/getGroupMessages',{id:this.currentGroupId}).toPromise().then(data =>{                
         mensaje = data;
       });
+      this.mensajesSinLeer[this.currentGroupId]=0;
       this.createComponent(1);  
       this.componentRef.instance.updateGroupMessages({idGrupo:this.currentGroupId,mensajes:mensaje});
       this.isCurrentUsesAdmin();
@@ -853,9 +867,13 @@ esAñadirMiembrosAGrupoNuevo=false;
   }
   abrirReporte(tipo : number){
     if(tipo===1){
-      this.dialog.open(ReportesClienteComponent);
+      this.dialog.open(ReportesClienteComponent,{
+        data: { type : 1,usuario: this.currentUser, currentId : this.currentUserId}
+      });
     }else{
-      
+      this.dialog.open(ReportesClienteComponent,{
+        data: { type : 2,usuario: this.actualGroupInformation, currentId : this.currentUserId}
+      });
     }
   }
 

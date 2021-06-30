@@ -44,7 +44,7 @@ export class InformeReporteComponent implements OnInit {
   }
 
   desBloquear(){          
-    let grupo : boolean = this.type===3?false:true;
+    let grupo : number = this.type===3?2:1;
     this.http.post(this.DIRECCION_SERVER+`/desbloquear/${this.bloqueado.id}/${grupo}`,{}).subscribe();
   }
 

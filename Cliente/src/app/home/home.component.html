@@ -111,7 +111,7 @@
 
   <div id="buttons-group" fxflex="10" style="flex: 1 1 1e-09px; box-sizing: border-box; max-height: 10%;">
     <button style="height: auto;" mat-raised-button (click)="_toggleOpened()">Salir del grupo</button><br>
-    <button style="height: auto; margin-top: 0.9%;" mat-raised-button (click)="_toggleOpened()">Reportar grupo</button>
+    <button style="height: auto; margin-top: 0.9%;" mat-raised-button (click)="_toggleOpened(); abrirReporte(2)">Reportar grupo</button>
   </div>
 </div>  
 </ng-sidebar>
@@ -213,19 +213,20 @@
             <div fxflex="20" style="float: left ;box-sizing: border-box; width: 20%;height: 100%;display: block; " class="submenu" id="submenu1">
               <div class="colored-box" style="flex-direction: column; box-sizing: border-box; display: flex;">
                   <div class="options" style="flex: 1 1 100%; box-sizing: border-box; max-height: 25%;">
-                      <h3>Opciones</h3>
+                      <h3>Opciones</h3>                       
                       <button (click)="hclick=true" (click)='addMemberCommon()' (click)="this.cleanCreateGroupFields()">Crear grupo</button>
                   </div>
                   <div class="my-groups" style="flex: 1 1 1e-09px; box-sizing: border-box;" >
                       <h3>Mis Grupos</h3>
-                      <div *ngFor="let grupo of grupos | keyvalue">
+                      <div *ngFor="let grupo of grupos | keyvalue; let index">
                       <!--TODO: Crear en forma de ListView y arreglar problema con los nombres-->
                       <button mat-raised-button 
                         (click)='showGroup(grupo.value)' 
                         name='grupo.value.informacion.nombre' 
                         id="btnC"
-                       
-                      >{{grupo.value.informacion.nombre}}</button>             W   
+                        *ngIf="grupo.value.informacion.estado===false"
+                        [matBadge]=" mensajesSinLeer[grupo.value.id]>0?mensajesSinLeer[grupo.value.id]:null " matBadgePosition="after" matBadgeColor="#01174B" 
+                      >{{grupo.value.informacion.nombre}}</button>      
                       </div>                
                   </div>
               </div>
