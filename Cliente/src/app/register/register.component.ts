@@ -36,7 +36,8 @@ export class RegisterComponent implements OnInit {
   ];
 
   registerFields : any = {};
-  
+  error = { error:false, mensaje : '' };
+
   async register(){
     let nameField : any = document.getElementById('txtNombre');
     let emailField : any = document.getElementById('email');
@@ -77,6 +78,8 @@ export class RegisterComponent implements OnInit {
     await this.http.post('http://localhost:3000/crearUser',this.registerFields).toPromise().then((res:any)=>{
       if(res.error){
         //alert(res.mensaje);
+        this.error.error=true;
+        this.error.mensaje = res.mensaje;
         return;
       }else{
         //alert('Registrado!');                   

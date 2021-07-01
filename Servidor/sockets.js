@@ -23,13 +23,11 @@ module.exports = function (io){
                 let id = integrantes[i];
                 if(id in usuarios){
                     usuarios[id].emit('nuevoMensaje',{idGrupo:data.idGrupo, mensaje: data.mensaje});
-                }else{            
-                    let tipo = `nuevosMensajes.${data.idGrupo}`;
-                    await Usuario.updateOne({"id":id}, { $inc: { tipo : 1  }}).exec((err,data)=>{
+                }else{                                
+                    await Usuario.updateOne({"id":id}, { $inc: {  [`nuevosMensajes.${data.idGrupo}`] : 1  }}).exec((err)=>{
                         if(err){
                             console.log('Error actualizando mensajes \x1b[36m%s\x1b[0m', 's/nuevoMensaje', err.message);
-                        }
-                        console.log(data);
+                        }                        
                     });
                 }
             }        
@@ -52,7 +50,8 @@ module.exports = function (io){
                 if(id in usuarios){                    
                     usuarios[id].emit('nuevoGrupo',data.infoGrupo);                    
                 }                
-                await Usuario.updateOne({"id":id},{ $push:{ "grupos":data.infoGrupo.id.toString() } })
+                //await Usuario.updateOne({"id":id},{ $push:{ "grupos":data.infoGrupo.id.toString() } })
+                await Usuario.updateOne({"id":id},{ $push:{ "grupos":data.infoGrupo.id.toString() } }, {$set: { [`nuevosMensajes.${data.infoGrupo.id}`]:0 } });
             }
             cb({err:false});
         });
@@ -381,10 +380,13 @@ module.exports = function (io){
         });        
         socket.on('cerrar-sesion', id=>{
             console.log('sesión cerrada');
+            if(!socket.id)return;
             delete usuarios[id];
         });
         socket.on('disconnect', ()=>{
-            //delete usuarios[0];
+            console.log('sesión cerrada');
+            if(!socket.id)return;
+            delete usuarios[ socket.id ];
         });
     });
 };

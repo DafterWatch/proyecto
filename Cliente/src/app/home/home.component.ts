@@ -6,7 +6,8 @@ import { Component,
   ViewContainerRef,
   ComponentFactoryResolver,
   ComponentRef,
-  ViewChild } from '@angular/core';
+  ViewChild, 
+  HostListener} from '@angular/core';
 import { WebSocketService } from '../web-socket.service';
 import {HttpClient} from '@angular/common/http';
 import { identifierModuleUrl } from '@angular/compiler';
@@ -64,9 +65,24 @@ export class HomeComponent implements OnInit {
     this.currentUserId = sessionStorage.getItem('currentUser');        
     this.generateUserData();
 
-    this.router = route;    
+    this.router = route;     
+
+    window.addEventListener("beforeunload", (event) => {
+      event.preventDefault();
+      //DEJAR SOLO SI SE QUIERE LA VENTAJA DE CONFIRMACIÓN
+      event.returnValue = "Unsaved modifications";
+      let data = {
+        id : this.currentUserId,
+        mensajes : this.mensajesSinLeer
+      }
+      this.http.post('http://localhost:3000/actMensajesVistos',data).subscribe();
+      
+      return event;
+   });
     
   }
+  
+
   @ViewChild('groupContainer', { read: ViewContainerRef }) entry: ViewContainerRef;
   dialogRef : any = null;
   resultadoDormulario:String;
@@ -121,8 +137,7 @@ export class HomeComponent implements OnInit {
     });    
     this.currentUser.fotoPerfil = `http://localhost:3000/${this.currentUser.fotoPerfil}`;        
     this.mensajesSinLeer = this.currentUser.nuevosMensajes;
-
-    console.log(this.mensajesSinLeer["2"]);  
+    
     this.http.post('http://localhost:3000/gruposId/',this.currentUser.grupos).subscribe(data =>{      
           let userData = JSON.stringify(data);          
           this.grupos = JSON.parse(userData);                                                                               
@@ -306,6 +321,7 @@ export class HomeComponent implements OnInit {
     });
     this.socket.listen('nuevoGrupo').subscribe((data:any)=>{            
       this.grupos.push(data);      
+      this.mensajesSinLeer[data.id] = 0;
     });
     this.socket.listen('admin-nuevo').subscribe((data:any)=>{
       alert('Te acaban de ascender a administrador')
@@ -499,6 +515,12 @@ export class HomeComponent implements OnInit {
 
     let profileData : string;
 
+    if(profilePicture === undefined){
+      alert('Debe seleccionar una imagen !');
+      //TODO: Cambiar por una etiqueta o hacer un alert diferente! 
+      return;
+    }
+
     await this.http.post('http://localhost:3000/prepareGroupProfile',formData,{responseType:'text'}).toPromise().then(
       (res)=>{
         profileData = res;
@@ -537,7 +559,8 @@ export class HomeComponent implements OnInit {
     await this.http.post('http://localhost:3000/getGroupCount',{}).toPromise().then((data:any) => idGroup = data.conteo);            
     idGroup++;    
     if(idGroup === -1){
-      alert('Erro con el id de grupo');
+      //TODO: CAMBIAR POR OTRO MÉTODO
+      //alert('Erro con el id de grupo');
       return;
     }
     
@@ -553,6 +576,7 @@ export class HomeComponent implements OnInit {
       }
     });
     this.router.navigate(['/home']);
+    this.mensajesSinLeer[idGroup]=0;
     window.location.reload();
     //this.cleanGropsPage();    
   }
@@ -808,6 +832,7 @@ esAñadirMiembrosAGrupoNuevo=false;
     input.onchange = async ()=>{
       formData.append('groupPicture',input.files[0]);
       formData.append('groupId',this.currentGroupId);
+      formData.append('previousImage',this.currentGroupProfileP);
       let newProfileDirection:string;
       await this.http.post('http://localhost:3000/changeGroupImage',formData,{responseType:'text'}).toPromise().then(
         (res)=>{

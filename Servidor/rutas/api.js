@@ -13,6 +13,7 @@ const bodyParser = require('body-parser');
 const { google } = require('googleapis');
 const { file } = require('googleapis/build/src/apis/file');
 const { log } = require('console');
+const usuario = require('../modelos/usuario');
 
 const PATH = './uploadsFiles';
 
@@ -569,7 +570,8 @@ module.exports = function(router){
                 preguntaSeguridad : datos.securityQuestion,
                 respuesta : datos.securityAns,
                 fotoPerfil:"uploads\\default.png",
-                estado : false
+                estado : false,
+                nuevosMensajes :{}
             }
 
             let nuevoUsuario = new Usuario(newUser);
@@ -670,6 +672,15 @@ module.exports = function(router){
     });
 
     router.post('/changeGroupImage',upload.single('groupPicture'), async (req,res)=>{
+
+        let previousImage = './'+req.body.previousImage.substring(22);
+        try {
+            if(!previousImage === './uploads\\default.png')
+            fs.unlinkSync(previousImage);
+        } catch (error) {
+            console.log('Error borrando la imagen anterior del grupo');
+        }
+
         await Grupo.updateOne({"id":req.body.groupId},{$set:{'informacion.foto':req.file.path}}).exec(err=>{
             if(err) console.log('Error actualizando grupo \x1b[36m%s\x1b[0m', '/changeGroupImage', err.message);
         });
@@ -677,6 +688,7 @@ module.exports = function(router){
     });
 
     router.post('/prepareGroupProfile',upload.single('groupPicture'), async(req,res)=>{
+        //IF req.file.path ELSE enviar el path de la imágen por defecto
         res.send(req.file.path);
     });
 
@@ -782,6 +794,39 @@ module.exports = function(router){
                 console.log('Error creando reporte \x1b[36m%s\x1b[0m', '/bloquearUsuarioDirecto', err.message);   
             }
         });
+        res.send(true);
+    });
+
+    router.post('/men/:id',async (req,res)=>{
+        let id = req.params.id.toString();          
+        
+        const doc = await usuario.findOne({ id });
+        
+        let mensajes = doc.nuevosMensajes;
+        mensajes['4']=0;
+        console.log(mensajes);
+        usuario.updateOne({id}, {$pull:{[`nuevosMensajes.${5}`]:0}}).exec();
+        //doc.updateOne({}, {$set:{'nuevosMensajes':mensajes}}).exec();
+        await doc.save();
+        /*Usuario.updateOne({"id":id}, { $push : {"nuevosMensajes": {"2":0 } } }).exec((err,data)=>{
+            if(err){
+                console.log('Error actualizando mensajes \x1b[36m%s\x1b[0m', 's/nuevoMensaje', err.message);
+            }
+            console.log(data);
+        });*/
+        res.send(true);
+    })
+
+    router.post('/actMensajesVistos',jsonParser,(req,res)=>{
+        let id = parseInt(req.body.id);
+        let mensajes = req.body.mensajes;        
+
+        usuario.updateOne({"id":id}, {$set: { 'nuevosMensajes':mensajes }}).exec(err=>{
+            if(err){
+                console.log('Error actualizando mensajes sin leer \x1b[36m%s\x1b[0m', '/actMensajesVistos', err.message);
+            }
+        });
+
         res.send(true);
     });
 

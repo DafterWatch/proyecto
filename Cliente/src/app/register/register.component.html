@@ -37,7 +37,8 @@
             <input type="password" placeholder="Repita su contraseña" name="psw-repeat" id="psw-repeat" required>
             <span style="color: red;" *ngIf="validadores['confirm']"> <mat-icon style="font-size: small;">info</mat-icon> Las contraseñas no coinciden </span><br>                    
             <hr>
-            <button class="registerbtn" (click)="register()">Registrarse</button>            
+            <button class="registerbtn" (click)="register()">Registrarse</button> 
+            <h3 *ngIf="error.error" style="color: rgba(255, 0, 0, 0.479);">{{error.mensaje }}</h3>           
         </div>
           
         <div class="container signin">
