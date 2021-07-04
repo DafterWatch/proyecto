@@ -10,15 +10,14 @@
             </div>
             <img [src]="foto||'../../../assets/images/chayan.png'" style="border-radius: 50%;" width="100px" height="100px">
             <div>
-                <h1 style="font-size: xx-large;">Reportar Usuario</h1>
+                <h1 style="font-size: xx-large;">Reportar {{grupo?'Grupo':'Usuario'}}</h1>
                 <h4>&nbsp; {{usuario?.nombre || usuario?.informacion?.nombre}}</h4>
-            </div>
-            <!--Cambiar por two way binding-->
+            </div>            
         </div>                
     </mat-card-header>
     <mat-card-subtitle>
         <br/>
-        <p>Por favor selecciona cual de las siguientes opciones se apega más al comportamiento del usuario a reportar</p>
+        <p>Por favor selecciona cual de las siguientes opciones se apega más al comportamiento del {{grupo?'grupo':'usuario'}} a reportar</p>
         <mat-divider></mat-divider>
     </mat-card-subtitle>
     <mat-card-content>
