@@ -35,6 +35,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import { FullCalendarModule } from '@fullcalendar/angular'; 
 import dayGridPlugin from '@fullcalendar/daygrid'; 
 import interactionPlugin from '@fullcalendar/interaction'; 
+
 FullCalendarModule.registerPlugins([ 
   dayGridPlugin,
   interactionPlugin
@@ -83,7 +84,7 @@ import { InformeReporteComponent } from './modalesAdmin/informe-reporte/informe-
 import { BuscarUsuarioComponent } from './buscar-usuario/buscar-usuario.component';
 import { ReportesClienteComponent } from './modalesAdmin/reportes-cliente/reportes-cliente.component';
 import { MatBadgeModule } from '@angular/material/badge'
-
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -116,8 +117,6 @@ import { MatBadgeModule } from '@angular/material/badge'
     BuscarUsuarioComponent,
     ReportesClienteComponent,
 
-    
-    
   ],
   imports: [
     MatDialogModule,
@@ -163,7 +162,8 @@ import { MatBadgeModule } from '@angular/material/badge'
     MatSliderModule,
     DynamicModule,
     MatExpansionModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatSnackBarModule
 
   ],
   bootstrap: [AppComponent],

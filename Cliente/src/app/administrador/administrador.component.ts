@@ -5,7 +5,7 @@ import { UsuarioReportadoComponent } from '../modalesAdmin/usuario-reportado/usu
 import { InformeReporteComponent } from '../modalesAdmin/informe-reporte/informe-reporte.component';
 import { BuscarUsuarioComponent } from '../buscar-usuario/buscar-usuario.component';
 import {HttpClient} from '@angular/common/http';
-
+import { Router } from '@angular/router';
 interface ReporteGen{
   _id : string;
   type:number;
@@ -31,7 +31,7 @@ export class AdministradorComponent implements OnInit {
   //Cambiar cuando se exporte a heroku
   DIRECCION_SERVER : string = 'http://localhost:3000';  
 
-  constructor(public dialog: MatDialog, public http:HttpClient) { }   
+  constructor(public dialog: MatDialog, public http:HttpClient, private router : Router) { }   
 
   reportesUsuarios : Array<ReporteGen>;
   reportesGrupos : Array<ReporteGen>;
@@ -139,6 +139,8 @@ export class AdministradorComponent implements OnInit {
     });
     return listaDeBloqueos;
   }
-  
+  salirDeLaCuenta() :void {
+    this.router.navigate(['/','inicio']);
+  }
 
 }

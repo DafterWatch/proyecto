@@ -113,6 +113,7 @@ export class ChatGroupComponent implements OnInit {
   @Input() currentGroupProfileP:string;
   @Input() currentPinMessage : string = "";
   @Input() isAdmin:Boolean;
+  @Input() habilitado : boolean;
   tamano: number = 10;  
  
   eventosChat : ChatEvent[] = [];
@@ -124,6 +125,7 @@ export class ChatGroupComponent implements OnInit {
   
   @Output() myEventSendMessage= new EventEmitter<any>();
   sendMensaje(message:String){
+    console.log(this.habilitado);
     
     let new_msg:Messages = {
       type: 1,
@@ -131,9 +133,9 @@ export class ChatGroupComponent implements OnInit {
       message : message,
       name : this.currentUser.nombre,
       time: new Date(Date.now())
-    }    
-
-    this.myEventSendMessage.emit(new_msg);
+    } 
+    if(this.habilitado)   
+      this.myEventSendMessage.emit(new_msg);
 
     /*let chat_window = document.getElementById('chatContainerDiv');
     chat_window.scrollTop = chat_window.scrollHeight;*/

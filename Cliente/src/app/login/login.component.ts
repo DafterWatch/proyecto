@@ -18,6 +18,10 @@ export class LoginComponent implements OnInit {
   
   emailCompleted:boolean = true;
   passwordCompleted:boolean = true;
+  mensajeError : { error:boolean,mensaje : string } = {
+    error:false,
+    mensaje:''
+  }
 
   async login(id:string, password:string):Promise<any>{    
     let callbackData;
@@ -42,8 +46,8 @@ export class LoginComponent implements OnInit {
       let id = callbackData.user.id;
 
       if(callbackData.user.estado){
-        //TODO: Cambiar por otro mensaje emergente
-        alert('Usted está bloqueado');
+        this.mensajeError.error = true;
+        this.mensajeError.mensaje = 'Su cuenta se encuentra deshabilitada';
         return;
       }
 
@@ -52,9 +56,9 @@ export class LoginComponent implements OnInit {
       sessionStorage.setItem('currentUserData',userDataSave);
       console.log(callbackData.user);      
       this.router.navigate(['/','home']);
-    }else{
-      alert(callbackData.mensaje);
-      //TODO: Encontrar una forma de mostrar el mensaje
+    }else{      
+      this.mensajeError.error = true;
+      this.mensajeError.mensaje = callbackData.mensaje;      
     }
   }
   async getLoginData(id:string, password:string){

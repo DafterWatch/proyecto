@@ -8,6 +8,12 @@ const path = require ('path');
 
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const Hogan = require('hogan.js');
+
+//obtener el archivo
+const template = fs.readFileSync('./rutas/mailCard.hjs','utf-8');
+//compilar el archivo
+const compiledTemplate = Hogan.compile(template);
 
 ////////////////////////GOOGLE
 const { google } = require('googleapis');
@@ -609,15 +615,17 @@ module.exports = function(router){
     });
     router.post('/sendPassword/:email', async (req,res)=>{
         let password = "";
+        let userName = "";
         await Usuario.findOne({'email':req.params.email}).exec().then(usuario =>{
             password = usuario.contraseña;
+            userName = usuario.nombre;
         });
 
         let mailOptions = {
             from : 'mean.login.services@gmail.com',
             to : req.params.email,
-            subject : 'Contraseña de cuenta',
-            text : 'Su contraseña es :' + password
+            subject : 'Contraseña de cuenta',            
+            html: compiledTemplate.render({contrasenia: password, nombre:userName})
         }
 
         transporter.sendMail(mailOptions,(err,info)=>{
@@ -805,15 +813,9 @@ module.exports = function(router){
         let mensajes = doc.nuevosMensajes;
         mensajes['4']=0;
         console.log(mensajes);
-        usuario.updateOne({id}, {$pull:{[`nuevosMensajes.${5}`]:0}}).exec();
-        //doc.updateOne({}, {$set:{'nuevosMensajes':mensajes}}).exec();
+        usuario.updateOne({id}, {$pull:{[`nuevosMensajes.${5}`]:0}}).exec();        
         await doc.save();
-        /*Usuario.updateOne({"id":id}, { $push : {"nuevosMensajes": {"2":0 } } }).exec((err,data)=>{
-            if(err){
-                console.log('Error actualizando mensajes \x1b[36m%s\x1b[0m', 's/nuevoMensaje', err.message);
-            }
-            console.log(data);
-        });*/
+
         res.send(true);
     })
 

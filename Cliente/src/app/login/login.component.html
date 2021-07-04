@@ -18,9 +18,8 @@
             <input type="password" placeholder="Ingresar contraseña" name="psw" required #txtPassword (keyup)="passwordCompleted=false"> 
 
             <button  mat-raised-button [disabled]="emailCompleted || passwordCompleted" (click)="login(txtName.value, txtPassword.value)" >Iniciar sesión</button>
-            <!--<label>
-              <input type="checkbox" name="remember"> Recuerdame
-            </label>-->
+            <br>
+            <h2 *ngIf="mensajeError.error"> {{mensajeError.mensaje}} </h2>
           </div>
         
           <div class="container">

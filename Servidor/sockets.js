@@ -80,6 +80,11 @@ module.exports = function (io){
                 cb({error:true,mensaje:"La contraseña es incorrecta"});
                 return;
             }
+            if(user.id in usuarios){
+                cb({error:true,mensaje:"Ya hay alguien logeado en la cuenta"});
+                return;
+            }
+      
             cb({error:false, user});
             socket.id = user.id;
             usuarios[user.id] = socket;
@@ -87,24 +92,24 @@ module.exports = function (io){
 
         socket.on('admin-nuevo', (data,cb)=>{
            let userId = data.userId;
-           let groupId = data.groupId;
-           if(userId in usuarios){
-               usuarios[userId].emit('admin-nuevo',null);
-           }
+           let groupId = data.groupId;           
            
-           Grupo.updateOne({"id":groupId}, { $push:{"miembrosDelGrupo.admin":userId.toString()} }).exec(err=>{
-               if(err)
-                console.log(err.message);
-           });        
+            Grupo.updateOne({"id":groupId}, { $push:{"miembrosDelGrupo.admin":userId.toString()} }).exec(err=>{
+                if(err)
+                    console.log(err.message);
+            });                    
+            if(userId in usuarios){
+                console.log('Emite el evento');
+                usuarios[userId].emit('admin-nuevo',groupId);
+            }
         });
 
-        socket.on('quitar-admin',data =>{
-            console.log(data);
+        socket.on('quitar-admin',data =>{            
             let userId = data.userId;
             let groupId = data.groupId;
 
             if(userId in usuarios){
-                usuarios[userId].emit('quitar-admin',null);
+                usuarios[userId].emit('quitar-admin',groupId);
             }
 
             Grupo.updateOne({"id":groupId}, {$pull:{"miembrosDelGrupo.admin": userId.toString()}}).exec(err=>{
@@ -114,29 +119,29 @@ module.exports = function (io){
         }); 
 
         socket.on('salir-grupo',data =>{
+            console.log(data);
             let userId = data.userId;
             let groupId = data.groupId;
             let expulsado = data.expulsado;
             
 
-            Usuario.updateOne({"id": userId},{ $pull: {"grupos": groupId }}).exec((err)=>{
+            Usuario.updateOne({"id": userId},{ $pull: {"grupos": groupId.toString() }}).exec((err)=>{
                 if(err){
-                    console.log('Error con los usuarios');                                        
+                    console.log('Error actualizando usuarios \x1b[36m%s\x1b[0m', 's/salir-grupo', err.message);                                     
                 }                               
             });
-            
-            Grupo.updateOne({"id":groupId.toString()},
+                   Grupo.updateOne({"id":groupId},
                 { $pull: {
                     "miembrosDelGrupo.integrantes":userId,
                     "miembrosDelGrupo.admin":userId
                 }}
             ).exec(err =>{
                 if(err){
-                    console.log("Error con los grupos");
+                    console.log('Error actualizando grupos \x1b[36m%s\x1b[0m', 's/salir-grupo', err.message);   
                 }
             });
             let mensaje = (expulsado)? "Te han expulsado del grupo" : "Saliste del grupo";
-            if(userId in usuarios){
+            if(userId in usuarios){                
                 usuarios[userId].emit('salir-grupo',{mensaje,groupId});
             }
         });
@@ -219,17 +224,7 @@ module.exports = function (io){
             data.formulario["valores"] = Array(data.formulario.cuestions.length).fill(0);
             
             let idForm = -1;
-            /*await Grupo.findOne({"id":groupId}).exec().then((grupo)=>{
-                let count = 0;
-                for(let i = 0;i<grupo.mensajes.length;i++){
-                    let item = grupo.mensajes[i];
-                    if(item.type === 2){
-                        count++;
-                    }
-                }
-                idForm=count;
-            });*/
-
+  
             await Grupo.find({}).exec().then(grupos=>{
                 let count = 0;
                 for(let i=0;i<grupos.length;i++){
@@ -246,7 +241,7 @@ module.exports = function (io){
             
             data.formulario['idForm']=idForm;
             Grupo.updateOne({"id":groupId} , {$push : {"mensajes": data.formulario}}).exec(err=>{err?console.log(err.message):""});
-            io.sockets.emit('nuevo-form',data.formulario);
+            io.sockets.emit('nuevo-form', { infoForm : data.formulario, idGrupo:groupId});
         });
 
         socket.on('group-picture-change', async data=>{
@@ -265,7 +260,7 @@ module.exports = function (io){
         socket.on('respuesta-form', async data =>{                   
             let userId = data.userId;
             let formId = data.idForm;
-            //let groupId = data.groupId;            
+                       
             await Grupo.updateOne({"mensajes.idForm":formId}, { $push:{"mensajes.$.respuestas":userId} }).exec((err)=>{
                 if(err){
                     console.log(err.message);
@@ -279,13 +274,14 @@ module.exports = function (io){
             });            
 
             let form = null;
+            let idGrupo
             await Grupo.findOne({"mensajes.idForm":formId}).exec().then((form_)=>{
-                
+                idGrupo = form_.id;
                 form = form_.mensajes.filter(x=> x.type === 2 && x.idForm=== formId);
             });
 
             let newValues = updatePercentages({answersInfo : data, formInfo : form[0]})
-            let newData = {valores: newValues, idForm: formId, cantVotos : form[0].cantidadVotos};
+            let newData = {valores: newValues, idForm: formId, cantVotos : form[0].cantidadVotos,idGrupo };
             io.sockets.emit('respuesta-form',newData);
         });
         function updatePercentages(data){

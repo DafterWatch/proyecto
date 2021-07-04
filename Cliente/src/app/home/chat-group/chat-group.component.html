@@ -16,7 +16,7 @@
     </div>
     <div #scroll class="options" fxflex="80" id="chatContainerDiv" [scrollTop]="scroll.scrollHeight">
         <div class="mensajePinneado" *ngIf="currentPinMessage!=''">
-            <div style="text-align: center; margin-left: 5px; cursor: pointer;" (click)="removePin()">
+            <div *ngIf="isAdmin" style="text-align: center; margin-left: 5px; cursor: pointer;" (click)="removePin()">
                 <mat-icon>clear</mat-icon><br>
                 <span>Quitar</span>
             </div>
@@ -46,12 +46,12 @@
             }">
             <h3 *ngIf="mensaje.user !== this.currentUser.id; else showH" class="messageName"><strong>{{mensaje.name}} </strong> &nbsp; <span style="float: right;">{{mensaje.time.getHours().toString() +':'+ mensaje.time.getMinutes().toString()}}</span> </h3>
                 <span #i>{{mensaje.message}} </span>
-            <ng-template #showH> <h4> {{mensaje.time.getHours().toString() +':'+ mensaje.time.getMinutes().toString()}} </h4> </ng-template>
+            <ng-template #showH > <h4> {{mensaje.time.getHours().toString() +':'+  (mensaje.time.getMinutes().toString().length===1?mensaje.time.getMinutes().toString()+'0':mensaje.time.getMinutes().toString())   }} </h4> </ng-template>
             <button mat-icon-button class="messageOptions" [matMenuTriggerFor] = "menu" [ngStyle]="{'background-color':mensaje.user === this.currentUser.id ? '#3B65A5' : '#E9E9E9'}">
                 <mat-icon>arrow_downward</mat-icon>
             </button>
                 <mat-menu  #menu="matMenu" >
-                    <span> <!--<span  *ngIf="this.si">-->
+                    <span  *ngIf="isAdmin">
                     <button mat-menu-item (click)="pinMessage(i.innerHTML)">Pinnear Mensaje</button>                  
                     </span>
                 </mat-menu>
@@ -66,17 +66,17 @@
         </div>        
     </div>
     <div id="text-area-chat" fxflex="10" style="margin-top: 10px;">
-        <button mat-fab color="primary">
+        <!-- <button mat-fab color="primary">
             <mat-icon >attachment</mat-icon>
-            </button>
+            </button> -->
         <mat-form-field style="width: 88%;" appearance="fill" id="input-message">
-            <input name="Mensaje-Input" #txtMensaje id="txtMensaje" matInput placeholder="Escribe un mensaje aquí" required [(ngModel)]="value" >
+            <input name="Mensaje-Input" #txtMensaje id="txtMensaje" matInput autocomplete="off" [placeholder]="(habilitado)?'Escribe un mensaje aquí':'No puede enviar mensajes'" required [(ngModel)]="value" (keyup.enter)="sendMensaje($event.target.value); txtMensaje.value=''" >
             <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
                 <mat-icon>close</mat-icon>
             </button>
         </mat-form-field>
         <div id="send-button">
-            <button mat-fab color="primary" [disabled]="txtMensaje.value===''" (click)='sendMensaje(txtMensaje.value); txtMensaje.value=""'>
+            <button mat-fab color="primary" [disabled]="txtMensaje.value==='' || !habilitado" (click)='sendMensaje(txtMensaje.value); txtMensaje.value=""'>
             <mat-icon>send</mat-icon>
             </button>
         </div>

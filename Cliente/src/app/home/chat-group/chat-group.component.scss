@@ -497,3 +497,16 @@
   z-index: 1 ;
   max-width: 60%;
 }
+.notificacionFather{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.notificacionContainer{
+  padding: 10px;
+  margin: auto;  
+  display: inline-block;
+  height: 50px;
+  border-radius: 15%;
+  background-color: #5E5E5E;
+}

@@ -38,8 +38,7 @@ export class AddMemberComponent implements OnInit {
     searchUser.value="";
   }
   enableCheckAdmin(){
-    var checkBoxAdmin:any = document.getElementById('checkboxAdmin');
-    checkBoxAdmin.disabled=false;
+    var checkBoxAdmin:any = document.getElementById('checkboxAdmin');    
   }
   getCheckAdmin():any{
     var checkBoxAdmin:any = document.getElementById('checkboxAdmin');

@@ -27,7 +27,7 @@ import { CrearComponent } from '../crear/crear.component';
 import { EntregarComponent } from '../entregar/entregar.component';
 import { CalificarTareaComponent } from '../calificar-tarea/calificar-tarea.component';
 import { ReportesClienteComponent } from '../modalesAdmin/reportes-cliente/reportes-cliente.component';
-
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 type MensajesNuevos = {
   [key:string]:number
@@ -59,8 +59,10 @@ export class HomeComponent implements OnInit {
   currentGroupProfileP : string;  
   currentGroupPinnedMessage : string;
   mensajesSinLeer : MensajesNuevos;
+  habilitadoEnGrupo : boolean=true;
+  groupAdmins = {};
 
-  constructor(private socket: WebSocketService, private http:HttpClient, private route:Router,public dialog: MatDialog,  private resolver: ComponentFactoryResolver, public loaderService:LoaderService) {
+  constructor(private _snackBar : MatSnackBar, private socket: WebSocketService, private http:HttpClient, private route:Router,public dialog: MatDialog,  private resolver: ComponentFactoryResolver, public loaderService:LoaderService) {
 
     this.currentUserId = sessionStorage.getItem('currentUser');        
     this.generateUserData();
@@ -89,14 +91,15 @@ export class HomeComponent implements OnInit {
 
   ////////////////////////////////////////////////////////////
   currentComponent = null;
- 
+  //ES NECESARIO ???
   @ContentChild('template1') template;
   inputs = {
     hello: (arg:any)=>{console.log(arg)},
     something: Function,
   };
+
   outputs = {
-    onSomething: type => alert(type),
+    onSomething: type => {},
   };
   cleanGropsPage(){
     document.getElementById("submenu1").style.display="none";
@@ -182,8 +185,7 @@ export class HomeComponent implements OnInit {
           this.entry.clear();
           const factory = this.resolver.resolveComponentFactory(ListaTareas2Component);
           this.componentRef = this.entry.createComponent(factory);
-          this.componentRef.instance.tareas = tareas;
-          console.log(tareas);
+          this.componentRef.instance.tareas = tareas;          
           this.componentRef.instance.verTarea.subscribe((id) => {
             this.verTarea(id);
           });
@@ -245,29 +247,24 @@ export class HomeComponent implements OnInit {
           var tareaSeleccionada=[];
           listaTareas.forEach(element => {
             if(element.idTarea==id){
-              tareaSeleccionada.push(element);
-              
+              tareaSeleccionada.push(element);              
             }                                                        
           });
     
-        this.entry.clear();
-        const factory = this.resolver.resolveComponentFactory(EntregarComponent);
-        this.componentRef = this.entry.createComponent(factory);
-        this.componentRef.instance.tareaSeleccionada = tareaSeleccionada[0];
-        this.componentRef.instance.grupo = this.currentGroupId;
-        this.componentRef.instance.usuario = this.currentUserId;
+          this.entry.clear();
+          const factory = this.resolver.resolveComponentFactory(EntregarComponent);
+          this.componentRef = this.entry.createComponent(factory);
+          this.componentRef.instance.tareaSeleccionada = tareaSeleccionada[0];
+          this.componentRef.instance.grupo = this.currentGroupId;
+          this.componentRef.instance.usuario = this.currentUserId;
 
-        this.componentRef.instance.abrirListaTareas.subscribe(()=>{
-          this.isAdmin();
-        });
+          this.componentRef.instance.abrirListaTareas.subscribe(()=>{
+            this.isAdmin();
+          });
         
         });  
       }
     });
-
-
-
-   
   }
 
 
@@ -302,33 +299,54 @@ export class HomeComponent implements OnInit {
     ${startDate}/
     ${endDate}/
     ${horaVencimiento}/
-    ${esRecordatorio}`,{}).toPromise().then((data:any) => {
-      
-    });    
+    ${esRecordatorio}`,{}).subscribe(); 
     
     this.isAdmin();
   }
 
   ngOnInit(): void {
-    this.socket.listen('nuevoMensaje').subscribe((data:any)=>{
-      //TODO: GUARDAR EN BASE DE DATOS AL SALIR 
+    this.socket.listen('nuevoMensaje').subscribe((data:any)=>{            
       if(data.idGrupo === this.currentGroupId){      
-        this.componentRef.instance.addMessageToList(data.mensaje);
+        if(this.habilitadoEnGrupo)
+          this.componentRef.instance.addMessageToList(data.mensaje);
       }else{
-        if(data.idGrupo in this.mensajesSinLeer)
+        if(data.idGrupo in this.mensajesSinLeer && this.habilitadoEnGrupo)
           this.mensajesSinLeer[data.idGrupo]++;          
       }
     });
     this.socket.listen('nuevoGrupo').subscribe((data:any)=>{            
       this.grupos.push(data);      
       this.mensajesSinLeer[data.id] = 0;
+      this._snackBar.open('Te acaban de agregar a un grupo : '+data.informacion.nombre,'¡Entendido!');
     });
-    this.socket.listen('admin-nuevo').subscribe((data:any)=>{
-      alert('Te acaban de ascender a administrador')
+    this.socket.listen('admin-nuevo').subscribe((data:any)=>{      
+      
+      let nombre : string = '';
+      for(let grupo of this.grupos){
+        if(grupo.id==data){
+          nombre = grupo.informacion.nombre;
+        }
+      }
+      if(this.currentGroupId == data){
+        this.componentRef.instance.isAdmin = true;
+        this.groupAdmins[data.toString()] = true;
+        this.si=true;
+      }
+      this._snackBar.open('Te acaban de ascender a administrador en : '+nombre,'¡Entendido!');
     });
-    this.socket.listen('salir-grupo').subscribe((data:any) =>{
-      alert(data.mensaje);
-      //TODO:Colocar un mensaje de alaerta en los mensajes: 
+    this.socket.listen('salir-grupo').subscribe((data:any) =>{      
+      
+      if(this.currentGroupId == data.groupId){
+        this.habilitadoEnGrupo=false;
+        this.componentRef.instance.habilitado = this.habilitadoEnGrupo;        
+      }
+      let nombre : string = '';
+      for(let grupo of this.grupos){
+        if(grupo.id==data){
+          nombre = grupo.informacion.nombre;
+        }
+      }
+      this._snackBar.open(data.mensaje + ' '+ nombre,'Entendido');
       for (let index = 0; index < this.grupos.length; index++) {
         const element = this.grupos[index];
         if(element.id == data.groupId){
@@ -342,7 +360,7 @@ export class HomeComponent implements OnInit {
       //campo,nuevoCampo, idGroup  
       let idg = parseInt(data.idGroup)
       if(idg === this.currentGroupId){
-        //TODO: Recuperar las etiquetas y cambiar la información        
+            
         if(data.campo === "nombre"){
           this.currentGroup = data.nuevoCampo;
           this.componentRef.instance.currentGroup=data.nuevoCampo;
@@ -365,32 +383,46 @@ export class HomeComponent implements OnInit {
       
     });
 
-    this.socket.listen('quitar-admin').subscribe((data:any)=>{
-      //alert('Te han quitado privilegios de administrador');
+    this.socket.listen('quitar-admin').subscribe((data:any)=>{      
+      let nombre : string = '';
+      for(let grupo of this.grupos){
+        if(grupo.id==data){
+          nombre = grupo.informacion.nombre;
+        }
+      }
+      if(data == this.currentGroupId){
+        this.componentRef.instance.isAdmin = false;
+        this.groupAdmins[data.toString()] = false;
+        this.si=false;
+      }
+
+      this._snackBar.open('Te acaban de quitar privilegios de administrador en : '+nombre,'Entendido');
     });
     this.socket.listen('usuario-nuevo').subscribe((data:any)=>{      
+      //TODO: Actualizar lista !
       this.grupos.push(data);
+      
+      this.mensajesSinLeer[data.id.toString()]=0;
     });
     this.socket.listen('nuevo-form').subscribe((data:any)=>{
-      //realizar lo mismo que en nuevo mensaje      
-      if(true){      
-        this.componentRef.instance.addMessageToList(data);
+      
+      if(this.currentGroupId==data.idGrupo){      
+        this.componentRef.instance.addMessageToList(data.infoForm);
       }
+
     });
     this.socket.listen('respuesta-form').subscribe((data:any)=>{
-      //realizar lo mismo que en nuevo mensaje
-      if(true){      
-        //console.log(data);
+      
+      let id = data.idGrupo;
+      if(id == this.currentGroupId){              
         this.componentRef.instance.updateFormAnswers(data);
       }
     });
-    this.socket.listen('group-picture-change').subscribe((data:any)=>{
-      //console.log(data);
+    this.socket.listen('group-picture-change').subscribe((data:any)=>{      
       
       if(data.group == this.currentGroupId){
         this.currentGroupProfileP = data.newProfile;
-        this.componentRef.instance.currentGroupProfileP = data.newProfile;
-        //Posible error ???
+        this.componentRef.instance.currentGroupProfileP = data.newProfile;        
       }
     });
     this.socket.listen('message-pinned').subscribe((data:any)=>{
@@ -433,6 +465,7 @@ export class HomeComponent implements OnInit {
       this.componentRef.instance.currentGroupProfileP = this.currentGroupProfileP;
       this.componentRef.instance.currentPinMessage = this.currentGroupPinnedMessage;
       this.componentRef.instance.isAdmin = this.si;
+      this.componentRef.instance.habilitado = this.habilitadoEnGrupo;
 
       this.componentRef.instance.openDialogEvent.subscribe(() => {
         this.openDialog();
@@ -454,8 +487,7 @@ export class HomeComponent implements OnInit {
     }
     if(index==2){
       this.entry.clear();
-      const factory = this.resolver.resolveComponentFactory(CreateGroupComponent);
-      console.log(factory);
+      const factory = this.resolver.resolveComponentFactory(CreateGroupComponent);      
       this.componentRef = this.entry.createComponent(factory);
       this.componentRef.instance.miembros = this.miembros;
       this.componentRef.instance.myEvent2.subscribe(() => {
@@ -483,9 +515,6 @@ export class HomeComponent implements OnInit {
         this.createComponent($event);
       });
       this.componentRef.instance.enableCheckAdmin();
-      //---------------------------------------------
-      //this.cleanAddMemberFields();
-
     }
   }
   pinMessage(message:string){
@@ -508,16 +537,15 @@ export class HomeComponent implements OnInit {
 
     const formData : FormData = new FormData;
     formData.append('groupPicture',profilePicture);
-    if(this.miembros && Object.keys(this.miembros).length===0 && this.miembros.constructor===Object){
-      alert('No se han seleccionado miembros')
+    if(this.miembros && Object.keys(this.miembros).length===0 && this.miembros.constructor===Object){      
+      this._snackBar.open('No se han seleccionado miembros ','¡Entendido!');
       return;
     } 
 
     let profileData : string;
 
     if(profilePicture === undefined){
-      alert('Debe seleccionar una imagen !');
-      //TODO: Cambiar por una etiqueta o hacer un alert diferente! 
+      this._snackBar.open('Debe seleccionar una imagen','¡Entendido!');
       return;
     }
 
@@ -558,9 +586,7 @@ export class HomeComponent implements OnInit {
             
     await this.http.post('http://localhost:3000/getGroupCount',{}).toPromise().then((data:any) => idGroup = data.conteo);            
     idGroup++;    
-    if(idGroup === -1){
-      //TODO: CAMBIAR POR OTRO MÉTODO
-      //alert('Erro con el id de grupo');
+    if(idGroup === -1){     
       return;
     }
     
@@ -576,9 +602,10 @@ export class HomeComponent implements OnInit {
       }
     });
     this.router.navigate(['/home']);
-    this.mensajesSinLeer[idGroup]=0;
-    window.location.reload();
+    this.mensajesSinLeer[idGroup.toString()]=0;
+    //window.location.reload();
     //this.cleanGropsPage();    
+    //CORREGIR 
   }
   
   copy (obj) {
@@ -597,12 +624,8 @@ export class HomeComponent implements OnInit {
  
     
   }
-  async addUser(){  
-    console.log('User data', this.userData);
-    
-    const userdata2 = await this.copy(this.userData);   
-    console.log('User data copy',userdata2);
-    
+  async addUser(){          
+    const userdata2 = await this.copy(this.userData);          
     if(this.esAñadirMiembrosAGrupoNuevo){
        
       var checkBoxAdmin:any =this.componentRef.instance.getCheckAdmin(); 
@@ -624,7 +647,7 @@ export class HomeComponent implements OnInit {
         this.createComponent(2);  
       }
       else{
-        alert("¡¡Usuario ya registrado!!");
+        this._snackBar.open('¡El usuario ya está registrado!','¡Entendido!');
         this.createComponent(3);  
       }
     }
@@ -638,14 +661,10 @@ export class HomeComponent implements OnInit {
         userId:idNewMember,
         groupId:this.currentGroupId,
         isAdmin:newMemberAdmin
-      }
-      //this.socket.emit('usuario-nuevo',data);
-      this.socket.socket.emit('usuario-nuevo',data,cb=>{    
-        console.log('callback: ',cb);
-        console.log('miembros: ',this.currentMembers);
+      }      
+      this.socket.socket.emit('usuario-nuevo',data,cb=>{      
         this.currentMembers.push(cb);
-      });
-      alert("Se añadió un nuevo miembro al grupo");
+      });      
       this.createComponent(1);  
     }    
       
@@ -677,8 +696,7 @@ esAñadirMiembrosAGrupoNuevo=false;
   }
 
 
-  deleteMember(memberInformation:any){
-    /*NOTA: TENER CUIDADO AL MANDAR DATOS, MONGODB ES SENSIBLE A STRINGS E INTS */
+  deleteMember(memberInformation:any){    
     let userId = memberInformation.value.id;
     let groupId = this.currentGroupId.toString();
 
@@ -695,16 +713,16 @@ esAñadirMiembrosAGrupoNuevo=false;
   makeAdmin(memberInformation:any){
     let userId = memberInformation.value.id;
     let groupId = this.currentGroupId;   
-    
+    this.groupAdmins[userId.toString()] = true;
     this.socket.emit('admin-nuevo',{userId,groupId});
   }
   deleteAdmin(memberInformation:any){    
     let userId = memberInformation.value.id;
     let groupId = this.currentGroupId;   
-
+    this.groupAdmins[userId.toString()] = false;
     this.socket.emit('quitar-admin',{userId,groupId});
   }
-
+  //DEPRECADA ???
   isIntegrantAdmin(memberId:number){
     let admins : Array<string>;    
           
@@ -721,6 +739,18 @@ esAñadirMiembrosAGrupoNuevo=false;
     
     return false;
   }
+
+  loadAdmins() : void{
+
+    let admins : Array<string> = this.actualGroupInformation.miembrosDelGrupo.admin;
+    let members : Array<string> = this.actualGroupInformation.miembrosDelGrupo.integrantes;
+    for(let i =0;i<members.length;i++){
+      let id : string =members[i];
+      this.groupAdmins[id] = admins.includes(id); 
+    }
+    console.log(this.groupAdmins);
+  }
+
 
   actualGroupInformation:any;
   async showGroup(groupInformation:any){    
@@ -744,25 +774,23 @@ esAñadirMiembrosAGrupoNuevo=false;
         let userData2_ = JSON.parse(userData2);
         this.currentMembers.push(userData2_);   
       }); 
+    });    
+    let mensaje;
+    await this.http.post('http://localhost:3000/getGroupMessages',{id:this.currentGroupId}).toPromise().then(data =>{                
+      mensaje = data;
     });
-    //if(this.chatGroupComponent){
-      let mensaje;
-      await this.http.post('http://localhost:3000/getGroupMessages',{id:this.currentGroupId}).toPromise().then(data =>{                
-        mensaje = data;
-      });
-      this.mensajesSinLeer[this.currentGroupId]=0;
-      this.createComponent(1);  
-      this.componentRef.instance.updateGroupMessages({idGrupo:this.currentGroupId,mensajes:mensaje});
-      this.isCurrentUsesAdmin();
-    //this.chatGroupComponent.metodoCualquiera();
-
-      
-     
+    this.mensajesSinLeer[this.currentGroupId]=0;
+    this.createComponent(1);  
+    this.componentRef.instance.updateGroupMessages({idGrupo:this.currentGroupId,mensajes:mensaje});
+    this.isCurrentUsesAdmin();
+    this.habilitadoEnGrupo=true;    
+    this.componentRef.instance.habilitado = this.habilitadoEnGrupo;
+    this.loadAdmins();           
   }
   exitGroup():void{
-    let userId = this.currentUser;
-    let groupId = this.currentGroupId;
-    this.socket.emit('salir-grupo',{userId,groupId,expulsado:false})
+    let userId = this.currentUserId;
+    let groupId = parseInt(this.currentGroupId);
+    this.socket.emit('salir-grupo',{userId,groupId,expulsado:false});
   }
 
   replaceItem(itemId:string, actionButton : string, info:string):void{
@@ -784,8 +812,8 @@ esAñadirMiembrosAGrupoNuevo=false;
 
     confirmButton.onclick = ()=>{
       let newName = newNameInput.value;      
-      if(actualGroupName.trim() === newName.trim() || actualGroupName === newName){
-        //alert('Sin cambios');        
+      if(actualGroupName.trim() === newName.trim() || actualGroupName === newName){        
+        this._snackBar.open('No se realizaron cambios','¡Entendido!');    
       }else{
         let data = {
           idGroup : this.currentGroupId.toString(),
@@ -872,7 +900,7 @@ esAñadirMiembrosAGrupoNuevo=false;
     confirmButton.onclick = ()=>{
       let newName = newNameInput.value;      
       if(actualGroupName.trim() === newName.trim() || actualGroupName === newName){
-        alert('Sin cambios');        
+        this._snackBar.open('No sé realizaron cambios','¡Entendido!');     
       }else{
         let data = {
           id : this.currentUser.id,
@@ -895,7 +923,8 @@ esAñadirMiembrosAGrupoNuevo=false;
       this.dialog.open(ReportesClienteComponent,{
         data: { type : 1,usuario: this.currentUser, currentId : this.currentUserId}
       });
-    }else{
+    }else{      
+      this._toggleOpened();
       this.dialog.open(ReportesClienteComponent,{
         data: { type : 2,usuario: this.actualGroupInformation, currentId : this.currentUserId}
       });
@@ -973,22 +1002,22 @@ esAñadirMiembrosAGrupoNuevo=false;
     this._keyClose = !this._keyClose;
   }
   public _onOpenStart(): void {
-    console.info('Sidebar opening');
+    //console.info('Sidebar opening');
   }
   public _onOpened(): void {
-    console.info('Sidebar opened');
+    //console.info('Sidebar opened');
   }
   public _onCloseStart(): void {
-    console.info('Sidebar closing');
+    //console.info('Sidebar closing');
   }
   public _onClosed(): void {
-    console.info('Sidebar closed');
+    //console.info('Sidebar closed');
   }
   public _onTransitionEnd(): void {
-    console.info('Transition ended');
+    //console.info('Transition ended');
   }
   public _onBackdropClicked(): void {
-    console.info('Backdrop clicked');
+    //console.info('Backdrop clicked');
   }
   //---------------------------------------------------------------------------------------------------------------------------------------------------------------
 }
