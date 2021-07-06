@@ -93,7 +93,7 @@
     <h1 style="float: left;">Integrantes</h1>
   </div>
   <div id="members-group" fxflex="35" style="flex: 1 1 100%; box-sizing: border-box; max-height: 35%;">
-    <cdk-virtual-scroll-viewport itemSize="50" class="list-members">
+    <div class="list-members">
       <div *ngFor="let item of currentMembers | keyvalue" class="member-item">
         <button mat-button [matMenuTriggerFor]="menu" style="height: 100%; width: 100%;">
           {{(this.currentUserId === item.value.id.toString())? "Tú":item.value.nombre}}
@@ -107,7 +107,7 @@
         </span>
         </mat-menu>
       </div>   
-    </cdk-virtual-scroll-viewport> 
+    </div> 
   </div>  
 
   <div id="buttons-group" fxflex="10" style="flex: 1 1 1e-09px; box-sizing: border-box; max-height: 10%;">
@@ -215,7 +215,7 @@
               <div class="colored-box" style="flex-direction: column; box-sizing: border-box; display: flex;">
                   <div class="options" style="flex: 1 1 100%; box-sizing: border-box; max-height: 25%;">
                       <h3>Opciones</h3>                       
-                      <button (click)="hclick=true" (click)='addMemberCommon()' (click)="this.cleanCreateGroupFields()">Crear grupo</button>
+                      <button (click)="hclick=true" (click)='addMemberCommon();this.cleanCreateGroupFields()'>Crear grupo</button>
                   </div>
                   <div class="my-groups" style="flex: 1 1 1e-09px; box-sizing: border-box;" >
                       <h3>Mis Grupos</h3>

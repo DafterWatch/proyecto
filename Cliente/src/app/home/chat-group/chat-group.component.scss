@@ -513,6 +513,7 @@
 .mapaMensaje{
   width: 100%;
   height: 200px;    
+  z-index: 0;
 }
 .mapaContainer{
   width: 47%;
@@ -520,5 +521,6 @@
   margin-bottom: 2%;  
   max-height: 300px;
   border-radius: 5px;
-  margin: 15px;
+  margin: 15px;  
+  z-index: -2;
 }

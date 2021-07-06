@@ -69,18 +69,18 @@ export class HomeComponent implements OnInit {
 
     this.router = route;     
 
-  //   window.addEventListener("beforeunload", (event) => {
-  //     event.preventDefault();
-  //     //DEJAR SOLO SI SE QUIERE LA VENTAJA DE CONFIRMACIÓN
-  //     event.returnValue = "Unsaved modifications";
-  //     let data = {
-  //       id : this.currentUserId,
-  //       mensajes : this.mensajesSinLeer
-  //     }
-  //     this.http.post('http://localhost:3000/actMensajesVistos',data).subscribe();
+    window.addEventListener("beforeunload", (event) => {
+      // event.preventDefault();
+      // //DEJAR SOLO SI SE QUIERE LA VENTAJA DE CONFIRMACIÓN
+      // event.returnValue = "Unsaved modifications";
+      let data = {
+        id : this.currentUserId,
+        mensajes : this.mensajesSinLeer
+      }
+      this.http.post('http://localhost:3000/actMensajesVistos',data).subscribe();    
       
-  //     return event;
-  //  });
+       //return event;
+    });
     
   }
   
@@ -398,8 +398,7 @@ export class HomeComponent implements OnInit {
 
       this._snackBar.open('Te acaban de quitar privilegios de administrador en : '+nombre,'Entendido');
     });
-    this.socket.listen('usuario-nuevo').subscribe((data:any)=>{      
-      //TODO: Actualizar lista !
+    this.socket.listen('usuario-nuevo').subscribe((data:any)=>{            
       this.grupos.push(data);
       
       this.mensajesSinLeer[data.id.toString()]=0;
@@ -663,7 +662,7 @@ export class HomeComponent implements OnInit {
         isAdmin:newMemberAdmin
       }      
       this.socket.socket.emit('usuario-nuevo',data,cb=>{      
-        this.currentMembers.push(cb);
+        this.currentMembers.push(cb);          
       });      
       this.createComponent(1);  
     }    
@@ -748,7 +747,7 @@ esAñadirMiembrosAGrupoNuevo=false;
       let id : string =members[i];
       this.groupAdmins[id] = admins.includes(id); 
     }
-    console.log(this.groupAdmins);
+    
   }
 
 
