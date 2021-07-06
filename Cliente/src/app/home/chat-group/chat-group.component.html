@@ -38,7 +38,7 @@
     <!--Mensajes-->
         <div *ngFor="let mensaje of eventosChat; let i = index" id="messages-container">
             <!--DIV PARA EL MENSAJE-->
-            <div *ngIf="mensaje.type === 1; else formDiv" class="mensajeDiv" style="overflow: visible;"
+            <div *ngIf="mensaje.type === 1" class="mensajeDiv" style="overflow: visible;"
             [ngStyle]="{
                 'background-color':mensaje.user === this.currentUser.id ? '#4a83d9' : 'white',
                 'float':mensaje.user === this.currentUser.id ? 'right' : 'left',
@@ -57,12 +57,24 @@
                 </mat-menu>
             </div> <br>
             <!--DIV PARA EL FORMULARIO-->
-            <ng-template #formDiv>       
+            <div #formDiv *ngIf="mensaje.type===2">       
                 <div class="formContainer">                     
                     <app-formulario [canSend]="mensaje.respuestas.includes(currentUser.id)" *ngIf="mensaje.type===2" [currentUserId]="currentUser.id" [cantidadVotos]="mensaje.cantidadVotos" [values]="mensaje.valores" [idForm]="mensaje.idForm" [pregunta]="mensaje.cuestion" [preguntas]="mensaje.cuestions" [multipleAnswer]="mensaje.multipleAnswer" [membersLength]="mensaje.CurrentMembersLength"></app-formulario>
                     <!--<app-formulario *ngIf="mensaje.type===2" [currentUserId]="currentUser.id" [cantidadVotos] = "mensaje.cantidadVotos" [values]="valuesForm[mensaje.idForm].valores" [idForm]="mensaje.idForm" [pregunta]="mensaje.cuestion" [preguntas]="mensaje.cuestions" [multipleAnswer]="mensaje.multipleAnswer" [membersLength]="mensaje.CurrentMembersLength"></app-formulario>-->
                 </div>
-            </ng-template>
+            </div>
+            <!--DIV PARA EL MAPA-->
+            <div *ngIf="mensaje.type===4" class="mapaContainer" [ngStyle]="{
+                'background-color':mensaje.user === currentUser.id ? '#4a83d9' : 'white',
+                'float':mensaje.user === currentUser.id ? 'right' : 'left',
+                'text-align':mensaje.user === currentUser.id ? 'right' : 'left'
+            }">
+                <h3 *ngIf="mensaje.user !== this.currentUser.id; else mapTime" class="messageName"><strong>{{mensaje.name}} </strong> &nbsp;  <span style="float: right;">{{mensaje.time.getHours().toString() +':'+ mensaje.time.getMinutes().toString()}}</span></h3>                
+                <ng-template #mapTime > <h4> {{mensaje.time.getHours().toString() +':'+  (mensaje.time.getMinutes().toString().length===1?mensaje.time.getMinutes().toString()+'0':mensaje.time.getMinutes().toString())   }} </h4> </ng-template>
+                <i>{{(mensaje.user !== currentUser.id)?'Ha enviado su posición':'Haz enviado tu posición' }}</i>
+                <div [id]="'mapa'+i" class="mapaMensaje"></div>
+                {{generateMap(mensaje.lat,mensaje.lng,'mapa'+i, mensaje.name)}}
+            </div>
         </div>        
     </div>
     <div id="text-area-chat" fxflex="10" style="margin-top: 10px;">

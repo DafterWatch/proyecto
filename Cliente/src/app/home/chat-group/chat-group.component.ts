@@ -1,23 +1,59 @@
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
-import { Component, OnInit,Output,EventEmitter,Input,Renderer2, ViewChild, ElementRef} from '@angular/core';
+import { Component, OnInit,Output,EventEmitter,Input,Renderer2, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
 import { Form,Messages,ChatEvent,ChatNotification} from './Messages';
+
+declare const L:any;
 
 @Component({
   selector: 'app-chat-group',
   templateUrl: './chat-group.component.html',
   styleUrls: ['./chat-group.component.scss']
 })
-export class ChatGroupComponent implements OnInit {
-
+export class ChatGroupComponent implements OnInit/*, AfterViewInit*/ {
+  
   @ViewChild('div') div: ElementRef;
   constructor(private renderer: Renderer2) { 
         
   }  
-  //valuesForm : any = {}
-
-  ngOnInit(): void {          
+  // ngAfterViewInit(): void {
+  //   let mymap = L.map('mapid').setView([51.505, -0.09], 13);
+  //   L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ29yZG9mIiwiYSI6ImNrcXI5anFwOTFsOG4yeHNidmZjN2tpY2kifQ.LBkLpCO2_n3jeHM99RSnWQ', {
+  //   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+  //   maxZoom: 18,
+  //   id: 'mapbox/streets-v11',
+  //   tileSize: 512,
+  //   zoomOffset: -1,
+  //   accessToken: 'your.mapbox.access.token'
+  //   }).addTo(mymap);
+  //   let marker = L.marker([51.5, -0.09]).addTo(mymap);
+  //   marker.bindPopup('<b>Posición</b>');
+  // }
   
+  mapasExistentes : Array<string>=[];
+  ngOnInit(): void {          
+   
   }
+
+  generateMap(lat : string,lng : string, tagId : string, nombre : string){
+
+    let coords : [number,number] = [ parseFloat(lat), parseFloat(lng)];
+    if(this.mapasExistentes.includes(tagId)) return;
+    
+    let newMap = new L.map(tagId).setView(coords,13);      
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ29yZG9mIiwiYSI6ImNrcXI5anFwOTFsOG4yeHNidmZjN2tpY2kifQ.LBkLpCO2_n3jeHM99RSnWQ', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    id: 'mapbox/streets-v11',
+    tileSize: 512,
+    zoomOffset: -1,
+    accessToken: 'your.mapbox.access.token'
+    }).addTo(newMap);    
+    let markerToPos = L.marker(coords).addTo(newMap);
+    markerToPos.bindPopup(`<b>Posición de:${nombre} </b>`);
+    
+    this.mapasExistentes.push(tagId);
+  }
+
   @Output() openDialogEvent= new EventEmitter();
   abrirDialog(){         
     this.openDialogEvent.emit();

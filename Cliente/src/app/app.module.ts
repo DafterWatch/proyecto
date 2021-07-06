@@ -164,7 +164,6 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatExpansionModule,
     MatBadgeModule,
     MatSnackBarModule
-
   ],
   bootstrap: [AppComponent],
   providers: [ErrorStateMatcher,{provide:MAT_DIALOG_DATA,useValue: {}},{provide:MatDialogRef,useValue: {}}, {provide:HTTP_INTERCEPTORS,useClass:InterceptorService,multi:true}],

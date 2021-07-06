@@ -69,18 +69,18 @@ export class HomeComponent implements OnInit {
 
     this.router = route;     
 
-    window.addEventListener("beforeunload", (event) => {
-      event.preventDefault();
-      //DEJAR SOLO SI SE QUIERE LA VENTAJA DE CONFIRMACIÓN
-      event.returnValue = "Unsaved modifications";
-      let data = {
-        id : this.currentUserId,
-        mensajes : this.mensajesSinLeer
-      }
-      this.http.post('http://localhost:3000/actMensajesVistos',data).subscribe();
+  //   window.addEventListener("beforeunload", (event) => {
+  //     event.preventDefault();
+  //     //DEJAR SOLO SI SE QUIERE LA VENTAJA DE CONFIRMACIÓN
+  //     event.returnValue = "Unsaved modifications";
+  //     let data = {
+  //       id : this.currentUserId,
+  //       mensajes : this.mensajesSinLeer
+  //     }
+  //     this.http.post('http://localhost:3000/actMensajesVistos',data).subscribe();
       
-      return event;
-   });
+  //     return event;
+  //  });
     
   }
   
