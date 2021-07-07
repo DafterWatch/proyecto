@@ -577,7 +577,8 @@ module.exports = function(router){
                 respuesta : datos.securityAns,
                 fotoPerfil:"uploads\\default.png",
                 estado : false,
-                nuevosMensajes :{}
+                nuevosMensajes :{},
+                idMovil : ""
             }
 
             let nuevoUsuario = new Usuario(newUser);
@@ -832,7 +833,33 @@ module.exports = function(router){
         res.send(true);
     });
 
+    //-----------
+    router.post('/loginHuella/:idMovil',(req,res)=>{
+        let id = req.params.idMovil;
+        if(id){  
+            Usuario.findOne({"idMovil": id}).exec((err,usuarios)=>{
+                if(err){
+                    console.log('Error recuperando usuario \x1b[36m%s\x1b[0m', 'usuarios/id', err.message);                    
+                    return;
+                }                    
+                res.json(usuarios);
+            });
+        }
+    });
+    router.post('/registrarHuella/:id/:idMovil',jsonParser,(req,res)=>{
+        let id = req.params.id;
+        let newField = req.params.idMovil;
+        console.log(req.params)
+        Usuario.updateOne({"id":id},{$set:{"idMovil":newField}}).exec((err, data)=>{
+            console.log(data);
+            if(err)
+            console.log('Error actualizando usuario \x1b[36m%s\x1b[0m', '/changeInfo', err.message);
+        });    
+        res.send(true);
+    });
     return router;
+    //---------
+
 }
 
 function makeid(length) {

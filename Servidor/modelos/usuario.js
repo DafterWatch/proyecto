@@ -13,7 +13,8 @@ const usuarioSchema = new Schema ({
     respuesta : String,
     fotoPerfil : String,
     estado : Boolean,
-    nuevosMensajes : Object
+    nuevosMensajes : Object,
+    idMovil : String
 });
 
 module.exports = mongoose.model('usuario',usuarioSchema,'usuarios');
