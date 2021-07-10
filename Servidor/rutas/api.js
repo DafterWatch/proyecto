@@ -26,8 +26,16 @@ const PATH = './uploadsFiles';
 const CLIENT_ID='501838622458-4iltecautpppitda0phlomq7r8nhthmq.apps.googleusercontent.com';
 const CLIENT_SECRET='5tsp4Wv4TLYSMXLPqUjglxF0';
 const REDIRECT_URI='https://developers.google.com/oauthplayground';
-const REFRESH_TOKEN='1//04M_7xP_JYIobCgYIARAAGAQSNwF-L9IrBBFIXvgUAqor_zfTYGbnM4c336r8noLUQjIo6Hkcw4D97irqGs6gzyNtCiCxZipPHT0';
+const REFRESH_TOKEN='1//041CkAXDbHAmPCgYIARAAGAQSNwF-L9Irh6SL1haaC_0gRNteMc1X8DApxc7AGgbCiDRyKhpQB_e8S5gOyX4yuLPmazGDw9i7erE';
 
+require('core-js/modules/es.promise');
+require('core-js/modules/es.string.includes');
+require('core-js/modules/es.object.assign');
+require('core-js/modules/es.object.keys');
+require('core-js/modules/es.symbol');
+require('core-js/modules/es.symbol.async-iterator');
+require('regenerator-runtime/runtime');
+const ExcelJS = require('exceljs/dist/es5');
 
 const oauth2Client = new google.auth.OAuth2(
   CLIENT_ID,
@@ -41,7 +49,27 @@ const drive = google.drive({
   version: 'v3',
   auth: oauth2Client,
 });
-////////////////////////////
+//////////////////////////////////////////////////////7
+//APP RECOGNITION
+
+
+const process = require('process');
+// eslint-disable-next-line import/no-extraneous-dependencies, node/no-unpublished-require
+//const log = require('@vladmandic/pilogger');
+// eslint-disable-next-line import/no-extraneous-dependencies, node/no-unpublished-require
+const fetch = require('node-fetch').default;
+// eslint-disable-next-line import/no-extraneous-dependencies, node/no-unpublished-require
+const tf = require('@tensorflow/tfjs-node');
+const faceapi = require('@vladmandic/face-api'); // this is equivalent to '@vladmandic/faceapi'
+
+const modelPathRoot = '../model';
+const imgPathRoot = './rostros'; // modify to include your sample images
+const minConfidence = 0.15;
+const maxResults = 5;
+let optionsSSDMobileNet;
+
+
+///////////////////////////////////////////////////////
 
 async function createFolder(idGroup,idTarea){
     try {
@@ -156,6 +184,31 @@ module.exports = function(router){
         storage: storage1
       });
     
+      let storage3 = multer.diskStorage({
+        destination: (req, file, cb) => {
+          cb(null, "./rostrosComparar");
+        },
+        filename: (req, file, cb) => {
+          cb(null,req.query.codLog+".jpg")
+        }
+      });
+    
+      let upload3 = multer({
+        storage: storage3
+      });
+
+      let storage4 = multer.diskStorage({
+        destination: (req, file, cb) => {
+          cb(null, "./rostros");
+        },
+        filename: (req, file, cb) => {
+          cb(null,req.query.codUser+".jpg")
+        }
+      });
+    
+      let upload4 = multer({
+        storage: storage4
+      });
       
       var subirArchivos= async function uploadFile(reqFile,changedName) {
         try {
@@ -327,6 +380,123 @@ module.exports = function(router){
             
             });
         
+    });
+    router.get('/cambiarToken',(req,res1)=>{   
+        var nuevoToken=req.query.nuevoToken;
+        this.REFRESH_TOKEN=nuevoToken;
+        res1.send("true");
+        
+    });
+    router.get('/descargarRegistroDeTarea',(req,res)=>{   
+                  
+        var idGrupo=req.query.idGrupo;
+        var idTarea=req.query.idTarea;
+
+        Grupo.find({id:req.query.idGrupo},{}).exec((err,tareas)=>{
+            if(err){
+                console.log('Error recuperando grupo \x1b[36m%s\x1b[0m', '/obtenerGrupo', err.message);
+                return;
+            }
+          
+            var tareasMatriz= tareas[0].tareas
+            var tareaSeleccionada;
+            tareasMatriz.forEach(element =>
+                {
+                    if(element.idTarea==idTarea){
+                        tareaSeleccionada=element;
+                    }
+                });
+
+
+                const workbook = new ExcelJS.Workbook();
+            workbook.creator = 'Me';
+            workbook.lastModifiedBy = 'Her';
+            workbook.created = new Date();
+            workbook.modified = new Date();
+            workbook.lastPrinted = new Date();
+            const worksheet = workbook.addWorksheet('My Sheet');
+       
+
+            // adjust properties afterwards (not supported by worksheet-writer)
+            worksheet.properties.outlineLevelCol = 2;
+            worksheet.properties.defaultRowHeight = 15;
+            worksheet.headerFooter.differentFirst = true;
+            worksheet.headerFooter.firstHeader = "Hello Exceljs";
+            worksheet.headerFooter.firstFooter = "Hello World"
+            const row1 = [];
+            row1[1] = "Titulo";
+            row1[2] = tareaSeleccionada.titulo.trim();
+            worksheet.addRow(row1);
+            const row2 = [];
+            row2[1] = "Instrucciones";
+            row2[2] = tareaSeleccionada.instrucciones.trim();
+            worksheet.addRow(row2);
+            const row3 = [];
+            row3[1] = "Titulo";
+            row3[2] = tareaSeleccionada.puntos.trim();
+            const row4 = [];
+            row4[1] = "Fecha de inicio";
+            row4[2] = tareaSeleccionada.startDate.trim();
+            worksheet.addRow(row4);
+            const row5 = [];
+            row5[1] = "Fecha de cierre";
+            row5[2] = tareaSeleccionada.endDate.trim();
+            worksheet.addRow(row5);
+            const row6 = [];
+            row6[1] = "Hora de vencimiento";
+            row6[2] = tareaSeleccionada.horaVencimiento.trim();
+            worksheet.addRow(row6);
+            const row7 = [];
+            row7[1] = "¿Es recordatorio?";
+            row7[2] = tareaSeleccionada.esRecordatorio.trim();
+            const row8 = [];
+            row8[1] = "Codigo de tarea";
+            row8[2] = tareaSeleccionada.idTarea;
+            worksheet.addRow(row8);
+            const row9 = [];
+            row9[1] = "Tareas entregadas:";
+            worksheet.addRow(row9);
+            var tareasEntregadas=tareaSeleccionada.tareasEntregadasUsuarios;
+            console.log(tareasEntregadas)
+            tareasEntregadas.forEach(e=>{
+                var rowG1 = [];
+                rowG1[2] = "Codigo de estudiante";
+                rowG1[3] = e.idEstudiante;
+                worksheet.addRow(rowG1);
+                var rowG2 = [];
+                rowG2[2] = "Codigo de tarea en la nube";
+                rowG2[3] = e.idTareaNube;
+                worksheet.addRow(rowG2);
+                var rowG3 = [];
+                rowG3[2] = "Fecha de la entrega";
+                rowG3[3] = e.fechaYHoraEntrega;
+                worksheet.addRow(rowG3);
+                var rowG4 = [];
+                rowG4[2] = "Calificación";
+                rowG4[3] = e.calificacion;
+                worksheet.addRow(rowG4);
+            })
+            worksheet.columns.forEach(function (column, i) {
+                var maxLength = 0;
+                column["eachCell"]({ includeEmpty: true }, function (cell) {
+                    var columnLength = cell.value ? cell.value.toString().length : 10;
+                    if (columnLength > maxLength ) {
+                        maxLength = columnLength;
+                    }
+                });
+                column.width = maxLength < 10 ? 10 : maxLength;
+            });
+            var NombreRegistro= "Excel"+Date.now()+".xlsx";
+            const stream = fs.createWriteStream('Registros/'+NombreRegistro);
+                workbook.xlsx.write(stream).then(v=>{
+                    res.download('Registros/'+NombreRegistro);
+                })
+          
+           
+        });
+        
+         
+
     });
 
 
@@ -857,6 +1027,17 @@ module.exports = function(router){
         });    
         res.send(true);
     });
+
+
+    router.post('/compararImagenes',upload3.single('groupPicture'),async (req,res)=>{
+        main(req.query.codLog+".jpg").then(v=>{
+            res.send(v);
+        })
+    })
+    router.post('/registrarRostro',upload4.single('groupPicture'),async (req,res)=>{
+        res.send("¡Registro realizado con exito!");
+    })
+
     return router;
     //---------
 
@@ -872,3 +1053,116 @@ function makeid(length) {
    }
    return result.join('');
 }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function image(input) {
+    // read input image file and create tensor to be used for processing
+    let buffer;
+    console.log('Loading image:', input);
+    if (input.startsWith('http:') || input.startsWith('https:')) {
+      const res = await fetch(input);
+      if (res && res.ok) buffer = await res.buffer();
+      else  console.log('Invalid image URL:', input, res.status, res.statusText, res.headers.get('content-type'));
+    } else {
+      buffer = fs.readFileSync(input);
+    }
+  
+    // decode image using tfjs-node so we don't need external depenencies
+    // can also be done using canvas.js or some other 3rd party image library
+    if (!buffer) return {};
+    const tensor = tf.tidy(() => {
+      const decode = faceapi.tf.node.decodeImage(buffer, 3);
+      let expand;
+      if (decode.shape[2] === 4) { // input is in rgba format, need to convert to rgb
+        const channels = faceapi.tf.split(decode, 4, 2); // tf.split(tensor, 4, 2); // split rgba to channels
+        const rgb = faceapi.tf.stack([channels[0], channels[1], channels[2]], 2); // stack channels back to rgb and ignore alpha
+        expand = faceapi.tf.reshape(rgb, [1, decode.shape[0], decode.shape[1], 3]); // move extra dim from the end of tensor and use it as batch number instead
+      } else {
+        expand = faceapi.tf.expandDims(decode, 0);
+      }
+      const cast = faceapi.tf.cast(expand, 'float32');
+      return cast;
+    });
+    return tensor;
+  }
+  
+  async function detect(tensor) {
+    try {
+      const result = await faceapi
+        .detectAllFaces(tensor, optionsSSDMobileNet)
+        .withFaceLandmarks()
+        .withFaceExpressions()
+        .withFaceDescriptors()
+        .withAgeAndGender();
+      return result;
+    } catch (err) {
+      log.error('Caught error', err.message);
+      return [];
+    }
+  }
+  
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  function detectPromise(tensor) {
+    return new Promise((resolve) => faceapi
+      .detectSingleFace(tensor, optionsSSDMobileNet)
+      .withFaceLandmarks()
+      .withFaceExpressions()
+      .withFaceDescriptors()
+      .withAgeAndGender()
+      .then((res) => resolve(res))
+      .catch((err) => {
+        log.error('Caught error', err.message);
+        resolve([]);
+      }));
+  }
+  
+  function print(face) {
+    const expression = Object.entries(face.expressions).reduce((acc, val) => ((val[1] > acc[1]) ? val : acc), ['', 0]);
+    const box = [face.alignedRect._box._x, face.alignedRect._box._y, face.alignedRect._box._width, face.alignedRect._box._height];
+    const gender = `Gender: ${Math.round(100 * face.genderProbability)}% ${face.gender}`;
+    console.log(`Detection confidence: ${Math.round(100 * face.detection._score)}% ${gender} Age: ${Math.round(10 * face.age) / 10} Expression: ${Math.round(100 * expression[1])}% ${expression[0]} Box: ${box.map((a) => Math.round(a))}`);
+  }
+  
+  async function main(idArchivoRostroComparar) {
+
+    console.log('FaceAPI single-process test');
+  
+    await faceapi.tf.setBackend('tensorflow');
+    await faceapi.tf.enableProdMode();
+    await faceapi.tf.ENV.set('DEBUG', false);
+    await faceapi.tf.ready();
+  
+    console.log(`Version: TensorFlow/JS ${faceapi.tf?.version_core} FaceAPI ${faceapi.version.faceapi} Backend: ${faceapi.tf?.getBackend()}`);
+  
+    console.log('Loading FaceAPI models');
+    const modelPath = path.join(__dirname, modelPathRoot);
+    await faceapi.nets.ssdMobilenetv1.loadFromDisk(modelPath);
+    await faceapi.nets.ageGenderNet.loadFromDisk(modelPath);
+    await faceapi.nets.faceLandmark68Net.loadFromDisk(modelPath);
+    await faceapi.nets.faceRecognitionNet.loadFromDisk(modelPath);
+    await faceapi.nets.faceExpressionNet.loadFromDisk(modelPath);
+    optionsSSDMobileNet = new faceapi.SsdMobilenetv1Options({ minConfidence, maxResults });
+  
+    const dir = fs.readdirSync(imgPathRoot);
+    
+    const labeledDescriptors = [
+      ]
+    for (const img of dir) {
+        if (!img.toLocaleLowerCase().endsWith('.jpg')) continue;
+        const tensor = await image(path.join(imgPathRoot, img));
+        const result = await detect(tensor);
+        tensor.dispose();
+        labeledDescriptors.push(new faceapi.LabeledFaceDescriptors(
+            img,
+              [result[0].descriptor]
+        ))
+      }
+      const img3=idArchivoRostroComparar;
+      const tensor3 = await image(path.join("./rostrosComparar", img3));
+      const result3 = await detect(tensor3);
+      tensor3.dispose();
+      const faceMatcher = new faceapi.FaceMatcher(labeledDescriptors,0.6);
+      const distance= await faceMatcher.matchDescriptor(result3[0].descriptor);
+
+      return distance;
+  }

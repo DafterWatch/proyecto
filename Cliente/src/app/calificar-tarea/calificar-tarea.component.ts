@@ -78,7 +78,6 @@ calificarTarea(tareaEstudiante){
 }
  
 descargarTarea(idArchivoTarea){
-
   this.http.get('http://localhost:3000/getInformacionArchivo',{responseType:"json",params:{"idTareaNube":idArchivoTarea.idTareaNube}}).subscribe(
     (res)=>{
       this.http.get('http://localhost:3000/descargarTarea',{responseType:"blob",params:{"idTareaNube":idArchivoTarea.idTareaNube}}).toPromise()
@@ -88,7 +87,12 @@ descargarTarea(idArchivoTarea){
     },
     (err)=>console.log(err)
   );
-
-  
 }
+
+  DescargarRegistroDeTareas(){
+    this.http.get('http://localhost:3000/descargarRegistroDeTarea',{responseType:"blob",params:{"idGrupo":this.idGrupo,"idTarea":this.tareaSeleccionada.idTarea}}).toPromise()
+    .then(blob => {
+        saveAs(blob, "Reporte_"+Date.now()); 
+    })  
+  }
 }
