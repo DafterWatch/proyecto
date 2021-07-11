@@ -7,11 +7,14 @@
     <button mat-icon-button (click)="abrirLista()">
       <mat-icon>close</mat-icon>
     </button>
+    
   </mat-toolbar>
 
   <div class="text-assign" style="background-color: white;">
     <h1><b>Grupo: </b> {{tarea}}</h1>
     <h1><b>Entregados: </b> {{tareaSeleccionada.tareasEntregadasUsuarios.length}} &nbsp;|&nbsp; No Entregados {{noentregados}}</h1>
+    <button mat-raised-button color="primary" style="margin-bottom: 2%;" (click)="DescargarRegistroDeTareas()" >Descargar registro de tareas</button><br>
+
 </div>
 <div class="example-container mat-elevation-z8" style="background-color: #f6f6f6;">
   <table mat-table [dataSource]="data" class="mat-elevation-z8" style="background-color: white;">
