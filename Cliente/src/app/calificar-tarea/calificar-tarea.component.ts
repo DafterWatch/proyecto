@@ -51,7 +51,7 @@ export class CalificarTareaComponent implements OnInit {
 
   @Input() Usuario;
   @Input() NoEntregadasTareas;
-
+  readonly DIRECCION_SERVER :string = 'https://mean-server1.herokuapp.com';
   puntajeActual="";
   onBlur(value) {
     this.puntajeActual=value;
@@ -67,7 +67,7 @@ calificarTarea(tareaEstudiante){
   var inputCalificacion:any=document.getElementById("puntajeInput");
   console.log(this.tareaSeleccionada);
   console.log(tareaEstudiante);
-  this.http.post('http://localhost:3000/calificarTarea',{responseType: 'text',params:{"tareaSeleccionada":this.tareaSeleccionada.idTarea,"idEstudiante":tareaEstudiante.idEstudiante,"calificacion":this.puntajeActual,"idGrupo":this.idGrupo}}).subscribe(
+  this.http.post(this.DIRECCION_SERVER+'/calificarTarea',{responseType: 'text',params:{"tareaSeleccionada":this.tareaSeleccionada.idTarea,"idEstudiante":tareaEstudiante.idEstudiante,"calificacion":this.puntajeActual,"idGrupo":this.idGrupo}}).subscribe(
         (res)=>{
           console.log(res);          
         },
@@ -79,9 +79,9 @@ calificarTarea(tareaEstudiante){
  
 descargarTarea(idArchivoTarea){
 
-  this.http.get('http://localhost:3000/getInformacionArchivo',{responseType:"json",params:{"idTareaNube":idArchivoTarea.idTareaNube}}).subscribe(
+  this.http.get(this.DIRECCION_SERVER+'/getInformacionArchivo',{responseType:"json",params:{"idTareaNube":idArchivoTarea.idTareaNube}}).subscribe(
     (res)=>{
-      this.http.get('http://localhost:3000/descargarTarea',{responseType:"blob",params:{"idTareaNube":idArchivoTarea.idTareaNube}}).toPromise()
+      this.http.get(this.DIRECCION_SERVER+'/descargarTarea',{responseType:"blob",params:{"idTareaNube":idArchivoTarea.idTareaNube}}).toPromise()
       .then(blob => {
           saveAs(blob, res); 
       })         

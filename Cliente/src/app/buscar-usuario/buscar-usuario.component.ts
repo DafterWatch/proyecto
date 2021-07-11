@@ -11,8 +11,8 @@ export class BuscarUsuarioComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<BuscarUsuarioComponent>,private http: HttpClient) { }
 
   usuario : any ;
-  foto : string
-  DIRECCION_SERVER : string = 'http://localhost:3000';
+  foto : string  
+  readonly DIRECCION_SERVER :string = 'https://mean-server1.herokuapp.com';
   ngOnInit(): void {
   }
   async buscarUsuario(idUsuario : string) : Promise<void>{

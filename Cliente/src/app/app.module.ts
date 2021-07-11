@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule,CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule,CUSTOM_ELEMENTS_SCHEMA, Injectable } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -118,7 +118,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     ReportesClienteComponent,
 
   ],
-  imports: [
+  imports: [    
     MatDialogModule,
     BrowserModule,
     HttpClientModule,
@@ -166,7 +166,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatSnackBarModule
   ],
   bootstrap: [AppComponent],
-  providers: [ErrorStateMatcher,{provide:MAT_DIALOG_DATA,useValue: {}},{provide:MatDialogRef,useValue: {}}, {provide:HTTP_INTERCEPTORS,useClass:InterceptorService,multi:true}],
+  providers: [ErrorStateMatcher,{provide:MAT_DIALOG_DATA,useValue: {}},{provide:MatDialogRef,useValue: {}}, {provide:HTTP_INTERCEPTORS,useClass:InterceptorService,multi:true}
+],
   entryComponents: [ChatGroupComponent,CreateGroupComponent,AddMemberComponent]
 
 })

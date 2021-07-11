@@ -8,7 +8,8 @@ import * as io from 'socket.io-client';
 export class WebSocketService {
 
   public socket:any;  
-  readonly URL = 'localhost:3000';
+  //readonly URL = 'localhost:3000';
+  readonly URL = 'https://mean-server1.herokuapp.com';
   constructor() {
     this.socket = io.io(this.URL);
   }  

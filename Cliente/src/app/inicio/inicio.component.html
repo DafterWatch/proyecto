@@ -19,44 +19,89 @@ Nam mattis libero et nisi hendrerit consectetur. Nulla facilisi. Fusce a dui nec
 Donec vitae laoreet lorem. Nam sagittis dui eget vestibulum feugiat. Ut malesuada sapien nisi, ut vehicula quam convallis eget. Maecenas luctus porta turpis, nec lacinia diam finibus et. Quisque at magna ut orci commodo elementum sed ut nibh. Suspendisse potenti. Nulla ac aliquam urna, ut venenatis tortor. Pellentesque tincidunt bibendum euismod. Maecenas in suscipit ante. Phasellus tempus, velit vel luctus vestibulum, mi odio pulvinar risus, vel consequat velit libero non erat. Cras ut mi ac dui accumsan malesuada eget vitae augue. Etiam finibus sapien at scelerisque finibus.
   </div>-->
   <div class="header">
-    <h1>M E A N</h1>
-    <p>Plataforma para la comunicación y colaboración en clases asíncronas</p>
+    <video width="1000" height="500" autoplay playsinline >
+      <source src="../../assets/images/MeanLogo.mp4" type="video/mp4" />
+    </video>
   </div>
+  
   
   <div class="navbar">
+    <div id="nameNav">
+    <span >MEAN</span>    
     <a routerLink="/register" class="right">Registrarse</a>
     <a routerLink="/login" class="right">Iniciar Sesión</a>
-  </div>
-  
-  <div class="row">
-    <div class="side">
-      <h2>MEAN</h2>
-      <h5>¿Que es MEAN?</h5>
-      <div class="fakeimg" style="height:200px;"><img src="assets/images/mean.jpg" style="height: 100%; width: 100%;"></div><br>
-      <p>MEAN es una plataforma de comunicación que busca apoyar a los profesores/docentes en las clases virtuales</p><br>
-      <h2>RECONOCIMIENTO</h2>
-      <p>MEAN ha sido reconocido por diferentes organizaciones.</p>
-      <div class="fakeimg" style="height:100px;"><img src="assets/images/rotten.png" style="height: 80%; width: 80%; margin-top: 10px;"></div><br>
-      <div class="fakeimg" style="height:100px;"><img src="assets/images/meta.png" style="height: 80%; width: 80%; margin-top: 10px;"></div><br>
-      <div class="fakeimg" style="height:100px;"><img src="assets/images/lvl.png" style="height: 80%; width: 25%; margin-top: 10px;"></div>
-      <br><br><br><br><br>
-      <img src="assets/images/logo.png" style="height: 500px; width: 100%;"><br>
     </div>
-    <div class="main">
-      <h2>Casos de exito de MEAN</h2>
-      <h2>MEAN aplicada con exito para trabajos en linea en la universidad</h2>
-      <h5>EEUU, Agosto 06, 2019</h5>
-      <div class="fakeimg" style="height:400px;"><img src="assets/images/uni1.jpg" style="height: 100%; width: 80%;"></div>
-      <br>
-      <h2>MEAN aplicada para la comunicación entre estudiantes</h2>
-      <h5>España , Diciembre 24, 2020</h5>
-      <div class="fakeimg" style="height:400px;"><img src="assets/images/uni2.jpg" style="height: 100%; width: 80%;"></div>
-      <br>
-      <h2>MEAN actualmente siendo utilizada en todas partes del mundo</h2>
-      <h5>Francia, Mayo 01, 2021</h5>
-      <div class="fakeimg" style="height:400px;"><img src="assets/images/uni3.png" style="height: 100%; width: 80%;"></div>
+  </div>    
+  <div id="section1">
+    <h1 class="subtitle">Obtenga una mejor y más sencilla</h1>
+    <h2 class="subtitle"> <strong>comunicación con MEAN</strong></h2>
+    <p>Aprenda como nuestra plataforma para la comunicación de forma asíncrona le permite una <br> interracción mucho 
+      más sencilla con otros usuarios en linea de una forma <br> rápida , sencilla y sin aplicaciones de por medio.
+    </p>
+    <div id="section1_2">
+      <div id="section1_2_1">
+        <h1 class="subtittle_"><strong>Mean para celular</strong></h1>
+        <p>Revise la aplicación de Mean, disponible para Android e ios, <br> con la aplicación móvil podrá gozar de nuevas funciones de la plataforma
+          <br> como el uso de sensores para autenticación, geolocalización y más.
+        </p>
+      </div>
+      <div style="width: 200px;"></div>
+      <div id="section1_2_2">
+        <div (click)="desvanecerFicha()">
+          <img class="mobileCard" src="../../assets/images/Pantalla5.png" height="700" width="400"/>
+          <img class="mobileCard" src="../../assets/images/Pantalla4.png" height="700" width="400"/>
+          <img class="mobileCard" src="../../assets/images/Pantalla3.png" height="700" width="400"/>
+          <img class="mobileCard" src="../../assets/images/Pantalla2.png" height="700" width="400"/> 
+          <img class="mobileCard" style="opacity: 1;" src="../../assets/images/Pantalla1.png" height="700" width="400"/>
+          <img  src="../../assets/images/MarcoMovil.png" height="700" width="400"/>          
+        </div>
+        
+      </div>
     </div>
   </div>
+  <div id="section_2">
+    <h1 class="subtittle_"> <strong>Ventajas del uso de Mean</strong></h1>
+    <p class="paragraphs">Todas las ventajas que ofrece el uso de nuestra plataforma gratuita</p>
+    <div class="advantages">
+      <div >
+        <mat-icon style="margin-left: -25px;">stay_primary_portrait</mat-icon><br><br>
+        <h3 class="subtittle_" style="font-size: 18px;"> <strong>Multiples plataformas</strong></h3>
+        <p class="paragraphs" style="font-size: 16px; margin-top: -5px;"> Mean se encuentra disponible para Android, Ios y Windows Phone. </p>
+      </div>
+      <div >
+        <mat-icon style="margin-left: -25px;">check</mat-icon><br><br>
+        <h3 class="subtittle_" style="font-size: 18px;"> <strong>Facilidad de uso</strong></h3>
+        <p class="paragraphs" style="font-size: 16px; margin-top: -5px;"> Diseño intuitivo, Mean posse un diseño sencillo y fácil de recordar. </p>
+      </div>
+      <div >
+        <mat-icon style="margin-left: -25px;">merge_type</mat-icon><br><br>
+        <h3 class="subtittle_" style="font-size: 18px;"> <strong>Multiples funcionalidades</strong></h3>
+        <p class="paragraphs" style="font-size: 16px; margin-top: -5px;"> Chat grupal, Asignación de tareas, recordatorios, reportes y mucho más. </p>
+      </div>      
+    </div>
+  </div>
+  <div id="section3">
+    <h1 class="subtittle_"> <strong>Cambiando vidas</strong></h1>
+  </div>
+    <div id="galleryContainer" >
+      <div class="card card-wide" style="background-image: url('https://www.noorulislam.org.uk/wp-content/uploads/2020/03/dawah-to-children-muslim-family-deenspiration-SMALL-1280x640-1.jpg');"></div>
+      <div class="card card-tall" style="background-image: url('https://image.freepik.com/free-photo/portrait-happy-graduating-student_53419-125.jpg');"></div>
+      <div class="card" style="background-image: url('https://media.istockphoto.com/photos/time-to-bring-our-best-picture-id966297342?k=6&m=966297342&s=612x612&w=0&h=JHjKlp2L9H2pPN-wX-rsWbIl_ZwJnKKjrvZitTqzWGk=');"></div>
+      <div class="card card-wide" style="background-image: url('https://www.seu.edu/wp-content/uploads/2020/05/graduation-photo.jpg');"></div>
+      <div class="card" style="background-image: url('https://online.egr.msu.edu/wp-content/themes/msu/images/blog/what-can-you-do-masters-civil-engineering.jpg');"></div>
+      <div class="card" style="background-image: url('https://images.ctfassets.net/yzn2zv0qt1y1/7mqVoktXK399DnRuASSUMP/a82d8a36b5034c375df306b472113f4a/iStock_000045944318_Large_Sunday_HS_Tips.jpg?w=750');"></div>
+      <div class="card" style="background-image: url('https://www.tuv.com/content-media-files/master-content/services/systems/0319-tuv-rheinland-advanced-training-for-working-professionals/tuv-rheinland-advanced-training-for-working-professionals.jpg');"></div>
+      <div class="card card-wide" style="background-image: url('http://static.fmgsuite.com/media/images/6c5c2e88-662d-40b6-95d3-aeb5ea1abe6a.jpg');"></div>
+      <div class="card" style="background-image: url('https://mk0all4edorgjxiy8xf9.kinstacdn.com/wp-content/uploads/2017/05/Happy-student-e1495552101160.jpg');"></div>    
+      <div class="card" style="background-image: url('https://centerstone.org/wp-content/uploads/Blended-family-550x413.jpg');"></div>          
+      <div class="card card-wide" style="background-image: url('https://thumbs.dreamstime.com/b/estudiante-success-learning-concep-de-la-graduaci%C3%B3n-de-la-educaci%C3%B3n-de-la-celebraci%C3%B3n-66881974.jpg');"></div>
+      <div class="card" style="background-image: url('https://reachingrecovery.org/wp-content/uploads/2012/06/Stock_Pair_Coworkers_600x400_mr.jpg');"></div>
+      <div class="card" style="background-image: url('https://www.parallaxuk.com/wp-content/uploads/2017/02/pluralist.jpg');"></div>
+      <div class="card card-wide" style="background-image: url('https://i0.wp.com/jayfeitlinger.com/wp-content/uploads/2017/04/happy-family-e1504619253464.jpg?fit=1500%2C855&ssl=1');"></div>
+      <div class="card" style="background-image: url('https://static.onecms.io/wp-content/uploads/sites/23/2020/05/13/graduation-advice-tips-2000.jpg');"></div>      
+      
+    </div>  
+
 <div class="footer">
   <h2>¿Que esperas para unirte a la comunidad?</h2>
   <button mat-raised-button routerLink="/register" style="background-color: #143058; color: white;">Registrarse</button>&nbsp;

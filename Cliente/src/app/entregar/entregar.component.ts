@@ -91,7 +91,7 @@ export class EntregarComponent implements OnInit {
   abrirLista(){
     this.abrirListaTareas.emit();
   }
-
+  readonly DIRECCION_SERVER :string = 'https://mean-server1.herokuapp.com';
   changeProfilePicture1(){
     let inputEl : any = document.getElementById('btnDiscretFile1');    
     const formData : FormData = new FormData;   
@@ -104,7 +104,7 @@ export class EntregarComponent implements OnInit {
       formData.append('usuario',this.usuario);    
       formData.append('idTarea',this.tareaSeleccionada.idTarea);   
       
-      this.http.post('http://localhost:3000/upload',formData,{responseType: 'text'}).subscribe(
+      this.http.post(this.DIRECCION_SERVER+'/upload',formData,{responseType: 'text'}).subscribe(
         (res)=>{
           console.log(res);          
         },

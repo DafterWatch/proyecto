@@ -22,7 +22,7 @@ export class UsuarioReportadoComponent implements OnInit {
     
   }
 
-  DIRECCION_SERVER : string = 'http://localhost:3000';
+  readonly DIRECCION_SERVER :string = 'https://mean-server1.herokuapp.com';
 
   listaMensajes : Array< {} >;
   usuario : any; 

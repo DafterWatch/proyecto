@@ -23,7 +23,7 @@ export class CalenderComponent implements OnInit,ClaseMensaje {
 
   constructor(private http:HttpClient) { }
   mensaje: String="asdsad";
-
+  readonly DIRECCION_SERVER :string = 'https://mean-server1.herokuapp.com';
   calendarVisible = true;
 
   calendarWeekends = true;
@@ -52,11 +52,11 @@ export class CalenderComponent implements OnInit,ClaseMensaje {
     
     this.currentUserId = sessionStorage.getItem('currentUser');   
 
-     this.http.post(`http://localhost:3000/usuarios/${this.currentUserId}`,{}).toPromise().then(data =>{
+     this.http.post(this.DIRECCION_SERVER+`/usuarios/${this.currentUserId}`,{}).toPromise().then(data =>{
       let aux = JSON.stringify(data);         
       this.currentUser = JSON.parse(aux);
 
-      this.http.post('http://localhost:3000/gruposId/', this.currentUser.grupos).subscribe(data => {
+      this.http.post(this.DIRECCION_SERVER+'/gruposId/', this.currentUser.grupos).subscribe(data => {
       let userData = JSON.stringify(data);
       this.grupos = JSON.parse(userData);
 

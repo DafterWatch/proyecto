@@ -40,6 +40,8 @@ type MensajesNuevos = {
 })
 export class HomeComponent implements OnInit {
 
+
+  readonly SERVER_DIR :string = 'https://mean-server1.herokuapp.com';
   currentUserId : any;
   currentUser : any=null; 
   mensajes : Array<String> = [];
@@ -77,13 +79,21 @@ export class HomeComponent implements OnInit {
         id : this.currentUserId,
         mensajes : this.mensajesSinLeer
       }
-      this.http.post('http://localhost:3000/actMensajesVistos',data).subscribe();    
+      this.http.post(this.SERVER_DIR+'/actMensajesVistos',data).subscribe();    
       
        //return event;
     });
     
   }
-  
+  @ContentChild('template1') template;
+
+  inputs = {
+
+    hello: (arg:any)=>{console.log(arg)},
+
+    something: Function,
+
+  };
 
   @ViewChild('groupContainer', { read: ViewContainerRef }) entry: ViewContainerRef;
   dialogRef : any = null;
@@ -91,12 +101,6 @@ export class HomeComponent implements OnInit {
 
   ////////////////////////////////////////////////////////////
   currentComponent = null;
-  //ES NECESARIO ???
-  @ContentChild('template1') template;
-  inputs = {
-    hello: (arg:any)=>{console.log(arg)},
-    something: Function,
-  };
 
   outputs = {
     onSomething: type => {},
@@ -132,16 +136,15 @@ export class HomeComponent implements OnInit {
 
   }
 
-
   async generateUserData() {
-    await this.http.post(`http://localhost:3000/usuarios/${this.currentUserId}`,{}).toPromise().then(data =>{
+    await this.http.post(this.SERVER_DIR+`/usuarios/${this.currentUserId}`,{}).toPromise().then(data =>{
         let aux = JSON.stringify(data);         
         this.currentUser = JSON.parse(aux);
     });    
-    this.currentUser.fotoPerfil = `http://localhost:3000/${this.currentUser.fotoPerfil}`;        
+    this.currentUser.fotoPerfil = this.SERVER_DIR+`/${this.currentUser.fotoPerfil}`;        
     this.mensajesSinLeer = this.currentUser.nuevosMensajes;
     
-    this.http.post('http://localhost:3000/gruposId/',this.currentUser.grupos).subscribe(data =>{      
+    this.http.post(this.SERVER_DIR+'/gruposId/',this.currentUser.grupos).subscribe(data =>{      
           let userData = JSON.stringify(data);          
           this.grupos = JSON.parse(userData);                                                                               
     });
@@ -153,7 +156,7 @@ export class HomeComponent implements OnInit {
 
   async isCurrentUsesAdmin(){
 
-    await this.http.post(`http://localhost:3000/isAdmin/${this.currentUserId}/${this.currentGroupId}`,{}).toPromise().then((es:boolean) =>{
+    await this.http.post(this.SERVER_DIR+`/isAdmin/${this.currentUserId}/${this.currentGroupId}`,{}).toPromise().then((es:boolean) =>{
       this.si = es;
     });
     
@@ -161,9 +164,9 @@ export class HomeComponent implements OnInit {
 
   async isAdmin(){   
     
-    await this.http.post(`http://localhost:3000/obtenerGrupo/${this.currentGroupId}`,{}).toPromise().then(tareas =>{
+    await this.http.post(this.SERVER_DIR+`/obtenerGrupo/${this.currentGroupId}`,{}).toPromise().then(tareas =>{
       
-      this.http.post(`http://localhost:3000/isAdmin/${this.currentUserId}/${this.currentGroupId}`,{}).subscribe(data =>{
+      this.http.post(+this.SERVER_DIR+`/isAdmin/${this.currentUserId}/${this.currentGroupId}`,{}).subscribe(data =>{
         if(data){
           this.entry.clear();
           const factory = this.resolver.resolveComponentFactory(ListaTareas1Component);
@@ -213,10 +216,10 @@ export class HomeComponent implements OnInit {
   async verTarea(id){
 
 
-    this.http.post(`http://localhost:3000/isAdmin/${this.currentUserId}/${this.currentGroupId}`,{}).subscribe(async data =>{
+    this.http.post(this.SERVER_DIR+`/isAdmin/${this.currentUserId}/${this.currentGroupId}`,{}).subscribe(async data =>{
       if(data){
 
-        await this.http.post(`http://localhost:3000/obtenerGrupo/${this.currentGroupId}`,{}).toPromise().then(tareas =>{
+        await this.http.post(this.SERVER_DIR+`/obtenerGrupo/${this.currentGroupId}`,{}).toPromise().then(tareas =>{
           var listaTareas=tareas[0].tareas
           var tareaSeleccionada=[];
           listaTareas.forEach(element => {
@@ -242,7 +245,7 @@ export class HomeComponent implements OnInit {
         });  
 
       } else {      
-        await this.http.post(`http://localhost:3000/obtenerGrupo/${this.currentGroupId}`,{}).toPromise().then(tareas =>{
+        await this.http.post(this.SERVER_DIR+`/obtenerGrupo/${this.currentGroupId}`,{}).toPromise().then(tareas =>{
           var listaTareas=tareas[0].tareas
           var tareaSeleccionada=[];
           listaTareas.forEach(element => {
@@ -290,7 +293,7 @@ export class HomeComponent implements OnInit {
     var endDate:any=informacionTarea.endDate;
     var horaVencimiento:any=informacionTarea.horaVencimiento;
     var esRecordatorio:any=informacionTarea.esRecordatorio;
-    await this.http.post(`http://localhost:3000/crearTarea/
+    await this.http.post(this.SERVER_DIR+`/crearTarea/
     ${this.currentGroupId}/
     ${this.currentGroup}/
     ${titulo}/
@@ -548,7 +551,7 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    await this.http.post('http://localhost:3000/prepareGroupProfile',formData,{responseType:'text'}).toPromise().then(
+    await this.http.post(this.SERVER_DIR+'/prepareGroupProfile',formData,{responseType:'text'}).toPromise().then(
       (res)=>{
         profileData = res;
       },
@@ -583,7 +586,7 @@ export class HomeComponent implements OnInit {
     };
     let idGroup:number = -1;
             
-    await this.http.post('http://localhost:3000/getGroupCount',{}).toPromise().then((data:any) => idGroup = data.conteo);            
+    await this.http.post(this.SERVER_DIR+'/getGroupCount',{}).toPromise().then((data:any) => idGroup = data.conteo);            
     idGroup++;    
     if(idGroup === -1){     
       return;
@@ -680,7 +683,7 @@ esAñadirMiembrosAGrupoNuevo=false;
   }
   searchUser(id:any){
       this.userData.id = id;
-      this.http.post(`http://localhost:3000/usuarios/${id}`,{}).subscribe(data =>{
+      this.http.post(this.SERVER_DIR+`/usuarios/${id}`,{}).subscribe(data =>{
       let userData = JSON.stringify(data);
       let userData_ = JSON.parse(userData);            
       
@@ -762,11 +765,11 @@ esAñadirMiembrosAGrupoNuevo=false;
     this.currentDescription=groupInformation.informacion.descripcion;
     this.currentGroupId=groupInformation.id;
     this.currentGroupItems=groupInformation.miembrosDelGrupo.integrantes; 
-    this.currentGroupProfileP = 'http://localhost:3000/'+ groupInformation.informacion.foto;
+    this.currentGroupProfileP = this.SERVER_DIR+'/'+ groupInformation.informacion.foto;
     this.currentGroupPinnedMessage = groupInformation.mensajeFijado;
     //--------------------------------------------------------------------------REVISAR -------------------------------------------------------------------------------------------------------------------------
     this.currentGroupItems.forEach(element => {
-        this.http.post(`http://localhost:3000/usuarios/${element}`,{}).subscribe(data =>{
+        this.http.post(this.SERVER_DIR+`/usuarios/${element}`,{}).subscribe(data =>{
 
         let userData2 = JSON.stringify(data);
  
@@ -775,7 +778,7 @@ esAñadirMiembrosAGrupoNuevo=false;
       }); 
     });    
     let mensaje;
-    await this.http.post('http://localhost:3000/getGroupMessages',{id:this.currentGroupId}).toPromise().then(data =>{                
+    await this.http.post(this.SERVER_DIR+'/getGroupMessages',{id:this.currentGroupId}).toPromise().then(data =>{                
       mensaje = data;
     });
     this.mensajesSinLeer[this.currentGroupId]=0;
@@ -840,7 +843,7 @@ esAñadirMiembrosAGrupoNuevo=false;
       formData.append('profileImage',inputEl.files[0]);     
       formData.append('id',this.currentUserId); 
       formData.append('previousImage',this.currentUser.fotoPerfil);
-      this.http.post('http://localhost:3000/changeImage',formData,{responseType: 'text'}).subscribe(
+      this.http.post(this.SERVER_DIR+'/changeImage',formData,{responseType: 'text'}).subscribe(
         (res)=>{
           console.log(res);          
           this.currentUser.fotoPerfil = res; 
@@ -861,7 +864,7 @@ esAñadirMiembrosAGrupoNuevo=false;
       formData.append('groupId',this.currentGroupId);
       formData.append('previousImage',this.currentGroupProfileP);
       let newProfileDirection:string;
-      await this.http.post('http://localhost:3000/changeGroupImage',formData,{responseType:'text'}).toPromise().then(
+      await this.http.post(this.SERVER_DIR+'/changeGroupImage',formData,{responseType:'text'}).toPromise().then(
         (res)=>{
           console.log(res);          
           newProfileDirection = res;          
@@ -906,7 +909,7 @@ esAñadirMiembrosAGrupoNuevo=false;
           field : info,
           newField : newName
         }
-        this.http.post('http://localhost:3000/changeInfo',data).subscribe((err)=>{
+        this.http.post(this.SERVER_DIR+'/changeInfo',data).subscribe((err)=>{
           if(err) console.log(err);
         });
         originalNameElement.innerHTML = newName;

@@ -14,9 +14,8 @@ export class InformeReporteComponent implements OnInit {
   bloqueado : any;
   reporte : string;
   lista : string;
-
-  DIRECCION_SERVER : string = 'http://localhost:3000';
-
+  
+  readonly DIRECCION_SERVER :string = 'https://mean-server1.herokuapp.com';
   ngOnInit(): void {
     this.type = this.data.informacionBloqueo.type;
     this.reporte = this.data.informacionBloqueo.reporte;    

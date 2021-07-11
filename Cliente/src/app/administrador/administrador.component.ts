@@ -29,7 +29,8 @@ type InformacionBloqueo = {
 export class AdministradorComponent implements OnInit {
 
   //Cambiar cuando se exporte a heroku
-  DIRECCION_SERVER : string = 'http://localhost:3000';  
+  //https://mean-server1.herokuapp.com/
+  readonly DIRECCION_SERVER : string = 'https://mean-server1.herokuapp.com';  
 
   constructor(public dialog: MatDialog, public http:HttpClient, private router : Router) { }   
 

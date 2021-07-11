@@ -26,6 +26,7 @@ export class RegisterComponent implements OnInit {
     "password":false,
     "confirm":false    
   }
+  readonly DIRECCION_SERVER :string = 'https://mean-server1.herokuapp.com';
 
   ngOnInit(): void {
   }
@@ -75,7 +76,7 @@ export class RegisterComponent implements OnInit {
     
     
     let newUser;
-    await this.http.post('http://localhost:3000/crearUser',this.registerFields).toPromise().then((res:any)=>{
+    await this.http.post(this.DIRECCION_SERVER+'/crearUser',this.registerFields).toPromise().then((res:any)=>{
       if(res.error){
         //alert(res.mensaje);
         this.error.error=true;

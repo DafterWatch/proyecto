@@ -26,9 +26,11 @@ export class AccountRecoveryComponent implements OnInit {
     {value: 'pregunta3', viewValue: '¿Cuál es el nombre de su primer mascota?'}
   ];
 
+  readonly DIRECCION_SERVER : string = 'https://mean-server1.herokuapp.com';  
+
   async checkIfMailExist(email : string){
     let answerFields;
-    await this.http.post(`http://localhost:3000/isRegistered/${email}`,{}).toPromise().then(data =>{
+    await this.http.post(this.DIRECCION_SERVER+`/isRegistered/${email}`,{}).toPromise().then(data =>{
         answerFields = data;        
     });
     if(answerFields.error){
@@ -47,7 +49,7 @@ export class AccountRecoveryComponent implements OnInit {
     let currentQuestion  = this.questions.filter(x => x.value=== securityField.value)[0].viewValue;    
 
     if(currentQuestion === this.recuperationFields.pregunta && answer === this.recuperationFields.respuesta){      
-      this.http.post(`http://localhost:3000/sendPassword/${this.currentEmail}`,{}).subscribe((res:any)=>{
+      this.http.post(this.DIRECCION_SERVER+`/sendPassword/${this.currentEmail}`,{}).subscribe((res:any)=>{
         let message:HTMLParagraphElement = document.createElement('p');
         message.innerText = `Se ha enviado su contraseña a: ${this.currentEmail}`;
         document.getElementById('question-container').parentElement.append(message);        

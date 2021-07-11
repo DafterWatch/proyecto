@@ -13,7 +13,7 @@ export class ReportesClienteComponent implements OnInit {
 
   constructor(private http : HttpClient, @Inject(MAT_DIALOG_DATA) public data: DatosReporte) { }
 
-  SERVER_DIR : string = 'http://localhost:3000';
+  readonly SERVER_DIR :string = 'https://mean-server1.herokuapp.com';
 
   usuario : any;
   foto : string;

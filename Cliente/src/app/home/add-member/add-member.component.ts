@@ -10,7 +10,7 @@ export class AddMemberComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.userData.fotoPerfil = (this.userData.fotoPerfil)? 'http://localhost:3000/'+this.userData.fotoPerfil: '';
+    this.userData.fotoPerfil = (this.userData.fotoPerfil)? 'https://mean-server1.herokuapp.com/'+this.userData.fotoPerfil: '';
   }
 
   @Output() myEvent= new EventEmitter<string>();
