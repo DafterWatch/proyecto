@@ -740,7 +740,7 @@ module.exports = function(router){
                 respuesta : datos.securityAns,
                 fotoPerfil:"uploads\\default.png",
                 estado : false,
-                nuevosMensajes :{},
+                nuevosMensajes :{p:-1},
                 idMovil : ""
             }
 

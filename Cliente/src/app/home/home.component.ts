@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit {
   componentRef= null;  
   currentGroupProfileP : string;  
   currentGroupPinnedMessage : string;
-  mensajesSinLeer : MensajesNuevos ={};
+  mensajesSinLeer : any = {};
   habilitadoEnGrupo : boolean=true;
   groupAdmins = {};
 
@@ -593,8 +593,9 @@ export class HomeComponent implements OnInit {
     if(idGroup === -1){     
       return;
     }
-    
-    let grupo_n = {id:idGroup, miembrosDelGrupo:miembrosDelGrupo,informacion:informacionDelGrupo1,mensaje:mensaje,mensajeFijado:''}    
+    this.mensajesSinLeer[idGroup.toString()]=0;
+    let grupo_n = {id:idGroup, miembrosDelGrupo:miembrosDelGrupo,informacion:informacionDelGrupo1,mensaje:mensaje,mensajeFijado:'', 
+    mensajesSinLeer : this.mensajesSinLeer }    
     let data = {
       ids: integrantesGrupo,
       infoGrupo:grupo_n
@@ -605,8 +606,7 @@ export class HomeComponent implements OnInit {
         console.log(cb.error);        
       }
     });
-    this.router.navigate(['/home']);
-    this.mensajesSinLeer[idGroup.toString()]=0;
+    this.router.navigate(['/home']);    
     //window.location.reload();
     //this.cleanGropsPage();    
     //CORREGIR 
