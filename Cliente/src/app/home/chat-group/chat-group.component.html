@@ -16,7 +16,7 @@
     </div>
     <div #scroll class="options" fxflex="80" id="chatContainerDiv" [scrollTop]="scroll.scrollHeight">
         <div class="mensajePinneado" *ngIf="currentPinMessage!=''">
-            <div *ngIf="isAdmin" style="text-align: center; margin-left: 5px; cursor: pointer;" (click)="removePin()">
+            <div style="text-align: center; margin-left: 5px; cursor: pointer;" (click)="removePin()">
                 <mat-icon>clear</mat-icon><br>
                 <span>Quitar</span>
             </div>
@@ -51,7 +51,7 @@
                 <mat-icon>arrow_downward</mat-icon>
             </button>
                 <mat-menu  #menu="matMenu" >
-                    <span  *ngIf="isAdmin">
+                    <span>
                     <button mat-menu-item (click)="pinMessage(i.innerHTML)">Pinnear Mensaje</button>                  
                     </span>
                 </mat-menu>
