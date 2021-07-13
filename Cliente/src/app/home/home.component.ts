@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit {
   componentRef= null;  
   currentGroupProfileP : string;  
   currentGroupPinnedMessage : string;
-  mensajesSinLeer : MensajesNuevos;
+  mensajesSinLeer : MensajesNuevos ={};
   habilitadoEnGrupo : boolean=true;
   groupAdmins = {};
 
