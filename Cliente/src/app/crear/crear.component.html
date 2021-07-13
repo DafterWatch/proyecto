@@ -13,39 +13,39 @@
     <div class="container">
     <h1>Titulo</h1>
     <mat-form-field style="width: 50%;">
-        <input id="titulo" matInput placeholder="Ingrese un titulo" value="">
+        <input id="titulo" matInput placeholder="Ingrese un titulo" value="" autocomplete="off">
       </mat-form-field>
       <h1>Instrucciones</h1>
       <mat-form-field style="width: 50%;">
-        <input id="instrucciones" matInput placeholder="Ingrese las instrucciones" value="">
+        <input id="instrucciones" matInput placeholder="Ingrese las instrucciones" value="" autocomplete="off">
       </mat-form-field>
       <h1>Puntos</h1>
       <mat-form-field style="width: 50%;">
-        <input type="number" id="puntosMax" matInput placeholder="Ingrese los puntos maximos" value="">
+        <input type="number" id="puntosMax" matInput placeholder="Ingrese los puntos maximos" value="" [disabled]="false" autocomplete="off">
       </mat-form-field>
 
       <h1 style="clear: both;">Fecha de vencimiento</h1>
       <div style="width: 100%;">
         <div style="float: left; padding-left: 15%;">
           <h3>Fecha de vencimiento inicial</h3>
-          <input id="startDate" type="date" value="01/01/2020"  placeholder="Start date"  >
+          <input id="startDate" type="date" value="01/01/2020"  placeholder="Start date" autocomplete="off" >
         </div>
         <div style="float: left; padding-left: 15%;">
           <h3>Fecha de vencimiento final</h3>
-          <input id="endDate" type="date" value="02/01/2020"  placeholder="End date">
+          <input id="endDate" type="date" value="02/01/2020"  placeholder="End date" autocomplete="off"> 
         </div>
       </div>
   
       <div style="clear: both;margin-top: 15vh;">
         <h1 >Hora de vencimiento</h1>
         <mat-form-field style="width: 50%;">
-          <input type="time" id="horaVencimiento" matInput placeholder="00:00" value="">
+          <input type="time" id="horaVencimiento" matInput placeholder="00:00" value="" autocomplete="off">
         </mat-form-field>
       </div>
       <div>
         <div>¿Es recordatorio?</div>
      
-          <input id="esRecordatorio" type="checkbox">
+          <input id="esRecordatorio" type="checkbox" (click)="desactivarPuntaje()" autocomplete="off">
     
       </div>
     

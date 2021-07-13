@@ -42,8 +42,18 @@ export class CrearComponent implements OnInit {
       horaVencimiento:horaVencimientoDom.value,
       esRecordatorio:esRecordatorioDom.checked,
     }
-
+   
 
     this.asignarTarea.emit(informacionTarea);
+  }
+  desactivarPuntaje(){
+    var esRecordatorioDom:any=document.getElementById("esRecordatorio");
+    var puntosMaxDom:any=document.getElementById("puntosMax");
+    if(esRecordatorioDom.checked){
+      puntosMaxDom.disabled=true;
+    }
+    else{
+      puntosMaxDom.disabled=false;
+    }
   }
 }

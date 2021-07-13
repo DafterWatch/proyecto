@@ -17,7 +17,7 @@ export class ListaTareas1Component implements OnInit {
 
     this.cantidadIntegrantes=this.tareas[0].miembrosDelGrupo.integrantes.length;
     
-    
+    this.entregados=this.entregados-1;
 
   }
   items = Array.from({length: 100}).map((_, i) => `Tarea ${i}`);

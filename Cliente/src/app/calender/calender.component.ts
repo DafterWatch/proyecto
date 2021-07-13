@@ -4,7 +4,7 @@ import esLocale from '@fullcalendar/core/locales/es-us';
 import { ClaseMensaje } from './mensaje';
 import {HttpClient} from '@angular/common/http';
 import { ViewChild } from '@angular/core';
-
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-calender',
@@ -21,7 +21,7 @@ export class CalenderComponent implements OnInit,ClaseMensaje {
     alert("sadsad");
   }
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient,private _snackBar : MatSnackBar) { }
   mensaje: String="asdsad";
   readonly DIRECCION_SERVER :string = 'https://mean-server1.herokuapp.com';
   calendarVisible = true;
@@ -39,7 +39,7 @@ export class CalenderComponent implements OnInit,ClaseMensaje {
      
     ],
     eventClick: function(info) {
-    alert(info.event.title);
+      this._snackBar.open(info.event.title);
     }
   };
   handleDateClick(arg) {
@@ -68,7 +68,7 @@ export class CalenderComponent implements OnInit,ClaseMensaje {
             
            console.log(element1);
             var mydate = new Date(element1.endDate.trim());
-            var taskName= " Titulo: "+element1.titulo.trim()+"\n Grupo: "+element.informacion.nombre+ "\n Fecha de inicio: "+element1.startDate.trim()+"\n Fecha de cierre: "+new Date(mydate).getFullYear()+"-"+new Date(mydate).getMonth()+"-"+new Date(mydate).getDay();
+            var taskName= ""+element1.titulo.trim()+"\n Grupo: "+element.informacion.nombre+ "\n Fecha de inicio: "+element1.startDate.trim()+"\n Fecha de cierre: "+new Date(mydate).getFullYear()+"-"+new Date(mydate).getMonth()+"-"+new Date(mydate).getDay();
             this.calendarEvents = this.calendarEvents.concat({ 
               title: taskName,
               start: mydate
