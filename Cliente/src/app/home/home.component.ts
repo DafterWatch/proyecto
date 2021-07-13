@@ -79,8 +79,7 @@ export class HomeComponent implements OnInit {
         id : this.currentUserId,
         mensajes : this.mensajesSinLeer
       }
-      this.http.post(this.SERVER_DIR+'/actMensajesVistos',data).subscribe();    
-      
+      this.http.post(this.SERVER_DIR+'/actMensajesVistos',data).subscribe();          
        //return event;
     });
     
@@ -166,7 +165,7 @@ export class HomeComponent implements OnInit {
     
     await this.http.post(this.SERVER_DIR+`/obtenerGrupo/${this.currentGroupId}`,{}).toPromise().then(tareas =>{
       
-      this.http.post(+this.SERVER_DIR+`/isAdmin/${this.currentUserId}/${this.currentGroupId}`,{}).subscribe(data =>{
+      this.http.post(this.SERVER_DIR+`/isAdmin/${this.currentUserId}/${this.currentGroupId}`,{}).subscribe(data =>{
         if(data){
           this.entry.clear();
           const factory = this.resolver.resolveComponentFactory(ListaTareas1Component);
