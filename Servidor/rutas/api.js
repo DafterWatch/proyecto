@@ -72,9 +72,7 @@ let optionsSSDMobileNet;
 ///////////////////////////////////////////////////////
 
 async function createFolder(idGroup,idTarea){
-    try {
-
-         
+    try {        
         var pageToken = null;
         // Using the NPM module 'async'
    
@@ -116,7 +114,7 @@ async function createFolder(idGroup,idTarea){
             }
         });
     } catch (error) {
-      console.log(error.message);
+      //console.log(error.message);
       return error;
     }
   }
@@ -140,7 +138,7 @@ const storage = multer.diskStorage({
         cb(null, './uploads/');
     },
     filename: (req,file,cb)=>{
-        cb(null, Date.now() + file.originalname); //Potential error
+        cb(null, Date.now() + file.originalname); 
     }
 });
 
@@ -239,7 +237,7 @@ module.exports = function(router){
             var idUsuario= req.body.usuario;
             var idTarea1=req.body.idTarea;        
             if (!req.file) {
-            console.log("No file is available!");
+            //console.log("No file is available!");
             return res.send({
                 success: false
             });
@@ -250,7 +248,7 @@ module.exports = function(router){
             
             Grupo.find({id:idGrupo1}).exec((err,grupos)=>{
                     if(err){
-                        console.log('Error recuperando grupo \x1b[36m%s\x1b[0m', 'upload', err.message);
+                        //console.log('Error recuperando grupo \x1b[36m%s\x1b[0m', 'upload', err.message);
                         return;
                     }
                     else{         
@@ -281,7 +279,7 @@ module.exports = function(router){
                                 var idTarea=parseInt(idTarea1);
                                 Grupo.updateOne({ id:idGrupo,"tareas.idTarea":idTarea},{ $push:{"tareas.$.tareasEntregadasUsuarios":{idEstudiante:idUsuario,idTareaNube:val.id,fechaYHoraEntrega:new Date()}}}).exec((err,grupo)=>{     
                                     if(err){
-                                        console.log('Error actualizando grupo \x1b[36m%s\x1b[0m', 'upload', err.message);
+                                        //console.log('Error actualizando grupo \x1b[36m%s\x1b[0m', 'upload', err.message);
                                         res.json(err);
                                         return;
                                     }           
@@ -307,12 +305,12 @@ module.exports = function(router){
 
                                 Grupo.updateOne({id:idGrupo}, {$set: {"tareas.$[i].tareasEntregadasUsuarios.$[j].idTareaNube":val.id}},{arrayFilters: [{"i.idTarea":idTarea},{"j.idEstudiante":idUsuario}]}).exec((err,grupo)=>{
                                     if(err){
-                                        console.log('Error actualizando grupo \x1b[36m%s\x1b[0m', 'upload', err.message);
+                                        //console.log('Error actualizando grupo \x1b[36m%s\x1b[0m', 'upload', err.message);
                                         res.json(err);
                                         return;
                                     }           
                                     else{
-                                        console.log(grupo);
+                                        //console.log(grupo);
                                         res.json(grupo);
                                         return;
                                     }
@@ -394,7 +392,7 @@ module.exports = function(router){
 
         Grupo.find({id:req.query.idGrupo},{}).exec((err,tareas)=>{
             if(err){
-                console.log('Error recuperando grupo \x1b[36m%s\x1b[0m', '/obtenerGrupo', err.message);
+                //console.log('Error recuperando grupo \x1b[36m%s\x1b[0m', '/obtenerGrupo', err.message);
                 return;
             }
           
@@ -408,7 +406,7 @@ module.exports = function(router){
                 });
 
 
-                const workbook = new ExcelJS.Workbook();
+            const workbook = new ExcelJS.Workbook();
             workbook.creator = 'Me';
             workbook.lastModifiedBy = 'Her';
             workbook.created = new Date();
@@ -457,7 +455,7 @@ module.exports = function(router){
             row9[1] = "Tareas entregadas:";
             worksheet.addRow(row9);
             var tareasEntregadas=tareaSeleccionada.tareasEntregadasUsuarios;
-            console.log(tareasEntregadas)
+            //console.log(tareasEntregadas)
             tareasEntregadas.forEach(e=>{
                 var rowG1 = [];
                 rowG1[2] = "Codigo de estudiante";
@@ -491,12 +489,10 @@ module.exports = function(router){
                 workbook.xlsx.write(stream).then(v=>{
                     res.download('Registros/'+NombreRegistro);
                 })
-          
-           
+                     
         });
         
          
-
     });
 
 
@@ -551,7 +547,7 @@ module.exports = function(router){
 
         Grupo.updateOne({id:idGrupo}, {$set: {"tareas.$[i].tareasEntregadasUsuarios.$[j].calificacion":calificacion}},{arrayFilters: [{"i.idTarea":idTareas},{"j.idEstudiante":idEstudiante}]}).exec((err,grupo)=>{
                     if(err){
-                        console.log('Error actulizando usuarios \x1b[36m%s\x1b[0m', '/calificarTarea', err.message);
+                        //console.log('Error actulizando usuarios \x1b[36m%s\x1b[0m', '/calificarTarea', err.message);
                         res.json(err);
                         return;
                     }           
@@ -568,7 +564,7 @@ module.exports = function(router){
     router.post('/obtenerGrupo/:idGrupo',(req,res)=>{
         Grupo.find({id:req.params.idGrupo},{}).exec((err,tareas)=>{
             if(err){
-                console.log('Error recuperando grupo \x1b[36m%s\x1b[0m', '/obtenerGrupo', err.message);
+                //console.log('Error recuperando grupo \x1b[36m%s\x1b[0m', '/obtenerGrupo', err.message);
                 return;
             }
                         
@@ -576,10 +572,9 @@ module.exports = function(router){
         });
     });
 
-    router.post('/subirTarea',upload.single('upladFile'),async (req,res)=>{   
-                
+    router.post('/subirTarea',upload.single('upladFile'),async (req,res)=>{                   
         
-        res.send('http://localhost:3000/'+req.file.path);
+        res.send('https://mean-server1.herokuapp.com/'+req.file.path);
        
     });
 //////////////////////////////      
@@ -591,20 +586,20 @@ module.exports = function(router){
 
        Usuario.updateOne({id: id}, {$push: {grupos:[idGroup]}}).exec((err,usuarios)=>{
         if(err){
-            console.log('Error actulizando usuarios \x1b[36m%s\x1b[0m', '/addfromGroup', err.message);
+            //console.log('Error actulizando usuarios \x1b[36m%s\x1b[0m', '/addfromGroup', err.message);
             return;
         }                    
         });
         Grupo.updateOne({"id": idGroup}, {$push: {"miembrosDelGrupo.integrantes":[id]}}).exec((err,usuarios)=>{
             if(err){
-                console.log('Error actualizando grupos \x1b[36m%s\x1b[0m', 'addfromGroup', err.message);
+                //console.log('Error actualizando grupos \x1b[36m%s\x1b[0m', 'addfromGroup', err.message);
                 return;
             }                    
         });
         if(isAdmin){
             Grupo.updateOne({"id": idGroup}, {$push: {"miembrosDelGrupo.admin":[id]}}).exec((err,usuarios)=>{
                 if(err){
-                    console.log('Error actualizando grupos de administradores \x1b[36m%s\x1b[0m', '/addfromGroup', err.message);
+                    //console.log('Error actualizando grupos de administradores \x1b[36m%s\x1b[0m', '/addfromGroup', err.message);
                     return;
                 }                    
             });
@@ -615,7 +610,7 @@ module.exports = function(router){
     router.get('/con',(req,res)=>{
         Usuario.find({}).exec((err,usuarios)=>{
             if(err){
-                console.log('Error recuperando usuarios \x1b[36m%s\x1b[0m', '/con', err.message);
+                //console.log('Error recuperando usuarios \x1b[36m%s\x1b[0m', '/con', err.message);
                 return;
             }               
             res.json(usuarios);
@@ -627,7 +622,7 @@ module.exports = function(router){
         if(id){  
             Usuario.findOne({"id": id}).exec((err,usuarios)=>{
                 if(err){
-                    console.log('Error recuperando usuarios \x1b[36m%s\x1b[0m', 'usuarios/id', err.message);
+                    //console.log('Error recuperando usuarios \x1b[36m%s\x1b[0m', 'usuarios/id', err.message);
                     return;
                 }                    
                 res.json(usuarios);
@@ -638,7 +633,7 @@ module.exports = function(router){
     router.post('/grupos',(req,res)=>{    
         Grupo.find({}).exec((err,grupos)=>{
             if(err){
-                console.log('Error recuperando grupos \x1b[36m%s\x1b[0m', 'grupos', err.message);
+                //console.log('Error recuperando grupos \x1b[36m%s\x1b[0m', 'grupos', err.message);
                 return;
             }
             res.json(grupos);
@@ -648,7 +643,7 @@ module.exports = function(router){
     router.post('/gruposId',jsonParser,(req,res)=>{                      
         Grupo.find({ id:{$in:req.body} }).exec((err,grupos)=>{
            if(err){
-               console.log('Error recuperando grupos \x1b[36m%s\x1b[0m', 'gruposId', err.message);
+               //console.log('Error recuperando grupos \x1b[36m%s\x1b[0m', 'gruposId', err.message);
                return;
            }            
            res.json(grupos);
@@ -680,12 +675,12 @@ module.exports = function(router){
  
         Usuario.findOne({"id": user}).exec((err,usuarios)=>{
             if(err){
-                console.log('Error recuperando usuarios \x1b[36m%s\x1b[0m', 'isAdmin', err.message);            
+                //console.log('Error recuperando usuarios \x1b[36m%s\x1b[0m', 'isAdmin', err.message);            
                 return;
             }
             Grupo.findOne({"id": group}).exec((err,grupos)=>{
                 if(err){
-                    console.log('Error recuperando grupo \x1b[36m%s\x1b[0m', 'isAdmin', err.message);
+                    //console.log('Error recuperando grupo \x1b[36m%s\x1b[0m', 'isAdmin', err.message);
                     return;
                 }
                 var admins = grupos.miembrosDelGrupo.admin; 
@@ -704,7 +699,7 @@ module.exports = function(router){
         
         Grupo.findOne({"id":groupId}).exec((err,grupo) =>{
             if(err){
-                console.log('Error recuperando grupo \x1b[36m%s\x1b[0m', 'getGroupMessages', err.message);
+                //console.log('Error recuperando grupo \x1b[36m%s\x1b[0m', 'getGroupMessages', err.message);
             }
             let aux = JSON.stringify(grupo);         
             let grupo_ = JSON.parse(aux);            
@@ -722,8 +717,6 @@ module.exports = function(router){
                 estaRegistrado=false
             }
         });
-
-        /*let fakeId = makeid(5);*/
         
         let mensaje = (!existeCorreo)? 'Dirección de correo no valida':'¡La cuenta ya está registrada!';
         let error = !existeCorreo || estaRegistrado; 
@@ -819,14 +812,16 @@ module.exports = function(router){
         switch(field){
             case "nombre":
                 Usuario.updateOne({"id":id},{$set:{"nombre":newField }}).exec(err=>{
-                    if(err)
-                    console.log('Error actualizando usuario \x1b[36m%s\x1b[0m', '/changeInfo', err.message);
+                    if(err){
+                       //console.log('Error actualizando usuario \x1b[36m%s\x1b[0m', '/changeInfo', err.message);
+                    }
                 });
                 break;
             case "descripcion":
                 Usuario.updateOne({"id":id},{$set:{"descripcion":newField }}).exec(err=>{
-                    if(err)
-                    console.log('Error actualizando grupo \x1b[36m%s\x1b[0m', '/changeInfo', err.message);
+                    if(err){
+                        //console.log('Error actualizando grupo \x1b[36m%s\x1b[0m', '/changeInfo', err.message);
+                    }
                 });
                 break;
         }
@@ -840,14 +835,14 @@ module.exports = function(router){
             if(!previousImage === './uploads\\default.png')
             fs.unlinkSync(previousImage);
         }catch{
-            console.log('Error borrando la foto anterior');
+            //console.log('Error borrando la foto anterior');
         }
         await Usuario.updateOne({'id':req.body.id},{$set:{'fotoPerfil':req.file.path}}).exec(err=>{
             if(err){
-                console.log('Error actualizando usuario \x1b[36m%s\x1b[0m', '/changeImage', err.message);
+                //console.log('Error actualizando usuario \x1b[36m%s\x1b[0m', '/changeImage', err.message);
             }
         });
-        res.send('http://localhost:3000/'+req.file.path);
+        res.send('https://mean-server1.herokuapp.com/'+req.file.path);
     });
 
     router.post('/changeGroupImage',upload.single('groupPicture'), async (req,res)=>{
@@ -863,7 +858,7 @@ module.exports = function(router){
         await Grupo.updateOne({"id":req.body.groupId},{$set:{'informacion.foto':req.file.path}}).exec(err=>{
             if(err) console.log('Error actualizando grupo \x1b[36m%s\x1b[0m', '/changeGroupImage', err.message);
         });
-        res.send('http://localhost:3000/'+req.file.path);
+        res.send('https://mean-server1.herokuapp.com/'+req.file.path);
     });
 
     router.post('/prepareGroupProfile',upload.single('groupPicture'), async(req,res)=>{
@@ -917,15 +912,13 @@ module.exports = function(router){
     router.post('/desbloquear/:idBloqueo/:grupo', (req,res)=>{     
         let grupo = req.params.grupo;  
         let id = req.params.idBloqueo;                         
-        /*Reportes.deleteOne({"id_reportado":id}).exec((err,data) =>{
-            if(err) console.log('Error borrando reporte \x1b[36m%s\x1b[0m', '/desbloquear', err.message);          
-        });   */     
-        console.log(grupo);
-        if(grupo==1){
-            console.log('desbloqueando grupo');
+        Reportes.deleteOne({"id_reportado":id}).exec((err,data) =>{
+            if(err) console.log('Error borrando reporte \x1b[36m%s\x1b[0m', '/desbloquear', err.message);         
+        });        
+        if(grupo==1){            
             Grupo.updateOne({"id":id},{$set:{"informacion.estado":false}}).exec((err,data) =>{
                 if(err){
-                    console.log('Error desbloqueando grupo \x1b[36m%s\x1b[0m', '/desbloquear', err.message);   
+                    //console.log('Error desbloqueando grupo \x1b[36m%s\x1b[0m', '/desbloquear', err.message);   
                 }                
             });
             
@@ -933,7 +926,7 @@ module.exports = function(router){
             console.log('desbloqueando usuario');      
             Usuario.updateOne({"id":id},{$set:{"estado":false}}).exec((err,data)=>{
                 if(err){
-                    console.log('Error desbloqueando usuario \x1b[36m%s\x1b[0m', '/desbloquear', err.message);   
+                    //console.log('Error desbloqueando usuario \x1b[36m%s\x1b[0m', '/desbloquear', err.message);   
                 }                
             });
         }
@@ -959,7 +952,7 @@ module.exports = function(router){
         let reporte = new Reportes({type,id_reportado:id_bloqueado,reporte:mensaje_reporte});
         reporte.save((err)=>{
             if(err){
-                console.log('Error creando reporte \x1b[36m%s\x1b[0m', '/bloquearUsuarioDirecto', err.message);
+                //console.log('Error creando reporte \x1b[36m%s\x1b[0m', '/bloquearUsuarioDirecto', err.message);
                 res.json({error:true,mensaje:err.message});
             }
         });
@@ -970,7 +963,7 @@ module.exports = function(router){
         let newReporte = new Reportes(req.body);
         newReporte.save(err=>{
             if(err){
-                console.log('Error creando reporte \x1b[36m%s\x1b[0m', '/bloquearUsuarioDirecto', err.message);   
+                //console.log('Error creando reporte \x1b[36m%s\x1b[0m', '/bloquearUsuarioDirecto', err.message);   
             }
         });
         res.send(true);
@@ -996,7 +989,7 @@ module.exports = function(router){
 
         usuario.updateOne({"id":id}, {$set: { 'nuevosMensajes':mensajes }}).exec(err=>{
             if(err){
-                console.log('Error actualizando mensajes sin leer \x1b[36m%s\x1b[0m', '/actMensajesVistos', err.message);
+                //console.log('Error actualizando mensajes sin leer \x1b[36m%s\x1b[0m', '/actMensajesVistos', err.message);
             }
         });
 
@@ -1009,7 +1002,7 @@ module.exports = function(router){
         if(id){  
             Usuario.findOne({"idMovil": id}).exec((err,usuarios)=>{
                 if(err){
-                    console.log('Error recuperando usuario \x1b[36m%s\x1b[0m', 'usuarios/id', err.message);                    
+                    //console.log('Error recuperando usuario \x1b[36m%s\x1b[0m', 'usuarios/id', err.message);                    
                     return;
                 }                    
                 res.json(usuarios);
