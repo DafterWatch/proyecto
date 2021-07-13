@@ -41,6 +41,7 @@ export class LoginComponent implements OnInit {
     await this.getLoginData(id,password).then(data=>{
       callbackData = data;
     });
+    
     if(!callbackData.error){
 
       let id = callbackData.user.id;

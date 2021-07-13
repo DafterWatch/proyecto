@@ -1,0 +1,27 @@
+<div class="loader-container" *ngIf="loaderService.isLoading | async">    
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+  <div class="colored-box" style="flex-direction: row; box-sizing: border-box; display: flex;">
+      <div style="flex: 1 1 100%; box-sizing: border-box; max-width: 20%;">
+          
+      </div>
+      <div fxflex="100" style="flex: 1 1 100%; box-sizing: border-box; max-width: 100%;">
+  
+        <div class="video-container" *ngIf="!error" style="width: 100%;">
+            <video [class.show]="!isCaptured" [class.hide]="isCaptured" #video id="video" [width]="WIDTH" [height]="HEIGHT"
+                autoplay></video>
+            <canvas [class.show]="isCaptured" [class.hide]="!isCaptured" #canvas id="canvas" [width]="WIDTH"
+                [height]="HEIGHT"></canvas>
+        </div>
+        
+        <div class="snap-container">
+            <button class="btn btn-primary" *ngIf="!isCaptured" (click)="capture()">Snap Photo</button>
+            <button class="btn btn-danger" *ngIf="isCaptured" (click)="removeCurrent()">Take Another</button>
+        
+           
+      </div>
+      <div fxflex="20" style="flex: 1 1 100%; box-sizing: border-box; max-width: 20%;">
+  
+      </div>
+  </div>
+      

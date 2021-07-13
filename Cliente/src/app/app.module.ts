@@ -85,6 +85,8 @@ import { BuscarUsuarioComponent } from './buscar-usuario/buscar-usuario.componen
 import { ReportesClienteComponent } from './modalesAdmin/reportes-cliente/reportes-cliente.component';
 import { MatBadgeModule } from '@angular/material/badge'
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { ReconocimientoFacialComponent } from './reconocimiento-facial/reconocimiento-facial.component';
+import { RegistrarFacialComponent } from './registrar-facial/registrar-facial.component';
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -116,6 +118,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     InformeReporteComponent,
     BuscarUsuarioComponent,
     ReportesClienteComponent,
+    ReconocimientoFacialComponent,
+    RegistrarFacialComponent,
 
   ],
   imports: [    

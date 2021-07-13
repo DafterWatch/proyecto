@@ -20,7 +20,8 @@ import { NavegacionComponent } from './navegacion/navegacion.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { RegisterComponent } from './register/register.component';
-
+import { ReconocimientoFacialComponent } from './reconocimiento-facial/reconocimiento-facial.component';
+import { RegistrarFacialComponent } from './registrar-facial/registrar-facial.component';
 const routes: Routes = [
   // Con este hacemos q al ir a Localhost:4200 lo envie al login - a la primera pantalla q deseamos q vea
   { path: '', redirectTo: 'inicio', pathMatch: 'full'},
@@ -40,6 +41,8 @@ const routes: Routes = [
   { path: 'formulario', component: FormularioComponent },
   { path: 'navegacion', component: NavegacionComponent },
   {path: 'administrador', component: AdministradorComponent},
+  {path: 'reconocimiento', component: ReconocimientoFacialComponent},
+  {path: 'Regreconocimiento', component: RegistrarFacialComponent},
   //componente de pruebas - Jose
   //{ path: 'demo', component: DemoComponent },
   //{ path: 'group-menu', component: GroupMenuComponent },

@@ -134,6 +134,9 @@ export class HomeComponent implements OnInit {
     });    
 
   }
+  RegistrarRecFacial(){
+    this.router.navigate(['/Regreconocimiento']);
+  }
 
   async generateUserData() {
     await this.http.post(this.SERVER_DIR+`/usuarios/${this.currentUserId}`,{}).toPromise().then(data =>{
